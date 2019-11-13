@@ -24,17 +24,19 @@ function [M,model]=InitializeVibroSimScript(mphfile)
     oldpwd = pwd;
     scriptpwd = fileparts(mfilename('fullpath'));
 
-    % Add all of the paths needed - Requires Dataguzzler!
-    addpath([scriptpwd, '/conf']);
-    addpath([scriptpwd, '/definitions']);
-    addpath([scriptpwd, '/material']);
-    addpath([scriptpwd, '/mesh']);
-    addpath([scriptpwd, '/geometry']);
-    addpath([scriptpwd, '/physics']);
-    addpath([scriptpwd, '/results']);
-    addpath([scriptpwd, '/study']);
-    addpath([scriptpwd, '/util']);
-    addpath([scriptpwd, '/support']);
+    % Add all of the paths needed 
+    addpath(fullfile(scriptpwd, 'm_files'));
+    %addpath([scriptpwd, '/conf']);
+    %addpath([scriptpwd, '/conf']);
+    %addpath([scriptpwd, '/definitions']);
+    %addpath([scriptpwd, '/material']);
+    %addpath([scriptpwd, '/mesh']);
+    %addpath([scriptpwd, '/geometry']);
+    %addpath([scriptpwd, '/physics']);
+    %addpath([scriptpwd, '/results']);
+    %addpath([scriptpwd, '/study']);
+    %addpath([scriptpwd, '/util']);
+    %addpath([scriptpwd, '/support']);
     addpath('/usr/local/dataguzzler-lib/matlab');
     addpath('/usr/local/matlab/dc_unitsparam');
 

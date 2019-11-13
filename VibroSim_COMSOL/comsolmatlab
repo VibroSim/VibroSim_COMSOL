@@ -33,8 +33,6 @@ done
 
 
 
-export RUNMATLABDIR=/usr/local/matlab   # The MATLAB we run
-export INTERNALMATLABDIR=/usr/local/MATLAB/R2015b  # The MATLAB we ask COMSOL to run...
 
 # Find directory this script is stored in
 # From 
@@ -48,8 +46,36 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 export VIBROSIMDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
+
+# find MATLAB based on the copy in the path 
+MATLABSOURCE=`which matlab`
+while [ -h "$MATLABSOURCE" ]; do # resolve $MATLABSOURCE until the file is no longer a symlink
+  export RUNMATLABDIR="$( cd -P "$( dirname "$MATLABSOURCE" )" && pwd )"
+  MATLABSOURCE="$(readlink "$MATLABSOURCE")"
+  [[ $MATLABSOURCE != /* ]] && MATLABSOURCE="$RUNMATLABDIR/$MATLABSOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+export RUNMATLABDIR="$( cd -P "$( dirname "$MATLABSOURCE" )" && pwd )"
+
+# Now RUNMATLABDIR is the directory containing the "matlab" script. Let's go up to find the matlab root
+# ... (identify it by the presence of "VersionInfo.xml")
+while [ ! -f $RUNMATLABDIR/VersionInfo.xml ] && [ $RUNMATLABDIR != / ]; do 
+  export RUNMATLABDIR="$( cd -P "$( dirname "$MATLABSOURCE" )" && cd .. && pwd )" 
+done
+
+
+if [ $RUNMATLABDIR == / ]; then 
+   export RUNMATLABDIR=/usr/local/matlab   # Default to /usr/local/matlab (which should be a symlink to /usr/local/MATLAB/R20xxx) if we just can't find it
+fi
+
+export INTERNALMATLABDIR=$RUNMATLABDIR
+
+#export RUNMATLABDIR=/usr/local/matlab   # The MATLAB we run
+#export INTERNALMATLABDIR=/usr/local/MATLAB/R2015b  # The MATLAB we ask COMSOL to run...
+
+
 export COMSOL_MATLAB_PATH=$VIBROSIMDIR:$VIBROSIMDIR/support
-export MATLABPATH=$VIBROSIMDIR:$VIBROSIMDIR/conf:$VIBROSIMDIR/definitions:$VIBROSIMDIR/geometry:$VIBROSIMDIR/material:$VIBROSIMDIR/mesh:$VIBROSIMDIR/physics:$VIBROSIMDIR/results:$VIBROSIMDIR/study:$VIBROSIMDIR/support:$VIBROSIMDIR/util
+#export MATLABPATH=$VIBROSIMDIR:$VIBROSIMDIR/conf:$VIBROSIMDIR/definitions:$VIBROSIMDIR/geometry:$VIBROSIMDIR/material:$VIBROSIMDIR/mesh:$VIBROSIMDIR/physics:$VIBROSIMDIR/results:$VIBROSIMDIR/study:$VIBROSIMDIR/support:$VIBROSIMDIR/util
+export MATLABPATH=$VIBROSIMDIR:$VIBROSIMDIR/m_files:$MATLABPATH
 
 if [ -z "$OPEN" ]; then 
   # only run MATLAB process if we are not opening a .mph file

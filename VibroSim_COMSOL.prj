@@ -1,0 +1,148 @@
+<deployment-project plugin="plugin.toolbox" plugin-version="1.0">
+  <configuration build-checksum="2156557372" file="VibroSim_COMSOL.prj" location="." name="VibroSim_COMSOL" target="target.toolbox" target-name="Package Toolbox">
+    <param.appname>VibroSim_COMSOL</param.appname>
+    <param.authnamewatermark>Stephen D. Holland</param.authnamewatermark>
+    <param.email>sdh4@iastate.edu</param.email>
+    <param.company>Iowa State University</param.company>
+    <param.summary>COMSOL scripts for VibroSim</param.summary>
+    <param.description>Comsol scripts for the VibroSim vibrothermography simulation package</param.description>
+    <param.screenshot>/tmp/transducer_velocity_time_domain.png</param.screenshot>
+    <param.version>0.1</param.version>
+    <param.output>${PROJECT_ROOT}/VibroSim_COMSOL.mltbx</param.output>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.guid>75ed4f54-07d7-4acf-9523-7f777ae3201c</param.guid>
+    <param.exclude.filters />
+    <param.exclude.pcodedmfiles>true</param.exclude.pcodedmfiles>
+    <param.examples>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;examples&gt;
+   &lt;exampleCategory name="VibroSim_COMSOL"&gt;
+      &lt;example name="vibrosim_demo3" type="html"&gt;
+         &lt;file type="source"&gt;/html/vibrosim_demo3.html&lt;/file&gt;
+         &lt;file type="main"&gt;/vibrosim_demo3.m&lt;/file&gt;
+         &lt;file type="thumbnail"/&gt;
+      &lt;/example&gt;
+   &lt;/exampleCategory&gt;
+&lt;/examples&gt;</param.examples>
+    <param.demosxml />
+    <param.apps />
+    <param.registered.apps />
+    <param.docs />
+    <param.getting.started.guide>${PROJECT_ROOT}/VibroSim_COMSOL/doc/GettingStarted.mlx</param.getting.started.guide>
+    <param.matlabpath.excludes />
+    <param.javaclasspath.excludes />
+    <param.exported.on.package>false</param.exported.on.package>
+    <param.release.start />
+    <param.release.end />
+    <param.release.current.only>false</param.release.current.only>
+    <param.compatiblity.windows>true</param.compatiblity.windows>
+    <param.compatiblity.macos>true</param.compatiblity.macos>
+    <param.compatiblity.linux>true</param.compatiblity.linux>
+    <param.compatiblity.matlabonline>true</param.compatiblity.matlabonline>
+    <unset>
+      <param.output />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+      <param.exclude.filters />
+      <param.exclude.pcodedmfiles />
+      <param.demosxml />
+      <param.apps />
+      <param.registered.apps />
+      <param.docs />
+      <param.matlabpath.excludes />
+      <param.javaclasspath.excludes />
+      <param.exported.on.package />
+      <param.release.start />
+      <param.release.end />
+      <param.release.current.only />
+      <param.compatiblity.windows />
+      <param.compatiblity.macos />
+      <param.compatiblity.linux />
+      <param.compatiblity.matlabonline />
+    </unset>
+    <fileset.rootdir>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL</file>
+    </fileset.rootdir>
+    <fileset.rootfiles>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/BuildVibroModel.m</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/COPYING.txt</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/InitializeVibroSimScript.m</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/Makefile</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/README.txt</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/VERSION.txt</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/calc_straincoefficient.m</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/comsolmatlab</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/comsolmatlab~</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/m_files</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/demos.xml</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/doc</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/gui</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/html</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_demo.m</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_demo2.m</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_demo3.m</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_test.m</file>
+    </fileset.rootfiles>
+    <fileset.depfun.included />
+    <fileset.depfun.excluded />
+    <fileset.package />
+    <build-deliverables>
+      <file location=".." name="VibroSim_COMSOL.mltbx" optional="false">../VibroSim_COMSOL.mltbx</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/usr/local/MATLAB/R2018a</root>
+      <toolboxes>
+        <toolbox name="fixedpoint" />
+        <toolbox name="matlabcoder" />
+        <toolbox name="matlabhdlcoder" />
+        <toolbox name="embeddedcoder" />
+        <toolbox name="gpucoder" />
+      </toolboxes>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+      <toolbox>
+        <gpucoder>
+          <enabled>true</enabled>
+        </gpucoder>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>false</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>true</linux>
+      <solaris>false</solaris>
+      <osver>3.10.0-957.el7.x86_64</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>glnxa64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

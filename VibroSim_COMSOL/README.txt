@@ -4,17 +4,19 @@ VibroSim: A Vibrothermography Simulation Engine
 VibroSim is a set of MATLAB scripts for creating COMSOL 
 simulations of the vibrothermography process. 
 
-PLEASE NOTE THAT VIBROSIM HAS NOT BEEN ADEQUATELY VALIDATED,
-THE NUMBERS BUILT INTO IT ALMOST CERTAINLY DO NOT APPLY
-TO YOUR VIBROTHERMOGRAPHY PROCESS. ITS OUTPUT CANNOT BE 
-TRUSTED AND IS NOT SUITABLE FOR ENGINEERING REQUIREMENTS
-WITHOUT APPLICATION- AND PROCESS-SPECIFIC VALIDATION. 
+PLEASE NOTE THAT VIBROSIM MAY NOT HAVE BEEN ADEQUATELY 
+VALIDATED, THE NUMBERS BUILT INTO IT ALMOST CERTAINLY 
+DO NOT APPLY TO YOUR VIBROTHERMOGRAPHY PROCESS. ITS OUTPUT 
+CANNOT BE TRUSTED AND IS NOT SUITABLE FOR ENGINEERING 
+REQUIREMENTS WITHOUT APPLICATION- AND PROCESS-SPECIFIC 
+VALIDATION. 
 
 Requirements
 ------------
-COMSOL 5.0 or newer. Tested with COMSOL 5.0 and 5.2
+COMSOL 5.4 or newer. Tested with COMSOL 5.4
 MATLAB (the correct version for your COMSOL)
 LiveLink for MATLAB
+COMSOL Structural Mechanics module
 
 Depending on your source of geometry, you may want to also
 have COMSOL's CAD Import Module
@@ -34,28 +36,32 @@ Installation
 1. Install MATLAB
 2. Install COMSOL with MATLAB LiveLink, being sure to correctly
    identify your MATLAB installation
-3. Unzip the VibroSim archive to a convenient location
-4. (Linux platforms) Check the setting of the MATLABDIR parameter 
-   inside the "comsolmatlab" script in the VibroSim archive, then 
-   run the "comsolmatlab" script in the VibroSim archive 
-4. (Other Platforms) Run "COMSOL with MATLAB", then add the VibroSim directory
-   to MATLAB's function path and the following subdirectories: 
-     conf/
-     definitions/ 
-     geometry/
-     material/ 
-     mesh/ 
-     physics/ 
-     results/ 
-     study/
-     support/
-     util/ 
+3. Within MATLAB go to File...Open and browse to VibroSim_COMSOL.mtlbx 
+   and open it. Select 'Install'. You can manage it with MATLAB's 
+   add-on manager. By default it will be placed under your 
+   Documents/MATLAB folder. 
+4. Alternate install: 
+    * Unzip the .mtlbx file (it is actually a ZIP archive) 
+    * Add the VibroSim_COMSOL folder and the VibroSim_COMSOL/m_files
+      folders WITHIN the unzipped toolbox to your MATLAB path. 
 
 Running COMSOL
 --------------
 
-You need to run COMSOL server, 
+Follow the instructions outlined in the manual for COMSOL's LiveLink
+for Matlab. In summary you need to run the COMSOL server
+("comsolmphserver" (Windows) or "comsol mphserver" on the command line)
+and Matlab in the same session. To satisfy licensing requirements
+you may need to run MATLAB, COMSOL server, and (optionally) COMSOL
+client all from the same terminal. 
 
-"comsol server -mlroot /usr/local/matlab -forcegcc"
-or 
-comsol server -mlroot /usr/local/matlab -forcegcc matlab
+For Linux/Macintosh platforms a convenience script "comsolmatlab" 
+is included within the toolbox folder that starts MATLAB, 
+COMSOL server and COMSOL client all together. If you just want to 
+run MATLAB and comsolserver, then "comsol mphserver matlab" 
+should do the trick. 
+
+
+Rebuilding .mltbx file from source
+----------------------------------
+Load in VibroSim_COMSOL.prj
