@@ -1,0 +1,88 @@
+#! /bin/sh
+
+DESKTOP="YES"
+GRAPHICS="NO"   # "comsol server graphics" option
+RUN=""
+OPEN=""
+while [[ $# > 0 ]]
+do
+  key="$1"
+
+  case $key in
+    "-nodesktop")
+    # echo "nodesktop"
+    DESKTOP="NO"
+    ;;
+    "graphics")
+    GRAPHICS="YES"
+    ;;
+    "-open")   # just run regular COMSOL but open preexisting file
+    OPEN="$2"
+    shift
+    ;;
+    "-r") # run MATLAB command
+    RUN="$2"
+    shift
+    ;;
+    *)
+            # unknown option
+    ;;
+  esac
+  shift
+done
+
+
+
+export RUNMATLABDIR=/usr/local/matlab   # The MATLAB we run
+export INTERNALMATLABDIR=/usr/local/MATLAB/R2015b  # The MATLAB we ask COMSOL to run...
+
+# Find directory this script is stored in
+# From 
+# http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  export VIBROSIMDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$VIBROSIMDIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+export VIBROSIMDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+export COMSOL_MATLAB_PATH=$VIBROSIMDIR:$VIBROSIMDIR/support
+export MATLABPATH=$VIBROSIMDIR:$VIBROSIMDIR/conf:$VIBROSIMDIR/definitions:$VIBROSIMDIR/geometry:$VIBROSIMDIR/material:$VIBROSIMDIR/mesh:$VIBROSIMDIR/physics:$VIBROSIMDIR/results:$VIBROSIMDIR/study:$VIBROSIMDIR/support:$VIBROSIMDIR/util
+
+if [ -z "$OPEN" ]; then 
+  # only run MATLAB process if we are not opening a .mph file
+ 
+  # Run MATLAB with or without desktop as requested 
+  if [ "$DESKTOP" = "NO" ]; then
+    # echo "nodesktop!"
+    if [ -n "$RUN" ]; then
+      gnome-terminal -t 'COMSOL MATLAB' -x sh -c "$RUNMATLABDIR/bin/matlab -nodesktop -r $RUN" &
+    else
+      gnome-terminal -t 'COMSOL MATLAB' -x sh -c "$RUNMATLABDIR/bin/matlab -nodesktop -softwareopengl" &
+    fi
+  else
+    # echo "desktop!"
+    if [ -n "$RUN" ]; then
+      $RUNMATLABDIR/bin/matlab -desktop -softwareopengl -r "$RUN" &
+    else
+      $RUNMATLABDIR/bin/matlab -desktop -softwareopengl &
+    fi
+  fi 
+
+  if [ "$GRAPHICS" = "YES" ]; then 
+    # "graphics" command (graphics engine built into server) implies no client
+    comsol mphserver -mlroot "$INTERNALMATLABDIR" graphics
+    
+  else 
+    # No graphics... start client in case user wants to connect
+    comsol mphclient -mlroot "$INTERNALMATLABDIR" & 
+    comsol mphserver -mlroot "$INTERNALMATLABDIR"  
+  fi
+
+else
+
+  # With '-open' parameter run regular comsol with -open parameter 
+  comsol -mlroot "$INTERNALMATLABDIR" -open "$OPEN"
+fi

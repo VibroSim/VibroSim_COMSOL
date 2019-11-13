@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter  xmlns="http://docbook.org/ns/docbook" version="5.0"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Tutorial</title>
+  <section>
+    <title>Running the demo simulation</title>
+    <para>
+      Run the comsol server, per the LiveLink for MATLAB
+      documentation. Then run the 'vibrosim_demo2' script within
+      MATLAB. This script only generates the model, it does not
+      execute the model. You have the option of executing the model
+      from MATLAB by typing "RunAllStudies(model);" at the MATLAB command
+      prompt.  Once the script completes, you can open COMSOL and use
+      the 'connect to server' and 'import model from server' options
+      in the client/server menu to gain access to the generated model.
+    </para>
+    <para>
+      You can inspect the model and results (if executed) from COMSOL. If you did not use RunAllStudies(), you can execute the study steps one-by-one.
+    </para>
+    
+    <section><title>Performing a modal analysis</title>
+      <para>
+	The purpose of the modal analysis is to identify candidate
+	resonant modes of the specimen. In vibrothermography testing
+	you want to excite enough resonant modes that you will be
+	pretty much guaranteed that any point in the specimen will have
+	large strains in at least one of the modes. The modal
+	analysis can be used to find these resonances. In experiments,
+	this would be performed using a broadband frequency sweep across
+	the entire range of possible excitation frequencies. 
+      </para>
+      <para>
+	Select the <code>solidmech_modal_study</code> study in the
+	COMSOL Desktop and click the <code>compute</code> button.
+	This will perform a modal analysis to find the resonant modes
+	of the specimen. When the calculation is complete, it will bring
+	up a plot of a mode shape. In the plot settings, select a different
+	eigenfrequency and click the 'plot' button to see another mode shape.
+	Select a bending mode and make note of its frequency. 
+      </para>
+    </section>
+    <section><title>Performing a frequency sweep</title>
+      <para>
+	The purpose of the frequency sweep is to do a more precise analysis
+	than the modal analysis of specific candidate excitations over
+	a range of frequencies. This is analogous to the narrowband sweeps
+	that are performed in the vibrothermography process to identify
+	the exact optimal excitation frequency for a particular
+	resonant mode. 
+      </para>
+      <para>
+	Select the <code>solidmech_harmonicsweep_study</code> study in the
+	COMSOL Desktop and expand it it up to see the step contained within (<code>solidmech_harmonicsweep_step</code>). Adjust the <code>Frequencies</code>
+	setting to specify a range surrounding the resonant mode you found
+	in the modal analysis, e.g. <code>range(15650,10,15850)</code>, representing from 15650 Hz to 15860 Hz in steps of 10 Hz. 
+	Now click the <code>compute</code> button.
+	This will perform a frequency sweep to precisely identify that 
+	particular resonant mode of the specimen. When the calculation is complete,
+	it will bring up a 3D plot of the mode shape (selectable by frequency) plus plots of the modal amplitude as measured by crack strain magnitude and
+	by displacement at the location of the simulated laser vibrometer.
+      </para>
+      <para>
+	Identify the dominant frequency from the crack strain magnitude and
+	vibrometer plots, and make note of this frequency for use in the
+	tone-burst analysis. 
+      </para>
+    </section>
+    <section><title>Performing a frequency sweep</title>
+      <para>
+	Select the <code>solidmech_harmonicsweep_study</code> study in the
+	COMSOL Desktop and expand it it up to see the step contained within (<code>solidmech_harmonicsweep_step</code>). Adjust the <code>Frequencies</code>
+	setting to specify a range surrounding the resonant mode you found
+	in the modal analysis, e.g. <code>range(15650,10,15850)</code>, representing from 15650 Hz to 15860 Hz in steps of 10 Hz. 
+	Now click the <code>compute</code> button.
+	This will perform a frequency sweep to precisely identify that 
+	particular resonant mode of the specimen. When the calculation is complete,
+	it will bring up a 3D plot of the mode shape (selectable by frequency) plus plots of the modal amplitude as measured by crack strain magnitude and
+	by displacement at the location of the simulated laser vibrometer.
+      </para>
+      <para>
+	Identify the dominant frequency from the crack strain magnitude and
+	vibrometer plots, and make note of this frequency for use in the
+	tone-burst analysis. 
+      </para>
+    </section>
+    <section><title>Performing a simulated tone-burst vibrothermography excitation</title>
+      <para>
+	Select the <code>solidmech_harmonicburst_study</code> study in the
+	COMSOL Desktop and expand it it up to see the step contained within (<code>solidmech_harmonicburst_step</code>). Adjust the <code>Frequencies</code>
+	setting to specify the single frequency you identified from the
+	frequency sweep step, e.g. 15740 Hz. Now click the <code>compute</code> button.
+	This will perform a vibrothermography simulation at exactly that frequency. When the calculation is complete,
+	it will bring up a 3D plot of the mode shape.
+      </para>
+    </section>
+    <section><title>Simulating the heat flow</title>
+      <para>
+	Select the <code>heatflow_study</code> study in the COMSOL
+	Desktop and click the <code>Compute</code> button.  This will
+	automatically calculate crack heating and thermal diffusion
+	based on the vibration simulation most recently evaluated in
+	<code>solidmech_harmonicburst_step</code>.  When the
+	calculation is complete, it will bring up a 3D plot of the
+	specimen showing crack heating (if present) plus simulated
+	thermal camera noise. <emphasis>Be sure to adjust the time of 
+	the plot and click 'Plot' again, as it takes time for heat 
+	to be generated and build up.</emphasis> In this model the 
+	excitation turns on at t=0.2 seconds and off at t=1.2 seconds, 
+	so the peak heating usually occurs at t=1.2 seconds. 
+      </para>
+    </section>
+  </section>
+  
+  <section>
+    <title>Customizing the script</title>
+    <!-- example of changing static boundary conditions? -->
+    <para>
+      An example of customizing the script is shown in <code>vibrosim_demo3.m</code>. This is a minor modification of <code>vibrosim_demo2</code> that defines static boundary conditions and automatically runs the model. See the following chapters for more information on boundary conditions and model parameters.
+    </para>
+  </section>
+
+  <section>
+    <title>Creating different geometry</title>
+    <para>
+      VibroSim is designed to make it much easier to swap out geometry
+      than is normal for tools such as COMSOL. You usually only need
+      to modify or replace the <code>geometryfunc()</code>.
+      Your <code>geometryfunc()</code> is responsible for
+      creating your specimen geometry, specifying the mesh, specifying
+      the material, and applying suitable boundary conditions (isolator
+      and couplant boundary conditions are automatically generated by
+      the routines that create the isolators and couplant). 
+    </para>
+    <para>
+      For a simple example, look at
+      <code>CreateRectangularBarSpecimen()</code>.  This is about as
+      simple as you can make a geometry function. There is no couplant
+      or isolators (without couplant you can only do modal
+      analysis). The meshing is defined and the material is defined.
+      Also a 3D view is defined to provide a convenient default
+      representation that looks at the crack.
+    </para>
+    <para>
+      For a more advanced example, look at
+      <code>CreateRectangularBarGeometry()</code>, which calls
+      <code>CreateRectangularBarSpecimen()</code> and then creates
+      isolators and couplant and also applys static boundary
+      conditions to the isolators and couplant.
+    </para>
+  </section>
+</chapter>

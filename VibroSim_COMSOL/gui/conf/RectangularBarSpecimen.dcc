@@ -1,0 +1,133 @@
+global dgcontroller, autocontroller_specimendb
+
+from paramdb2 import autocontroller_specimendb
+from dc_value import numericunitsvalue as numericunitsv
+from dc_value import stringvalue as stringv
+from dc_value import excitationparamsvalue as excitationparamsv
+
+createparamserver()
+
+# specimen settings
+# specimen length
+paramdb.addparam("spclength", numericunitsv, defunits="mm", build=lambda param, paramdb=paramdb: autocontroller_specimendb(param, paramdb['specimen'], '/databrowse/specimens', "specimen:geometry/specimen:dimension[@direction='length']/."))
+
+# specimen width
+paramdb.addparam("spcwidth", numericunitsv, defunits="mm", build=lambda param, paramdb=paramdb: autocontroller_specimendb(param, paramdb['specimen'], '/databrowse/specimens', "specimen:geometry/specimen:dimension[@direction='width']/."))
+
+# specimen thickness
+paramdb.addparam("spcthickness", numericunitsv, defunits="mm", build=lambda param, paramdb=paramdb: autocontroller_specimendb(param, paramdb['specimen'], '/databrowse/specimens', "specimen:geometry/specimen:dimension[@direction='thickness']/."))
+
+# specimen material
+paramdb.addparam("spcmaterial", stringv, options=["Ti 6-4", "Inconel"], build=lambda param, paramdb=paramdb: autocontroller_specimendb(param, paramdb['specimen'], '/databrowse/specimens', "specimen:physicalproperties/specimen:material/."))
+paramdb.addparam("spcYoungsModulus", numericunitsv, defunits="GPa", build=lambda param, paramdb=paramdb: autocontroller_specimendb(param, paramdb['specimen'], '/databrowse/specimens', "specimen:physicalproperties/specimen:YoungsModulus/."))
+paramdb.addparam("spcDensity", numericunitsv, defunits="Kg/m^3", build=lambda param, paramdb=paramdb: autocontroller_specimendb(param, paramdb['specimen'], '/databrowse/specimens', "specimen:physicalproperties/specimen:Density/."))
+paramdb.addparam("spcPoissonsRatio", numericunitsv, build=lambda param, paramdb=paramdb: autocontroller_specimendb(param, paramdb['specimen'], '/databrowse/specimens', "specimen:physicalproperties/specimen:PoissonsRatio/."))
+
+
+# left mount offset
+paramdb.addparam("tlmountoffset", numericunitsv, defunits="m")
+paramdb.addparam("blmountoffset", numericunitsv, defunits="m")
+#paramdb["lmntoffset"].requestvalstr_sync("0.01060 m")
+
+# right mount offset
+paramdb.addparam("brmountoffset", numericunitsv, defunits="m")
+paramdb.addparam("trmountoffset", numericunitsv, defunits="m")
+#paramdb["rmntoffset"].requestvalstr_sync("0.01060 m")
+
+# mount type
+paramdb.addparam("mounttype", stringv, options=["Soft Rubber"])
+paramdb["mounttype"].requestvalstr_sync("Soft Rubber")
+
+# transducer settings
+# transducer type
+paramdb.addparam("xducertype", stringv, options=["Synthetic", "Real"])
+paramdb["xducertype"].requestvalstr_sync("Synthetic")
+# transducer ID
+paramdb.addparam("xducer", stringv, options=["01PM1620E", "03PM2540W", "Synthetic"])
+paramdb["xducer"].requestvalstr_sync("01PM1620E")
+
+# transducer offset, default units, m
+paramdb.addparam("xducerxoffset", numericunitsv, defunits="m")
+paramdb["xducerxoffset"].requestvalstr_sync("0.0 m")
+paramdb.addparam("xduceryoffset", numericunitsv, defunits="m")
+paramdb["xduceryoffset"].requestvalstr_sync("0.0 m")
+paramdb.addparam("xducerzoffset", numericunitsv, defunits="m")
+paramdb["xducerzoffset"].requestvalstr_sync("0.0 m")
+
+# static preload pressure
+paramdb.addparam("xducerpressure", numericunitsv, defunits="Pa")
+paramdb.addparam("xducerpressure", numericunitsv, defunits="Pa")
+
+# couplant settings
+paramdb.addparam("couplantmaterial", stringv, options=["Card Stock"])
+paramdb["couplantmaterial"].requestvalstr_sync("Card Stock")
+paramdb.addparam("couplantwidth", numericunitsv, defunits="m")
+paramdb["couplantwidth"].requestvalstr_sync("0.010 m")
+paramdb.addparam("couplantlength", numericunitsv, defunits="m")
+paramdb["couplantlength"].requestvalstr_sync("0.010 m")
+paramdb.addparam("couplantthickness", numericunitsv, defunits="m")
+paramdb["couplantthickness"].requestvalstr_sync("0.00020 m")
+
+# excitation params
+paramdb.addparam("excitation", excitationparamsv)
+#paramdb["excitation"].requestvalstr_sync("SWEEP Arb 100 Hz 20000 Hz 0.2 s 0.21 s 1.19 s 1.2 s")
+paramdb["excitation"].requestvalstr_sync("BURST Arb 20000 Hz 0.2 s 0.21 s 1.19 s 1.2 s")
+paramdb.addparam("excitationamplitude", numericunitsv, defunits="V")
+paramdb["excitationamplitude"].requestvalstr_sync("1.0 V")
+
+# Meshing
+# specimen mesh type
+paramdb.addparam("spcmeshtype", stringv, options=["Tetrahedral", "Hexahedral"])
+paramdb["spcmeshtype"].requestvalstr_sync("Hexahedral")
+
+# specimen mesh size
+paramdb.addparam("spcmeshsize", numericunitsv, defunits="m")
+paramdb["spcmeshsize"].requestvalstr_sync("0.002 m")
+
+# couplant
+paramdb.addparam("couplantmeshtype", stringv, options=["Tetrahedral", "Hexahedral"])
+paramdb["couplantmeshtype"].requestvalstr_sync("Hexahedral")
+
+# couplant mesh size
+paramdb.addparam("couplantmeshsize", numericunitsv, defunits="m")
+paramdb["couplantmeshsize"].requestvalstr_sync("0.002 m")
+
+# transducer
+paramdb.addparam("xducermeshtype", stringv, options=["Tetrahedral", "Hexahedral"])
+paramdb["xducermeshtype"].requestvalstr_sync("Hexahedral")
+
+# specimen mesh size
+paramdb.addparam("xducermeshsize", numericunitsv, defunits="m")
+paramdb["xducermeshsize"].requestvalstr_sync("0.002 m")
+
+# Analysis
+paramdb.addparam("analysistype", stringv, options=["Time Dependent", "Frequency", "Eigen-Value"])
+paramdb["analysistype"].requestvalstr_sync("Eigen-Value")
+# time-dependent analysis
+paramdb.addparam("analysisstartval", stringv)
+paramdb["analysisstartval"].requestvalstr_sync("0.0 s")
+paramdb.addparam("analysisstepval", stringv)
+paramdb["analysisstepval"].requestvalstr_sync("3.0e-6 s")
+paramdb.addparam("analysisendval", stringv)
+paramdb["analysisendval"].requestvalstr_sync("4.0e-3 s")
+paramdb.addparam("neigs", stringv)
+# Eigen-frequency analysis
+paramdb["neigs"].requestvalstr_sync("30")
+paramdb.addparam("eigsaround", numericunitsv, defunits='Hz')
+paramdb["eigsaround"].requestvalstr_sync("0 Hz")
+
+# Measurement settings
+paramdb.addparam("laserx", numericunitsv, defunits="m")
+paramdb["laserx"].requestvalstr_sync("0 m")
+paramdb.addparam("lasery", numericunitsv, defunits="m")
+paramdb["lasery"].requestvalstr_sync("0 m")
+paramdb.addparam("laserz", numericunitsv, defunits="m")
+paramdb["laserz"].requestvalstr_sync("0 m")
+
+# crack offset
+paramdb.addparam("crackx", numericunitsv, defunits="m")
+paramdb["crackx"].requestvalstr_sync("0 m")
+paramdb.addparam("cracky", numericunitsv, defunits="m")
+paramdb["cracky"].requestvalstr_sync("0 m")
+paramdb.addparam("crackz", numericunitsv, defunits="m")
+paramdb["crackz"].requestvalstr_sync("0 m")

@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dc:params xmlns:dcv="http://thermal.cnde.iastate.edu/dcvalue" xmlns:dc="http://thermal.cnde.iastate.edu/datacollect" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <dc:configfiles>
+    <dc:configfile xlink:href="../conf/RectangularBar_DynamicStrainCoeff.dcc"/>
+  </dc:configfiles>
+  <dc:guis>
+    <dc:gui xlink:href="../glade/RectangularBar_DynamicStrainCoeff.glade"/>
+  </dc:guis>
+  <dc:plans/>
+  <dc:paramdb>
+    <dc:specimen>C14-UTCA-001R</dc:specimen>
+    <dc:simulationeigsaround dcv:units="Hz">0.0</dc:simulationeigsaround>
+    <dc:lasery dcv:units="mm">0.0</dc:lasery>
+    <dc:laserx dcv:units="mm">0.0</dc:laserx>
+    <dc:laserz dcv:units="mm">0.0</dc:laserz>
+    <dc:hostname>ahab.cnde.iastate.edu</dc:hostname>
+    <dc:simulationcrackx dcv:units="mm">0.0</dc:simulationcrackx>
+    <dc:simulationcracky dcv:units="mm">0.0</dc:simulationcracky>
+    <dc:simulationcrackz dcv:units="mm">0.0</dc:simulationcrackz>
+    <dc:simulationoutput></dc:simulationoutput>
+    <dc:eta_specimen dcv:units="">nan</dc:eta_specimen>
+    <dc:spcmeshsize dcv:units="m">0.0030000000000000001</dc:spcmeshsize>
+    <dc:spcfacemethod>Map</dc:spcfacemethod>
+    <dc:spcmeshtype>hexahedral</dc:spcmeshtype>
+    <dc:calcstraincoeff>NO</dc:calcstraincoeff>
+    <dc:spcflawindex></dc:spcflawindex>
+    <dc:simulationneigs>50</dc:simulationneigs>
+    <dc:exportresults>NO</dc:exportresults>
+    <dc:perfby></dc:perfby>
+  </dc:paramdb>
+</dc:params>

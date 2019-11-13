@@ -1,0 +1,39 @@
+if "vibrotherm_simulation_couplant_dcc" not in globals():
+    vibrotherm_simulation_couplant_dcc=True
+
+    # couplant material
+    paramdb.addparam("couplantmaterial",stringv,options=["cardstock"])
+    paramdb["couplantmaterial"].requestvalstr_sync("cardstock")
+    paramdb.addparam("couplantshape",stringv,options=["Circle","Rectangle"])
+    paramdb["couplantshape"].requestvalstr_sync("Rectangle")
+    paramdb.addparam("couplantwidth",numericunitsv, defunits="m")
+    paramdb["couplantwidth"].requestvalstr_sync("0.010 m")
+    paramdb.addparam("couplantlength",numericunitsv, defunits="m")
+    paramdb["couplantlength"].requestvalstr_sync("0.010 m")
+    #paramdb.addparam("couplantthickness",numericunitsv, defunits="m")
+    #paramdb["couplantthickness"].requestvalstr_sync("0.00020 m")
+    # number of couplant layers
+    paramdb.addparam("ncouplantlayers",stringv,options=["1","2"])
+    paramdb["ncouplantlayers"].requestvalstr_sync("1")
+
+    # static load on transducer
+    paramdb.addparam("staticload_transducer", numericunitsv, defunits="N")
+    paramdb["staticload_transducer"].requestvalstr_sync("0 N")
+
+    # couplant damping factor
+    #paramdb.addparam("eta_couplant",numericunitsv)
+    paramdb.addparam("couplantdashpotcoeff",numericunitsv,defunits="Pa*s/m")
+
+    # couplant meshing -- not used for thin couplants
+    #paramdb.addparam("couplantmeshtype",stringv,options=["tetrahedral","hexahedral"])
+    #paramdb["couplantmeshtype"].requestvalstr_sync("hexahedral")
+
+    # couplant mesh facemethod
+    #paramdb.addparam("couplantfacemethod",stringv,options=["FreeQuad","Map","FreeTri"])
+    #paramdb["couplantfacemethod"].requestvalstr_sync("Map")
+
+    # couplant mesh size
+    #paramdb.addparam("couplantmeshsize",numericunitsv,defunits="m")
+    #paramdb["couplantmeshsize"].requestvalstr_sync("0.002 m")
+
+    pass

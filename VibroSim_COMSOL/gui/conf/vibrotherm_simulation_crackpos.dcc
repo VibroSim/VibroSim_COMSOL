@@ -1,0 +1,9 @@
+if "vibrotherm_simulation_crackpos" not in globals():
+    vibrotherm_simulation_crackpos=True
+
+    paramdb.addparam("simulationcrackx",numericunitsv,defunits="mm")
+    paramdb.addparam("simulationcracky",numericunitsv,defunits="mm")
+    paramdb.addparam("simulationcrackz",numericunitsv,defunits="mm")
+
+
+    pass

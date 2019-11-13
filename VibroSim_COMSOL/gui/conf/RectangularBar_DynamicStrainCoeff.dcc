@@ -1,0 +1,48 @@
+# Note: datacollect config files are passed through an m4 preprocessor
+# so you can use e.g. "m4_include([[includefile.dcc]])" to include
+# another file. As an alternative you can manually load multiple config
+# files before opening your experiment log, either from the 
+# datacollect command line or from the datacollect gui
+
+# call createparamserver() if dbus (i.e. python/matlab/etc.) access to the parameter 
+# database is likely to be needed.
+createparamserver()  # Multiple calls to createparamserver() are OK
+
+m4_include([[imports.dcc]])
+
+m4_include([[/databrowse/COMSOL/gui/conf/vibrotherm_simulation.dcc]])
+#m4_include([[vibrotherm_experiment.dcc]])
+
+# number of eigen frequencies to simulate
+paramdb.addparam("simulationneigs",stringv)
+paramdb["simulationneigs"].requestvalstr_sync("50")
+
+# central frequency for eign value solution
+paramdb.addparam("simulationeigsaround",numericunitsv,defunits='Hz')
+paramdb["simulationeigsaround"].requestvalstr_sync("0 Hz")
+
+
+# whether to calculate dynamic strain coefficient or not
+paramdb.addparam("calcstraincoeff",stringv,options=["YES","NO"])
+paramdb["calcstraincoeff"].requestvalstr_sync("YES")
+
+# simulation crack x location
+paramdb.addparam("simulationcrackx",numericunitsv,defunits="mm",build=lambda param, paramdb=paramdb: autocontroller_xmlfile(param, '/databrowse/specimens/%s.sdb', ['specimen'], "specimen:flawparameters[@index='%s']/specimen:location[1]/specimen:xcoordinate/.", ['spcflawindex'], namespaces={'specimen':'http://thermal.cnde.iastate.edu/specimen'}))
+
+# simulation crack y location
+paramdb.addparam("simulationcracky",numericunitsv,defunits="mm",build=lambda param, paramdb=paramdb: autocontroller_xmlfile(param, '/databrowse/specimens/%s.sdb', ['specimen'], "specimen:flawparameters[@index='%s']/specimen:location[1]/specimen:ycoordinate/.", ['spcflawindex'], namespaces={'specimen':'http://thermal.cnde.iastate.edu/specimen'}))
+
+# simulation crack z location
+paramdb.addparam("simulationcrackz",numericunitsv,defunits="mm",build=lambda param, paramdb=paramdb: autocontroller_xmlfile(param, '/databrowse/specimens/%s.sdb', ['specimen'], "specimen:flawparameters[@index='%s']/specimen:location[1]/specimen:zcoordinate/.", ['spcflawindex'], namespaces={'specimen':'http://thermal.cnde.iastate.edu/specimen'}))
+
+# image file name to save
+paramdb.addparam("imgsavefilename",stringv)
+paramdb["imgsavefilename"].requestvalstr_sync("None")
+
+# mph file name to save
+paramdb.addparam("mphsavefilename",stringv)
+paramdb["mphsavefilename"].requestvalstr_sync("None")
+
+
+
+

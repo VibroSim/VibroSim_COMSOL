@@ -1,0 +1,25 @@
+# Note: datacollect config files are passed through an m4 preprocessor
+# so you can use e.g. "m4_include([[includefile.dcc]])" to include
+# another file. As an alternative you can manually load multiple config
+# files before opening your experiment log, either from the 
+# datacollect command line or from the datacollect gui
+
+# call createparamserver() if dbus (i.e. python/matlab/etc.) access to the parameter 
+# database is likely to be needed.
+createparamserver()  # Multiple calls to createparamserver() are OK
+
+m4_include([[imports.dcc]])
+
+m4_include([[vibrotherm_simulation.dcc]])
+m4_include([[vibrotherm_experiment.dcc]])
+
+# Time analysis parameters
+paramdb.addparam("timeanalysistype",stringv,options=["Time Sweep","Time Domain Modal"])
+paramdb["spcmeshtype"].requestvalstr_sync("Time Sweep")
+paramdb.addparam("simulationtimestart",numericunitsv,defunits="s")
+paramdb["simulationtimestart"].requestvalstr_sync("0.0 s")
+paramdb.addparam("simulationtimestep",numericunitsv,defunits="s")
+paramdb["simulationtimestep"].requestvalstr_sync("0.0 s")
+paramdb.addparam("simulationtimeend",numericunitsv,defunits="s")
+paramdb["simulationtimeend"].requestvalstr_sync("0.0 s")
+

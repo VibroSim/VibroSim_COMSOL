@@ -1,0 +1,21 @@
+if "vibrotherm_simulation_specimen_dcc" not in globals():
+    vibrotherm_simulation_specimen_dcc=True
+    
+    # Damping coefficients
+    paramdb.addparam("spcviscousdamping",numericunitsv,defunits="N*s")
+    paramdb["spcviscousdamping"].requestvalstr_sync("0.0 N*s")
+
+
+    # Meshing
+    # specimen mesh type
+    paramdb.addparam("spcmeshtype",stringv,options=["tetrahedral","hexahedral"])
+    paramdb["spcmeshtype"].requestvalstr_sync("tetrahedral")
+
+    # specimen mesh size
+    paramdb.addparam("spcmeshsize",numericunitsv,defunits="m")
+    paramdb["spcmeshsize"].requestvalstr_sync("0.003 m")
+
+    # specimen mesh facemethod
+    paramdb.addparam("spcfacemethod",stringv,options=["FreeQuad","Map","FreeTri"])
+    paramdb["spcfacemethod"].requestvalstr_sync("Map")
+    pass

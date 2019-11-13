@@ -1,0 +1,23 @@
+
+if "vibrotherm_simulation_mounts_dcc" not in globals():
+    vibrotherm_simulation_mounts_dcc=True
+
+    # top left isolator 
+    paramdb.addparam("tlmountoffsetx", numericunitsv, defunits="m")
+    #paramdb.addparam("tlmountoffsety", numericunitsv, defunits="m")
+    #paramdb.addparam("tlmountoffsetz", numericunitsv, defunits="m")
+    
+    # bottom left isolator
+    paramdb.addparam("blmountoffsetx", numericunitsv, defunits="m")
+    #paramdb.addparam("blmountoffsety", numericunitsv, defunits="m")
+    #paramdb.addparam("blmountoffsetz", numericunitsv, defunits="m")
+
+    # bottom right isolator
+    paramdb.addparam("brmountoffsetx", numericunitsv, defunits="m")
+    #paramdb.addparam("brmountoffsety", numericunitsv, defunits="m")
+    #paramdb.addparam("brmountoffsetz", numericunitsv, defunits="m")
+
+    # top right isolator
+    paramdb.addparam("trmountoffsetx", numericunitsv, defunits="m")
+    #paramdb.addparam("trmountoffsety", numericunitsv, defunits="m")
+    #paramdb.addparam("trmountoffsetz", numericunitsv, defunits="m")

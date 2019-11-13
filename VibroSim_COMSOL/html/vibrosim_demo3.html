@@ -1,0 +1,336 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>vibrosim_demo3</title><meta name="generator" content="MATLAB 9.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-11-13"><meta name="DC.source" content="vibrosim_demo3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%&gt; @brief Here is a third example of how to use BuildVibroModel</span>
+
+<span class="comment">% This is identical to the second example, except static mount boundary conditions are added</span>
+<span class="comment">% using 'Seq' and it automatically runs as well as builds</span>
+<span class="comment">%</span>
+<span class="comment">% NOTE: Make your window as wide as possible when viewing this file!</span>
+
+<span class="comment">%                 x          y         z      angle</span>
+couplant_coord=[ .14/2,   .0254/2,     .012,      NaN    ];
+isolator_coords=[.13,     .0254/2,     0,   0.0,  <span class="comment">% top-left</span>
+		 .01,     .0254/2,     0,   0.0,  <span class="comment">% top-right</span>
+                 .12,     .0254/2,     .012,      0.0,  <span class="comment">% bottom-left</span>
+		 .02,     .0254/2,     .012,      0.0]; <span class="comment">% bottom-right</span>
+
+<span class="comment">% ( NaN for angle causes it to create a circular isolator)</span>
+
+<span class="comment">% You may wish to uncomment these next two lines if this is part of a function</span>
+<span class="comment">% -- that way if the function fails you can access the wrapped and unwrapped model</span>
+<span class="comment">% variables just because they are globals.</span>
+<span class="comment">%global M</span>
+<span class="comment">%global model</span>
+
+
+<span class="comment">% InitializeVibroSimScript() connects to COMSOL and initializes and</span>
+<span class="comment">% returns the wrapped model variable (M) and the unwrapped node (model).</span>
+[M,model]=InitializeVibroSimScript();
+
+
+
+<span class="comment">% Call a function that sets various parameters to be used by the model.</span>
+default_params(M);
+
+<span class="comment">% Extract parameters that will be needed below</span>
+ObtainDCParameter(M,<span class="string">'staticload_mount'</span>);
+ObtainDCParameter(M,<span class="string">'xducerforce'</span>,<span class="string">'N'</span>);
+
+<span class="comment">% Define a procedure for building the geometry. Steps can be sequenced by using</span>
+<span class="comment">% the pipe (vertical bar | ) character.</span>
+bldgeom = @(M,geom) CreateRectangularBarSpecimen(M,geom,<span class="string">'specimen'</span>) | <span class="keyword">...</span>
+	  @(specimen) AttachThinCouplantIsolators(M,geom,specimen, <span class="keyword">...</span>
+						    couplant_coord, <span class="keyword">...</span>
+						    isolator_coords) | <span class="keyword">...</span>
+	  <span class="keyword">...</span><span class="comment"> % Top-left and top-right isolators (.isolators{1} and .isolators{2}: net force of -staticload_mount in the z direction</span>
+	  @(specimen) AddBoundaryCondition(M,specimen,specimen.isolators{1},<span class="keyword">...</span>
+					   [specimen.isolators{1}.tag <span class="string">'_tltrforce'</span>], <span class="keyword">...</span>
+					   <span class="string">'solidmech_static'</span>,<span class="keyword">...</span><span class="comment">  % physics</span>
+					   <span class="string">'staticloading'</span>, <span class="keyword">...</span><span class="comment">    % BC class</span>
+					   @(M,physics,bcobj) <span class="keyword">...</span>
+					    BuildFaceTotalForceBC(M,geom,physics,specimen.isolators{1},bcobj,<span class="keyword">...</span>
+								  @(M,geom,tlisolator) <span class="keyword">...</span>
+								   union(specimen.isolators{1}.getfreefaceselection(M,geom,specimen.isolators{1}), <span class="keyword">...</span>
+									 specimen.isolators{2}.getfreefaceselection(M,geom,specimen.isolators{2})), <span class="keyword">...</span>
+								  {<span class="string">'0'</span>,<span class="string">'0'</span>,<span class="string">'-staticload_mount'</span>})) | <span class="keyword">...</span>
+          <span class="keyword">...</span><span class="comment"> % Bottom-left isolator (.isolators{3}) is fixed</span>
+          @(specimen) AddBoundaryCondition(M,specimen,specimen.isolators{3}, <span class="keyword">...</span>
+					   [specimen.isolators{3}.tag <span class="string">'_blfixed'</span>],<span class="keyword">...</span>
+					   <span class="string">'solidmech_static'</span>, <span class="keyword">...</span><span class="comment">  % physics</span>
+					   <span class="string">'staticloading'</span>, <span class="keyword">...</span><span class="comment">     % BC class</span>
+					   @(M,physics,bcobj) <span class="keyword">...</span>
+					    BuildFaceFixedBC(M,geom,physics, <span class="keyword">...</span>
+							     specimen.isolators{3}, <span class="keyword">...</span>
+							     bcobj, <span class="keyword">...</span>
+							     specimen.isolators{3}.getfreefaceselection)) |  <span class="keyword">...</span>
+	  <span class="keyword">...</span><span class="comment"> % Bottom-right isolator (.isolators{4}) is rolling -- displacement in the Z direction is zero</span>
+	  @(specimen) AddBoundaryCondition(M,specimen,specimen.isolators{4},[specimen.isolators{4}.tag <span class="string">'_brrolling'</span>], <span class="keyword">...</span>
+					   <span class="string">'solidmech_static'</span>, <span class="keyword">...</span>
+					   <span class="string">'staticloading'</span>, <span class="keyword">...</span>
+					   @(M,physics,bcobj) <span class="keyword">...</span>
+					    BuildFaceDirectionalDisplacementBC(M,geom,physics,<span class="keyword">...</span>
+									       specimen.isolators{4},<span class="keyword">...</span>
+									       bcobj, <span class="keyword">...</span>
+									       specimen.isolators{4}.getfreefaceselection, <span class="keyword">...</span>
+									       GetOutwardNormal(M,geom,specimen.isolators{4}.pos,specimen.isolators{4}.centerpos), <span class="keyword">...</span>
+									       0.0)) | <span class="keyword">...</span>
+	  <span class="keyword">...</span><span class="comment"> % Force condition on couplant</span>
+	  @(specimen) AddBoundaryCondition(M,specimen,specimen.couplant,[specimen.couplant.tag <span class="string">'_xducerforce'</span>], <span class="keyword">...</span>
+					   <span class="string">'solidmech_static'</span>, <span class="keyword">...</span>
+					   <span class="string">'staticloading'</span>, <span class="keyword">...</span>
+					   @(M,physics,bcobj) <span class="keyword">...</span>
+					    BuildFaceTotalForceBC(M,geom,physics,specimen.couplant,bcobj, <span class="keyword">...</span>
+								  specimen.couplant.getfreefaceselection, <span class="keyword">...</span>
+								  <span class="keyword">...</span><span class="comment"> % xducerforce is multiplied by outward normal</span>
+		  			                          <span class="keyword">...</span><span class="comment"> % on the couplant, which is equivalent to the</span>
+					                          <span class="keyword">...</span><span class="comment"> % inward normal on the specimen</span>
+								  MultiplyScalarStrByNumericVec(<span class="string">'xducerforce'</span>, <span class="keyword">...</span>
+												GetOutwardNormal(M,geom,specimen.couplant.pos,specimen.couplant.centerpos))));
+
+
+<span class="comment">% Define a procedure for building the crack. Steps can be sequenced by using</span>
+<span class="comment">% the pipe (vertical bar | ) character.</span>
+bldcrack = @(M,geom,specimen) CreateCrack(M,geom,<span class="string">'crack'</span>,specimen, <span class="keyword">...</span>
+					  { ObtainDCParameter(M,<span class="string">'simulationcrackx'</span>,<span class="string">'m'</span>), <span class="keyword">...</span>
+					    ObtainDCParameter(M,<span class="string">'simulationcracky'</span>,<span class="string">'m'</span>), <span class="keyword">...</span>
+					    ObtainDCParameter(M,<span class="string">'simulationcrackz'</span>,<span class="string">'m'</span>) }, <span class="keyword">...</span>
+					  ObtainDCParameter(M,<span class="string">'cracksemimajoraxislen'</span>), <span class="keyword">...</span>
+					  ObtainDCParameter(M,<span class="string">'cracksemiminoraxislen'</span>), <span class="keyword">...</span>
+					  [0,1,0], <span class="keyword">...</span>
+					  [0,0,-1], <span class="keyword">...</span>
+					  [ .001, -30 ; .002, 0 ; .003, 60], <span class="keyword">...</span>
+                                          {<span class="string">'solidmech_harmonicsweep'</span>,<span class="string">'solidmech_harmonicburst'</span>}, <span class="keyword">...</span>
+					  <span class="string">'vibroheatconvert'</span>);
+
+<span class="comment">% Define a procedure for creating the various physics definitions. Steps can be</span>
+<span class="comment">% sequenced by using the pipe (vertical bar | ) character.</span>
+bldphysics = @(M,geom,specimen,flaw) VibroPhysics(M,geom,specimen,flaw,<span class="string">'process'</span>);
+
+<span class="comment">% Define a procedure to create needed COMSOL result nodes. Generally can pass</span>
+<span class="comment">% either the wrapped model (M) or unwrapped (model). Pipelining will only work</span>
+<span class="comment">% with the wrapped model 'M'.</span>
+genresults = @(M) VibroResults(M);
+
+<span class="comment">% Define a path and filename for saving the generated COMSOL model.</span>
+<span class="comment">% BuildVibroModel() will create the model's directory if necessary</span>
+savefilename = fullfile(tempdir,sprintf(<span class="string">'vibrosim_%s'</span>,char(java.lang.System.getProperty(<span class="string">'user.name'</span>))),<span class="string">'vibrosim_demo3.mph'</span>);
+
+
+<span class="comment">% Given the model wrapper, the procedures for building the geometry, the crack, the physics,</span>
+<span class="comment">% and for storing the results, and a file name for saving, have COMSOL build the model.x</span>
+BuildVibroModel(M,<span class="keyword">...</span>
+		bldgeom, <span class="keyword">...</span>
+		bldcrack, <span class="keyword">...</span>
+		bldphysics, <span class="keyword">...</span>
+		genresults, <span class="keyword">...</span>
+		savefilename);
+
+<span class="comment">% Uncomment these next two lines to run the model and save the output after building the model</span>
+<span class="comment">%RunAllStudies(model);</span>
+<span class="comment">%mphsave(M.node,savefilename);</span>
+</pre><pre class="codeoutput">Warning: Name is nonexistent or not a directory: /home/sdh4/VibroSim/mli 
+</pre><pre class="codeoutput error">Error using InitializeVibroSimScript (line 67)
+mphstart could not be found, even in mli/
+
+Error in vibrosim_demo3 (line 26)
+[M,model]=InitializeVibroSimScript();
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%> @brief Here is a third example of how to use BuildVibroModel
+
+% This is identical to the second example, except static mount boundary conditions are added
+% using 'Seq' and it automatically runs as well as builds
+%
+% NOTE: Make your window as wide as possible when viewing this file!
+
+%                 x          y         z      angle
+couplant_coord=[ .14/2,   .0254/2,     .012,      NaN    ];
+isolator_coords=[.13,     .0254/2,     0,   0.0,  % top-left
+		 .01,     .0254/2,     0,   0.0,  % top-right
+                 .12,     .0254/2,     .012,      0.0,  % bottom-left
+		 .02,     .0254/2,     .012,      0.0]; % bottom-right
+
+% ( NaN for angle causes it to create a circular isolator)
+
+% You may wish to uncomment these next two lines if this is part of a function
+% REPLACE_WITH_DASH_DASH that way if the function fails you can access the wrapped and unwrapped model 
+% variables just because they are globals. 
+%global M
+%global model
+
+
+% InitializeVibroSimScript() connects to COMSOL and initializes and 
+% returns the wrapped model variable (M) and the unwrapped node (model). 
+[M,model]=InitializeVibroSimScript();
+
+
+ 
+% Call a function that sets various parameters to be used by the model. 
+default_params(M);
+
+% Extract parameters that will be needed below
+ObtainDCParameter(M,'staticload_mount');
+ObtainDCParameter(M,'xducerforce','N');
+
+% Define a procedure for building the geometry. Steps can be sequenced by using
+% the pipe (vertical bar | ) character. 
+bldgeom = @(M,geom) CreateRectangularBarSpecimen(M,geom,'specimen') | ...
+	  @(specimen) AttachThinCouplantIsolators(M,geom,specimen, ...
+						    couplant_coord, ...
+						    isolator_coords) | ...
+	  ... % Top-left and top-right isolators (.isolators{1} and .isolators{2}: net force of -staticload_mount in the z direction
+	  @(specimen) AddBoundaryCondition(M,specimen,specimen.isolators{1},...
+					   [specimen.isolators{1}.tag '_tltrforce'], ...
+					   'solidmech_static',...  % physics
+					   'staticloading', ...    % BC class
+					   @(M,physics,bcobj) ...
+					    BuildFaceTotalForceBC(M,geom,physics,specimen.isolators{1},bcobj,...
+								  @(M,geom,tlisolator) ...
+								   union(specimen.isolators{1}.getfreefaceselection(M,geom,specimen.isolators{1}), ...
+									 specimen.isolators{2}.getfreefaceselection(M,geom,specimen.isolators{2})), ...
+								  {'0','0','-staticload_mount'})) | ...
+          ... % Bottom-left isolator (.isolators{3}) is fixed
+          @(specimen) AddBoundaryCondition(M,specimen,specimen.isolators{3}, ...
+					   [specimen.isolators{3}.tag '_blfixed'],...
+					   'solidmech_static', ...  % physics
+					   'staticloading', ...     % BC class
+					   @(M,physics,bcobj) ...
+					    BuildFaceFixedBC(M,geom,physics, ...
+							     specimen.isolators{3}, ...
+							     bcobj, ...
+							     specimen.isolators{3}.getfreefaceselection)) |  ...
+	  ... % Bottom-right isolator (.isolators{4}) is rolling REPLACE_WITH_DASH_DASH displacement in the Z direction is zero
+	  @(specimen) AddBoundaryCondition(M,specimen,specimen.isolators{4},[specimen.isolators{4}.tag '_brrolling'], ...
+					   'solidmech_static', ...
+					   'staticloading', ...
+					   @(M,physics,bcobj) ...
+					    BuildFaceDirectionalDisplacementBC(M,geom,physics,...
+									       specimen.isolators{4},...
+									       bcobj, ...
+									       specimen.isolators{4}.getfreefaceselection, ...
+									       GetOutwardNormal(M,geom,specimen.isolators{4}.pos,specimen.isolators{4}.centerpos), ...
+									       0.0)) | ...
+	  ... % Force condition on couplant
+	  @(specimen) AddBoundaryCondition(M,specimen,specimen.couplant,[specimen.couplant.tag '_xducerforce'], ...
+					   'solidmech_static', ...
+					   'staticloading', ...
+					   @(M,physics,bcobj) ...
+					    BuildFaceTotalForceBC(M,geom,physics,specimen.couplant,bcobj, ...
+								  specimen.couplant.getfreefaceselection, ...
+								  ... % xducerforce is multiplied by outward normal 
+		  			                          ... % on the couplant, which is equivalent to the
+					                          ... % inward normal on the specimen
+								  MultiplyScalarStrByNumericVec('xducerforce', ...
+												GetOutwardNormal(M,geom,specimen.couplant.pos,specimen.couplant.centerpos))));
+
+
+% Define a procedure for building the crack. Steps can be sequenced by using
+% the pipe (vertical bar | ) character. 
+bldcrack = @(M,geom,specimen) CreateCrack(M,geom,'crack',specimen, ...
+					  { ObtainDCParameter(M,'simulationcrackx','m'), ...
+					    ObtainDCParameter(M,'simulationcracky','m'), ...
+					    ObtainDCParameter(M,'simulationcrackz','m') }, ...
+					  ObtainDCParameter(M,'cracksemimajoraxislen'), ...
+					  ObtainDCParameter(M,'cracksemiminoraxislen'), ...
+					  [0,1,0], ...
+					  [0,0,-1], ...
+					  [ .001, -30 ; .002, 0 ; .003, 60], ...
+                                          {'solidmech_harmonicsweep','solidmech_harmonicburst'}, ...
+					  'vibroheatconvert');
+
+% Define a procedure for creating the various physics definitions. Steps can be 
+% sequenced by using the pipe (vertical bar | ) character. 
+bldphysics = @(M,geom,specimen,flaw) VibroPhysics(M,geom,specimen,flaw,'process');
+
+% Define a procedure to create needed COMSOL result nodes. Generally can pass
+% either the wrapped model (M) or unwrapped (model). Pipelining will only work
+% with the wrapped model 'M'.
+genresults = @(M) VibroResults(M);
+
+% Define a path and filename for saving the generated COMSOL model.
+% BuildVibroModel() will create the model's directory if necessary
+savefilename = fullfile(tempdir,sprintf('vibrosim_%s',char(java.lang.System.getProperty('user.name'))),'vibrosim_demo3.mph');
+
+
+% Given the model wrapper, the procedures for building the geometry, the crack, the physics,
+% and for storing the results, and a file name for saving, have COMSOL build the model.x
+BuildVibroModel(M,...
+		bldgeom, ...
+		bldcrack, ...
+		bldphysics, ...
+		genresults, ...
+		savefilename);
+
+% Uncomment these next two lines to run the model and save the output after building the model
+%RunAllStudies(model);
+%mphsave(M.node,savefilename);
+
+
+##### SOURCE END #####
+--></body></html>

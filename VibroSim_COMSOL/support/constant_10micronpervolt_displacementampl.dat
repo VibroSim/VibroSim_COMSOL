@@ -1,0 +1,9 @@
+# Frequency[Hz]	xducercalib_real[m/Volt]	xducercalib_imag[m/Volt]
+0	10e-6	0
+1000	10e-6	0
+2000	10e-6	0
+5000	10e-6	0
+10000	10e-6	0
+20000	10e-6	0
+50000	10e-6	0
+100000	10e-6	0

@@ -1,0 +1,39 @@
+global dgcontroller
+
+from dc_value import numericunitsvalue as numericunitsv
+from dc_value import stringvalue as stringv
+
+createparamserver()
+
+
+paramdb.addparam("L", numericunitsv, defunits="m")
+paramdb.addparam("W", numericunitsv, defunits="m")
+paramdb.addparam("H", numericunitsv, defunits="m")
+paramdb.addparam("XPos", numericunitsv, defunits="m")
+paramdb.addparam("YPos", numericunitsv, defunits="m")
+paramdb.addparam("k_mat", numericunitsv, defunits="W/m/K")
+paramdb.addparam("rho_mat", numericunitsv, defunits="kg/m^3")
+paramdb.addparam("alpha_mat", numericunitsv, defunits="m^2/s")
+paramdb.addparam("x1", numericunitsv, defunits="m")
+paramdb.addparam("y1", numericunitsv, defunits="m")
+paramdb.addparam("z1", numericunitsv, defunits="m")
+paramdb.addparam("l1", numericunitsv, defunits="m")
+paramdb.addparam("q1", numericunitsv, defunits="W/m")
+paramdb.addparam("x2", numericunitsv, defunits="m")
+paramdb.addparam("y2", numericunitsv, defunits="m")
+paramdb.addparam("z2", numericunitsv, defunits="m")
+paramdb.addparam("l2", numericunitsv, defunits="m")
+paramdb.addparam("q2", numericunitsv, defunits="W/m")
+paramdb.addparam("x3", numericunitsv, defunits="m")
+paramdb.addparam("y3", numericunitsv, defunits="m")
+paramdb.addparam("z3", numericunitsv, defunits="m")
+paramdb.addparam("l3", numericunitsv, defunits="m")
+paramdb.addparam("q3", numericunitsv, defunits="W/m")
+paramdb.addparam("T0", numericunitsv, defunits="K")
+paramdb.addparam("t0", numericunitsv, defunits="s")
+paramdb.addparam("t1", numericunitsv, defunits="s")
+paramdb.addparam("t2", numericunitsv, defunits="s")
+paramdb.addparam("t3", numericunitsv, defunits="s")
+paramdb.addparam("tstep", numericunitsv, defunits="s")
+
+paramdb.addparam("nsources",numericunitsv,defunits="unitless")

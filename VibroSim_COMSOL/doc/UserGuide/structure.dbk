@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter  xmlns="http://docbook.org/ns/docbook" version="5.0"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Structure</title>
+  <section><title>Wrapping COMSOL nodes with MATLAB objects</title>
+  <para>
+    All COMSOL nodes used during construction of the COMSOL model
+    are wrapped with MATLAB objects of <code>class ModelWrapper</code>.
+    The ModelWrapper provides many benefits:
+    <itemizedlist>
+      <listitem><para>Provides pass-by-reference semantics within MATLAB,
+      in contrast to most other MATLAB objects, which are pass-by-value (because <code>ModelWrapper</code> is indirectly derived from <code>handle</code>.</para></listitem>
+      <listitem><para>Provides the ability to dynamically add additional
+      properties to an instance (because <code>ModelWrapper</code> is derived from <code>dynamicprops</code>.</para></listitem>
+      <listitem><para>Provides a consistent means -- through object properites --
+      to store common characteristics, such as the tag name, the COMSOL node,
+      and the COMSOL parent (used in case we want to delete the COMSOL node).</para></listitem>
+      <listitem><para>Provides means -- through object properites --
+      to store related objects.</para></listitem>
+      <listitem><para>All <code>ModelWrapper</code>s are entered in
+      a master model registry stored in a global MATLAB variable, so they
+      can be looked-up by tag. This is very useful, for example, if your
+      model building script fails and you want to interactively debug.
+      The top level model object can for example be extracted with
+      <programlisting>
+	M=FindWrappedObject([],'Model');
+	model=M.node;
+      </programlisting>
+      Other objects can be found by tag name via
+      <programlisting>
+	WrappedObject=FindWrappedObject(M,tagname);
+      </programlisting>
+      </para></listitem>
+      
+    </itemizedlist>
+    The <code>ModelWrapper</code> for the top level COMSOL object is
+    generally referred to as <code>M</code> and is passed as a parameter
+    to most VibroSim functions.
+  </para>
+
+  </section>
+  <section><title>BuildLater objects</title>
+    <para>
+      A common situation when constructing a COMSOL model tree is the
+      desire to <emphasis>specify</emphasis> objects to be constructed
+      at one phase of the construction process, but to actually build
+      them later. One example of this is in meshing. Usually you don't
+      want to start the meshing process until the geometry is
+      finalized, but in many cases you want to specify how each
+      geometry component is to be meshed as it is constructed.
+    </para>
+    <para>
+      To address cases like these, VibroSim defines the
+      <code>BuildLater</code> object, which represents an object that is
+      specified at one phase of model construction, but where the
+      COMSOL node is instantiated at a later phase.
+      <code>BuildLater</code> objects are created with the <code>BuildLater</code>
+      constructor which takes four parameters: The top level
+      model object <code>M</code>, the tag for the new object,
+      the BuildLater class for the new object (which controls
+      when it will be instantiated and what parameters are
+      provided for the instantiation), and the code object
+      that will perform the instantiation. Usually the
+      code object is an "anonymous function": A dynamically-generated
+      MATLAB function that provides instructions for building
+      the object. 
+    </para>
+    <section><title>Use of anonymous functions</title>
+      <para>
+        Anonymous functions, sometimes alternatively referred to as "lambdas"
+	are short, inline, dynamically generated MATLAB functions that make it
+	relatively easy to pass code as a function parameter. The basic
+	syntax for a MATLAB Anonymous function is:
+	<programlisting>
+	  gettopface  = @(M, geom, blockobj) GetBlockFace(M,geom,blockobj,[0 0 1]);
+	</programlisting>
+	The parentheses following the '@' specify the parameters that
+	must be specified when calling the function. Other values
+	and parameters used are taken from the context where the
+	anonymous function was defined. The anonymous function
+	is a code object that can be passed around and stored like
+	any other MATLAB variable, and can be executed when needed. 
+      </para>
+    </section>
+    <section><title>Functions for instantiating <code>BuildLater</code>objects</title>
+    <segmentedlist>
+      <?dbfo   list-presentation="table"?>
+      <?dbhtml   list-presentation="table"?>
+      <segtitle>Function</segtitle><segtitle>Use</segtitle>
+      <seglistitem><seg><code>BuildLater</code></seg><seg>Class constructor (general purpose</seg></seglistitem>
+      <seglistitem><seg><code>BuildLater</code></seg><seg>Class constructor (general purpose</seg></seglistitem>
+      <seglistitem><seg><code>AddBoundaryCondition</code></seg><seg>Specifying  boundary conditions for later instantiation during assembly of the physics tree</seg></seglistitem>
+      <seglistitem><seg><code>BuildLaterWithNormal</code></seg><seg>Specifying geometric (and other) objects -- usually attachments such as couplant and isolators -- to be built after the main geometry has been constructed and surface normal vectors can be evaluated, so that the attachment can be properly oriented. </seg></seglistitem>
+      <seglistitem><seg><code>RunLater</code></seg><seg>Specifying code (as opposed to an object to construct) that needs to be run in a later phase of model construction</seg></seglistitem>
+      </segmentedlist>
+    </section>
+  </section>
+  <section><title>Phases of model construction</title>
+    <para>(These phases correspond to the execution of <code>BuildVibroModelNoInit()</code>)</para>
+    <segmentedlist>
+      <?dbfo   list-presentation="table"?>
+      <?dbhtml   list-presentation="table"?>
+      <segtitle>Phase</segtitle><segtitle>Purpose</segtitle>
+      <seglistitem><seg>Between execution of InitializeVibroSimScript() and BuildVibroModelNoInit()</seg><seg>Custom initialization and parameter setting</seg></seglistitem>
+      <seglistitem><seg>Parameter setting via <code>paramfunc()</code></seg><seg>Set parameters of the simulation</seg></seglistitem>
+      <seglistitem><seg>Geometry construction</seg><seg>Build specimen, define isolators, contactors, materials, boundary conditions, etc. via <code>geometryfunc()</code></seg></seglistitem>
+      <seglistitem><seg>Flaw construction</seg><seg>Instantiate flaw via <code>flawfunc()</code></seg></seglistitem>
+      <seglistitem><seg>Initial mesh instantiation</seg><seg>Define a mesh over the specimen prior to normal extraction</seg></seglistitem>
+      <seglistitem><seg>Normal extraction</seg><seg>Extraction of surface normals of specimen, use of those normals to properly orient and instantiate previously-defined objects such as isolators and contactors.</seg></seglistitem>
+      <seglistitem><seg>Remaining mesh instantiation</seg><seg>Meshing of all remaining objects such as those created after normal extraction</seg></seglistitem>
+      <seglistitem><seg>Applying materials</seg><seg>Defining which materials apply to which geometric domains</seg></seglistitem>
+      <seglistitem><seg>Building physics and studies</seg><seg>Create physics and studies, and instantiate boundary conditions via <code>physicsstudyfunc()</code></seg></seglistitem>
+      <seglistitem><seg>Selection of boundary conditions</seg><seg>Boundary conditions for each physics must be selected once all physics nodes have been created</seg></seglistitem>
+      <seglistitem><seg>Instantiate results nodes</seg><seg>Create plots, etc. via <code>resultsfunc</code></seg></seglistitem>
+      <seglistitem><seg>Save and run model</seg><seg>Save model -- in case of trouble executing -- and run all studies if desired</seg></seglistitem>
+      <seglistitem><seg>Save final results</seg><seg>Save model.</seg></seglistitem>
+      
+    </segmentedlist>
+  </section>
+  <section><title>Parameters and DCParameters</title>
+    <para>
+      VibroSim provides support for internally externally specified and
+      controlled parameters through an internal parameter database <code>Paramdb</code> which can supplement external parameters known as <code>DCParam</code>s.
+      These two types of parameters can be used identically within VibroSim; the only difference is in how they are initialized. Local <code>Paramdb</code>
+      entries are instantiated from <code>AddParamToParamdb()</code> whereas
+      <code>DCParam</code>s are instantiated externally and accessed via
+      remote procedure calls (currently implemented using the <code>D-Bus</code> RPC engine). Attempting to create a local <code>Paramdb</code> entry will fail
+      if a <code>DCParam</code> of the same name exists.
+    </para>
+    <para>
+      For the most part, numeric <code>Paramdb</code> entries and <code>DCParam</code>s
+      are transformed into COMSOL parameters (in COMSOL's 'Definitions' node)
+      via the <code>ObtainDCParameter()</code> call. Note that changing the
+      local <code>Paramdb</code> or remote <code>DCParam</code> a
+      after the <code>ObtainDCParameter()</code> call will not affect
+      the COMSOL parameter. 
+    </para>
+    <para>
+      In some cases, such as for string parameters or for numeric parameters
+      where numeric evaluation within MATLAB is required (or where COMSOL
+      requires numbers in place of a named parameter), the <code>Paramdb</code>
+      entry or <code>DCParam</code> is instead extracted directly
+      via <code>GetDCParamNumericValue()</code> or <code>GetDCParamStringValue</code>.
+    </para>
+    <section><title>Algebraic expressions represented as strings</title>
+      <para>
+        In most cases COMSOL supports using expressions in place of numeric input. These expressions can use COMSOL parameters. Provided a <code>Paramdb</code> entry or <code>DCParam</code> has been extracted via <code>ObtainDCParameter()</code>, its name can be used like a variable in such expressions. 
+      </para>
+      <para>
+	It is fairly common to need to do arithmetic or form
+	mathematical expressions based on such parameters, without wanting
+	to evaluate them directly (so the parameter could be changed later
+	and the expression would still be correct). This is done
+	extensively within VibroSim and is a common practice within
+	the code. One example of this is the function <code>magnitude_cellstr_array()</code> which takes as a parameter a MATLAB cell array of strings. Each string is presumed to represent a vector component. The function (code shown below) assembles the needed expression as a string using MATLAB bracket concatenation (<code>[</code> and <code>]</code>). <emphasis>Please note that when assembling expressions using bracket concatenation it is very important to parenthesize every externally-provided input to ensure that the input is used as a unit and cannot be broken by operator precedence -- such as the multiplication operator multiplying only the last term of a sum.</emphasis>
+      </para>
+      <programlisting>
+function magnitude=magnitude_cellstr_array(array)
+% function magnitude=magnitude_cellstr_array(array)
+%
+% Calculate the vector magnitude of a vector represented
+% as a cell array of strings
+
+% Initialize magnitude-squared to 0 
+magnitudesq='0.0';
+
+% Accumulate the absolute square of each element  
+for cnt=1:length(array)
+  magnitudesq=[ magnitudesq ' + abs(' array{cnt} ')^2' ];
+end
+
+% return the square root. 
+magnitude=[ 'sqrt(' magnitudesq ')' ];
+      </programlisting>
+	
+    </section>
+  </section>
+</chapter>

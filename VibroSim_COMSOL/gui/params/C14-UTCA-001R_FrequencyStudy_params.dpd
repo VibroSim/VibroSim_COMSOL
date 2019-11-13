@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dc:params xmlns:dcv="http://thermal.cnde.iastate.edu/dcvalue" xmlns:dc="http://thermal.cnde.iastate.edu/datacollect" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <dc:configfiles>
+    <dc:configfile xlink:href="../conf/RectangularBar_StaticBending_FrequencyAnalysis.dcc"/>
+  </dc:configfiles>
+  <dc:guis>
+    <dc:gui xlink:href="../glade/RectangularBar_StaticBending_FrequencyAnalysis.glade"/>
+  </dc:guis>
+  <dc:plans/>
+  <dc:paramdb>
+    <dc:blmountoffsetz dcv:units="m">0.012580000000000001</dc:blmountoffsetz>
+    <dc:vib2signallevel dcv:units="%">NaN</dc:vib2signallevel>
+    <dc:blmountoffsetx dcv:units="m">0.036000000000000004</dc:blmountoffsetx>
+    <dc:blmountoffsety dcv:units="m">0.013125</dc:blmountoffsety>
+    <dc:orientation></dc:orientation>
+    <dc:trmountoffsety dcv:units="m">0.013125</dc:trmountoffsety>
+    <dc:couplantfacemethod>Map</dc:couplantfacemethod>
+    <dc:dgsfile xlink:href=""/>
+    <dc:coating></dc:coating>
+    <dc:eta_couplant dcv:units="">1.845</dc:eta_couplant>
+    <dc:aircyl></dc:aircyl>
+    <dc:simulationfreqstep dcv:units="Hz">50.0</dc:simulationfreqstep>
+    <dc:nisolatorlayers>5</dc:nisolatorlayers>
+    <dc:vib2range dcv:units="mm/s/V">NaN</dc:vib2range>
+    <dc:couplantmeshsize dcv:units="m">0.002</dc:couplantmeshsize>
+    <dc:lasery dcv:units="mm">0.0</dc:lasery>
+    <dc:laserx dcv:units="mm">0.0</dc:laserx>
+    <dc:freqanalysistype>Frequency Sweep</dc:freqanalysistype>
+    <dc:laserz dcv:units="mm">0.0</dc:laserz>
+    <dc:exportresults>Yes</dc:exportresults>
+    <dc:isolatorlength dcv:units="m">0.01</dc:isolatorlength>
+    <dc:staticload_mount dcv:units="N">-445.0</dc:staticload_mount>
+    <dc:hostname>ahab.cnde.iastate.edu</dc:hostname>
+    <dc:rmntoffset dcv:units="m">NaN</dc:rmntoffset>
+    <dc:leftclampoffset dcv:units="mm">NaN</dc:leftclampoffset>
+    <dc:xduceryoffset dcv:units="m">0.013125</dc:xduceryoffset>
+    <dc:simulationfreqend dcv:units="Hz">34700.0</dc:simulationfreqend>
+    <dc:couplant></dc:couplant>
+    <dc:vibrange dcv:units="mm/s/V">NaN</dc:vibrange>
+    <dc:rightclampoffset dcv:units="mm">NaN</dc:rightclampoffset>
+    <dc:xducerxoffset dcv:units="m">0.12309</dc:xducerxoffset>
+    <dc:couplantlength dcv:units="m">0.01</dc:couplantlength>
+    <dc:couplantmaterial>cardstock</dc:couplantmaterial>
+    <dc:tlmountoffsety dcv:units="m">0.013125</dc:tlmountoffsety>
+    <dc:brmountoffsetx dcv:units="m">0.21018000000000001</dc:brmountoffsetx>
+    <dc:brmountoffsety dcv:units="m">0.013125</dc:brmountoffsety>
+    <dc:brmountoffsetz dcv:units="m">0.012580000000000001</dc:brmountoffsetz>
+    <dc:xducer>14PI2530J</dc:xducer>
+    <dc:tlmountoffsetz dcv:units="m">0.0</dc:tlmountoffsetz>
+    <dc:excitation dcv:exctype="INVALID"/>
+    <dc:staticload_transducer dcv:units="N">-100.0</dc:staticload_transducer>
+    <dc:ncouplantlayers>1</dc:ncouplantlayers>
+    <dc:specimen>C14-UTCA-001R</dc:specimen>
+    <dc:pixelsperinch dcv:units="Pixels/Inch">NaN</dc:pixelsperinch>
+    <dc:simulationfreqstart dcv:units="Hz">34200.0</dc:simulationfreqstart>
+    <dc:simulationoutput></dc:simulationoutput>
+    <dc:couplantwidth dcv:units="m">0.01</dc:couplantwidth>
+    <dc:date>2015-01-05</dc:date>
+    <dc:xducerzoffset dcv:units="m">0.012580000000000001</dc:xducerzoffset>
+    <dc:isolatorwidth dcv:units="m">0.026249999999999999</dc:isolatorwidth>
+    <dc:trmountoffsetz dcv:units="m">0.0</dc:trmountoffsetz>
+    <dc:eta_specimen dcv:units="">nan</dc:eta_specimen>
+    <dc:trmountoffsetx dcv:units="m">0.21018000000000001</dc:trmountoffsetx>
+    <dc:lmntoffset dcv:units="m">NaN</dc:lmntoffset>
+    <dc:amplitude dcv:units="V">NaN</dc:amplitude>
+    <dc:clamptorque dcv:units="in*oz">NaN</dc:clamptorque>
+    <dc:spcmeshsize dcv:units="m">0.0030000000000000001</dc:spcmeshsize>
+    <dc:couplantshape>Rectangle</dc:couplantshape>
+    <dc:spcmeshtype>hexahedral</dc:spcmeshtype>
+    <dc:notes></dc:notes>
+    <dc:isolatormaterial>cardstock</dc:isolatormaterial>
+    <dc:couplantmeshtype>hexahedral</dc:couplantmeshtype>
+    <dc:eta_isolator dcv:units="">1.845</dc:eta_isolator>
+    <dc:tlmountoffsetx dcv:units="m">0.036000000000000004</dc:tlmountoffsetx>
+    <dc:spcflawindex></dc:spcflawindex>
+    <dc:spcfacemethod>Map</dc:spcfacemethod>
+    <dc:perfby></dc:perfby>
+    <dc:setfile xlink:href=""/>
+  </dc:paramdb>
+</dc:params>

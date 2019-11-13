@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Introduction</title>
+  <para>
+    VibroSim is a toolkit for modeling vibrothermographic NDE.
+    It is implemented as a set of MATLAB scripts which configure COMSOL
+    to run the vibrothermographic simulation.
+  </para>
+  <para>
+    PLEASE NOTE THAT VIBROSIM HAS NOT BEEN ADEQUATELY VALIDATED,
+    THE NUMBERS BUILT INTO IT ALMOST CERTAINLY DO NOT APPLY
+    TO YOUR VIBROTHERMOGRAPHY PROCESS. ITS OUTPUT CANNOT BE 
+    TRUSTED AND IS NOT SUITABLE FOR ENGINEERING REQUIREMENTS
+    WITHOUT APPLICATION- AND PROCESS-SPECIFIC VALIDATION. 
+  </para>
+  <para>
+    Vibrothermography is an NDE technique for finding cracks by
+    vibration-induced crack heating. When a specimen containing a
+    crack is vibrated at high amplitude, heat is generated at the crack.
+    This is caused by a friction-like dissipative mechanism based
+    on the relative motion of the two crack faces. 
+  </para>
+  <para>
+    VibroSim separates out your geometric and material model of your
+    specimen from VibroSim's physics models of the vibrothermography
+    process. The normal use of VibroSim is to predict vibrothermographic
+    response by following a test process parallel to that which
+    would be used in physical experiments.
+  </para>
+  <para>
+    Specifically, the test process involves five steps:
+    <orderedlist>
+      <listitem>
+	A modal vibration analysis to identify resonances.
+      </listitem>
+      <listitem>
+	Frequency sweeps to analyze candidate vibrational resonances more
+	precisely.
+      </listitem>
+      <listitem>
+	Tone burst vibrational excitations at desired vibrational resonances
+      </listitem>
+      <listitem>
+	Heatflow simulations predicting the resulting heat flow
+	from each tone burst excitation
+      </listitem>
+    </orderedlist>
+    In addition, prior to simulation you will need to create a
+    solid model within COMSOL, a suitable mesh, and attach
+    "couplant" and "isolators". There are also physics modules
+    to support static deformation analysis (including
+    geometric nonlinearity) as well as analysis of harmonic
+    perturbation of a staticly loaded system (these additional physics
+    modules will not normally be needed).
+  </para>
+  <section><title>Couplant and Isolators</title>
+    <para>
+      Couplant is the layer of protective material between your
+      excitation transducer and your specimen. Isolators are similar
+      layers of material between your specimen and its mount.
+      Couplant and isolators form the boundary of the vibrational
+      simulation: The details of your excitation transducer and
+      mounting apparatus are beyond the couplant and isolators and
+      are <emphasis>not</emphasis> explicitly modeled.
+    </para>
+    <para>
+      Proper use of couplant and isolators is necessary to make
+      vibrothermographic testing repeatable. Otherwise the unpredictability
+      the contact nonlinearity and the complexity of the
+      dynamic response of the mounts and transducer combine to add
+      a huge amount process variability to the physical system.
+      With such inconsistent experimental behavior, modeling is
+      not meaningful.
+    </para>
+    <para>
+      Couplant, modeled as a viscoelastic layer between your specimen
+      and your transducer, acts as a spring that serves to isolate the
+      dynamic behavior of the transducer from the dynamic behavior of
+      your specimen. It inhibits the formation of complicated and
+      unpredictable system resonances between the transducer and
+      specimen (in the condition that the couplant mechanical mobility
+      is much larger than the transducer mechanical mobility), and
+      allows the transducer to be dynamically modeled as a
+      displacement boundary condition on the opposite side of the
+      couplant from the specimen.
+    </para>
+    <para>
+      Isolators, likewise modeled as viscoelastic layers between your
+      specimen and mounts, act as springs that isolate the dynamic
+      behavor of the mounts from the dynamic behavior of your
+      specimen.  They inhibit the formation of unpredictable system
+      resonances between mounts and specimen (in the condition that
+      couplant mechanical mobility is much larger than mount
+      mechanical mobility), and allow the mounts to be dynamically
+      modeled as zero displacement boundary conditions.
+    </para>
+  </section>
+</chapter>

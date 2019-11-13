@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter  xmlns="http://docbook.org/ns/docbook" version="5.0"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Modeling Process</title>
+  <para>
+    The modeling process depends on the goal of your modeling
+    effort. In some cases you might be modeling a part that does not
+    yet exist or that you cannot yet test, and predict what the crack
+    detectability capability and reliability might be once you have
+    the part and do the test. In other cases, you may have a process
+    in place and want to use modeling to enhance your undertanding of
+    the process.
+  </para>
+  <section><title>Solid modeling</title>
+    <para>
+      You will need to create a geometric solid model of your part in 
+      COMSOL, and generate or load a suitable
+      mesh. You also need to adequately model your mounting apparatus
+      and transducer.
+    </para>
+    <para>
+      In general, you pass a function as the <code>geometryfunc</code>
+      parameter to <code>BuildVibroModel()</code>
+      or <code>BuildVibroModelNoInit()</code>.  This function is 
+      responsible for instantiating the geometry for the specimen, 
+      creating a <code>ModelWrapper</code>, applying a material, 
+      creating couplant and isolators, meshing, and applying 
+      boundary conditions. The geometryfunc takes three arguments: 
+      The top level <code>ModelWrapper</code> <code>M</code>, 
+      the top level wrapped geometry object <code>geom</code>, 
+      and the tag name for the specimen, <code>'specimen'</code>. 
+      The geometryfunc is presumed to return a single value, the 
+      wrapped specimen object. 
+    </para>
+
+    <section><title>Generating the solid model</title>
+      <para>
+        COMSOL has an optional CAD import model that integrates the
+        ParaSolid modeling kernel (the same kernel used in several
+        major CAD packages) into COMSOL and support loading a variety
+        of CAD formats. Geometries can also be constructed directly
+        from 2D and 3D primitives and operations such as extrusions
+        sweeps, etc.
+      </para>
+      <para>
+	In general generating the mesh for the model can 
+	be much harder than creating or importing the model per se, so it 
+	my be wise to choose your process for creating/importing
+	the model to ease mesh generation. 
+	Specifically, if you want to define a programmatic mesh generation
+	process -- for example to be able to accommodate changes in the model
+	or to simplify mesh refinement studies -- you may need to be very
+	careful in how the model is imported so that you can access geometric
+	primitives by name. 
+      </para>
+      <para>
+	Accessing primitives by name is very important so that you can
+	identify specific edges, boundaries, or domains for use in the
+	meshing process.  Otherwise, these can only be manually
+	identified by number. When a new import is performed, the
+	numbering can change and each of those features must be
+	manually re-identified.  For objects created within COMSOL,
+	enabling the "create selections" checkbox creates named 
+	selections that you can access during the meshing process.
+      </para>
+      <para>
+	Within VibroSim you can either load in a (optionally
+	pre-meshed) geometry as an entire .mph file at the very start
+	of your process, or build/load a geometry entirely within the
+	geometryfunc that you pass to BuildVibroModel. If you choose
+	to load an .mph file, your VibroSim script will start with
+	<programlisting>
+	  InitializeVibroSimScript('mph_file_name.mph');
+	</programlisting>
+	and then you <emphasis>must</emphasis> use
+	<code>BuildVibroModelNoInit()</code> for model creation, whereas otherwise
+	you either pass no parameter to <code>InitializeVibroSimScript()</code> or
+	not call <code>InitializeVibroSimScript()</code> at all and instead use
+	<code>BuildVibroModel()</code> for model creation. 
+      </para>
+    </section>
+    <section><title>Generating the mesh</title>
+      <para>
+	You will need to generate a mesh that is suitable both for the
+	vibration analysis and the heat flow analysis.  Detailed
+	meshing instructions can be found in the COMSOL
+	documentation. If you manually construct a set of meshing
+	nodes, and then save the entire .mph file, you can load it
+	using <code>InitializeVibroSimScript()</code> as described
+	above.  The problem with this approach is that if you use
+	VibroSim to add a hypothesized crack, isolators and/or
+	couplant, you will need to remesh the geometry. (You could get
+	around this problem by creating these additional geometry
+	elements in advance, and then your <code>geometryfunc</code>
+	and <code>flawfunc</code> would identify the preexisting
+	geometry and wrap it with a
+	<code>ModelWrapper</code> object.
+      </para>
+      <para>
+	Often, it is better to define a mesh generation process based
+	on identifying geometric features by name, and using those
+	features as boundaries of meshing zones. Meshing is nominally
+	done after geometry creation, using <code>BuildLater</code>
+	functionality (although <code>BuildLater</code> is not 
+	strictly required for specimen meshing so long as all geometric
+	features -- including any crack -- already exist.).
+      </para>
+      <para>
+	Create a <code>meshbuilder</code> <code>BuildLater</code>
+	object by creating and passing a mesh building function
+	to <code>BuildLater</code> (here the
+	variable <code>specimen</code> is presumed to be the 
+	<code>ModelWrapper</code> for the specimen object):
+	<programlisting>
+	  meshobj=BuildLater(M,[specimen.tag '_mesh'], ...
+	                     'meshbuilder', ...
+	                     @(M,mesh,meshobj) ...
+	                     BuildMeshForSpecimen(M,geom,mesh,
+                                                  specimen,meshobj));
+	</programlisting>
+	The mesh building function will be called with three parameters:
+	The top level model wrapper <code>M</code>, the top level mesh 
+	object <code>mesh</code>, and the created <code>BuildLater</code>
+	mesh object <code>meshobj</code>. The example above creates 
+	inline a MATLAB anonymous function (<code>@</code> notation) which takes those three 
+	arguments and more variables from the parent scope (<code>geom</code> 
+	and <code>specimen</code>). 
+      </para>
+      <para>
+	The mesh building function needs to instantiate COMSOL nodes
+	to mesh the entire geometry of the object. In general regions
+	of the object with complicated geometry or fine detail (such as 
+	holes, a crack, etc.) should be meshed separately from bulk 
+	material. This requires that the regions be separated into 
+	multiple COMSOL domains, such as with a <code>Partition</code> object. 
+	In general swept meshes are very effective for 
+	extrusions, but will fail if anything (such as a crack, hole, 
+	etc.) interrupts the extrusion. <code>FreeTet</code> is 
+	a very effective mesher for small, constrained domains, but it 
+	does not seem to work very well for large complicated volumes. 
+        <code>FreeTri</code> can be used to tesselate boundaries prior
+	to running <code>FreeTet</code>. See the chapter "Meshing" in 
+	the COMSOL Multiphysics Reference Manual for more information.
+      </para>
+      <para>
+	In writing your mesh building function you will need to refer
+	to geometric entities in a consistent way. The best way to do
+	this is through automatically generated named selections. This
+	process is documented on the COMSOL
+	website: <ulink url="http://www.comsol.com/blogs/automatically-handling-selections-comsol-multiphysics/"><citetitle>Automatically
+	Handling Selections in COMSOL
+	Multiphysics</citetitle></ulink>.
+	COMSOL creates these named selections for geometric features when
+	the 'Create selections' checkbox is selected for the geometric
+	feature.
+      </para>
+      <para>
+	Be warned that geometry changes (such as adding a crack,
+	adding isolators, or adding couplant) will change the numbering
+	of geometric entities including changing the meaning of 
+	manually-created named selection. Using the automatically-generated
+	named selections seems to be the <emphasis>only</emphasis> 
+	reliable way to identify geometry by its construction for use 
+	in the meshing process. 
+      </para>
+      <para>
+	Please note that all COMSOL meshing nodes must be explicitly 
+	mapped to specific domains. If you leave a meshing node set to 
+	mesh all remaining geometry, it will attempt to mesh the couplant
+	and isolators that aren't built until a later phase, and then 
+	conflict with the meshes built specifically for those objects. 
+      </para>
+      <para>
+	The mesh needs to be fine enough for accurate analysis. 
+	Usually the vibration analysis is the most sensitive
+	to inadequate meshing. In general, there should be at least 
+	several elements per wavelength, with wavelengths 
+	<inlineequation><alt>$\lambda=c/f$</alt></inlineequation>determined
+	by the
+	wavespeeds <inlineequation><alt>$c$</alt></inlineequation> of
+	the different kinds of waves and partial waves involved.
+	
+      </para>
+      <para>
+	Obviously it is the
+	lowest <inlineequation><alt>$c$</alt></inlineequation> that
+	matters. Usually this will be the bending wave. For a thin 
+	plate with a vibrational wave of frequency <inlineequation><alt>$f$</alt></inlineequation>,
+	<informalequation>
+	  <alt>\[c_{b}=\left(\frac{4 \pi^2 E h^2 f^2}{12 \rho (1-\nu^2)}\right)^{\frac{1}{4}}\]</alt>
+	</informalequation>
+	but this prediction may be unnecessarily conservative, as
+	out-of-plane curvature can increase the effective bending
+	stiffness dramatically and the wavespeed with it. 
+      </para>
+    </section>
+    <section><title>Applying material properties</title>
+      <para>
+	Material properties are usually specified in your geometry creation 
+	function with a <code>BuildLater</code> of class <code>applymaterial</code> that is called with two parameters: The top level <code>ModelWrapper</code> <code>M</code> and the <code>BuildLater</code> object <code>obj</code>. The example below applies a named material ('Titanium') to the object. A function, GetDomain(M,geom,specimen) is passed that will extract and return the COMSOL domain entity numbers corresponding to <code>specimen</code>'s COMSOL node that will be given this material:
+	<programlisting>
+	  BuildLater(M,[specimen.tag '_applymaterial'],...
+	             'applymaterial', ...
+	             @(M,obj) ...
+	             ReferenceNamedMaterial(M,geom,specimen,...
+	             'Titanium', ...
+	             @(M,geom,specimen) GetDomain(M,geom,specimen)));
+
+	</programlisting>
+      </para>
+    </section>
+    <section><title>Creating isolators and couplant</title>
+      <para>
+	To create isolators and couplant, 
+	you can either create them explicitly in your 
+	<code>geometryfunc</code> with 
+	CreateIsolator() and/or CreateCouplant(), or you can wrap your 
+	<code>geometryfunc</code> with a call to <code>AttachCouplantIsolators()</code>.
+	An advantage of using <code>AttachCouplantIsolators()</code> is that
+	it creates the couplant and isolators using <code>BuildLaterWithNormal()</code> which automatically orients the couplant and isolator normal to the
+	specimen. 
+	This function takes seven arguments:
+	<orderedlist>
+	  <listitem>
+	    <para>The top level ModelWrapper (<code>M</code>)</para>
+	  </listitem>
+	  <listitem>
+	    <para>The top level wrapped geometry (<code>geom</code>)</para>
+	  </listitem>
+	  <listitem>
+	    <para>The tag to pass on to your geometry creation function (<code>tag</code></para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      A function to call to create your geometry
+	      (<code>maincreationfunc)</code>. This is called
+	      as <code>maincreationfunc(M,geom,tag)</code> and should
+	      return the specimen object.
+	    </para>
+	  </listitem>
+	  <listitem><para>
+	      A single row-vector representing the coordinates for 
+	      placing the couplant (<code>couplant_coord</code>).
+	  </para></listitem>
+	  <listitem><para>
+	      A matrix -- series of row vectors -- each of which 
+	      represent the desired position of an isolator 
+	      (<code>isolator_coords</code>).
+	  </para></listitem>
+	  <listitem><para> An optional function to call
+	      (<code>followupfunc</code>) after the couplant and
+	      isolators have been defined. Note that they will not
+	      have actually been created (they won't be % created
+	      until after the getnormals study), but they can still be
+	      referenced.
+	  </para></listitem>
+	</orderedlist>
+	
+      </para>
+      <para>
+	Regardless of whether you create the isolators and couplant
+	directly or use <code>AttachCouplantIsolators()</code>, the
+	couplant and isolators are automatically meshed, given a
+	material according to the 'couplantmaterial' DC parameter, and
+	given some suitable boundary conditions.  Specifically
+	continuity boundary conditions are automatically created on
+	the contact face for
+	the <code>solidmech_modal</code>, <code>solidmech_static</code>, <code>solidmech_harmonic</code>, <code>solidmech_harmonicper</code>, and <code>heatflow</code> physics classes for the <code>continuities</code> boundary condition class. In addition a fixed boundary condition is set for the free face of each isolator for the <code>solidmech_modal</code>, <code>solidmech_harmonic</code>, and <code>solidmech_harmonicper</code> physics classes for the <code>fixedisolators</code> boundary condition class. The excitation is also supplied as a boundary condition on the free face of the couplant: For the <code>solidmech_harmonic</code> and <code>solidmech_harmonicper</code>physics classes this is a prescribed displacement component based on the calibrated excitation normal to the couplant free face (and free in the other axes). For <code>solidmech_modal</code> physics it is a zero prescribed displacement component normal to the couplant free face (and likewise zero in the other axes.  
+      </para>
+    </section>
+        <section><title>Creating the crack or flaw</title>
+      <para>
+	The function to create a simulated crack should be passed
+	to <code>BuildVibroModel</code>
+	or <code>BuildVibroModelNoInit</code> as
+	the <code>flawfunc</code> parameter. It is called with three
+	parameters: The top
+	level <code>ModelWrapper</code> <code>M</code>, the top level
+	wrapped geometry object <code>geom</code>, and the wrapped
+	specimen object as returned
+	from <code>geometryfunc</code>, <code>specimen</code>. Usually,
+	this will just be a call to CreateCrack. In our first example,
+	the crack is located at fixed location <code>[ 0.2 0.4 0.0
+	]</code> meters with
+	(major axis) half-length <code>.003</code> m and (minor axis) depth <code>.002</code>m. The major axis
+	is <code>[0,1,0]</code> (along <inlineequation><alt>$y$</alt></inlineequation>) and the 
+	minor axis is <code>[0,0,-1]</code> 
+	(along <inlineequation><alt>$-z$</alt></inlineequation>).
+	The closure state is given as -30 MPa for the first mm, 
+	0 MPa for the second mm, and 60 MPa for the third mm. 
+	The crack provides its strain measurement from and derives its
+	vibrothermographic heating calculation from the vibrations
+	calculated in COMSOL physics model <code>solidmech_harmonicburst</code>.
+	<programlisting>
+@(M,geom,specimen) ...
+CreateCrack(M,geom,'crack',specimen, ...
+            [ 0.2 0.4 0.0 ], ...
+            0.003, 0.002,
+            [0,1,0], ...
+            [0,0,-1], ...
+            [ .001, -30 ; .002, 0 ; .003, 60], ...
+	    { 'solidmech_harmonicburst' } );
+</programlisting>
+	The second example is fundamentally similar, but 
+	uses <code>ObtainDCParameter()</code> to get 
+	the crack position:
+	
+	<programlisting>
+@(M,geom,specimen) ...
+CreateCrack(M,geom,'crack',specimen, ...
+            { ObtainDCParameter(M,'simulationcrackx','m'), ...
+              ObtainDCParameter(M,'simulationcracky','m'), ...
+              ObtainDCParameter(M,'simulationcrackz','m') }, ...
+            0.003, 0.002,
+            [0,1,0], ...
+            [0,0,-1], ...
+            [ .001, -30 ; .002, 0 ; .003, 60], ...
+	    { 'solidmech_harmonicburst' } );
+</programlisting>
+Please note that since CreateCrack() adds additional geometric
+objects to the specimen and forms a union between these additional
+geometric objects and the specimen, that this union should
+be considered the final representation of the specimen.
+The final representation of specimen and crack is accessible
+within MATLAB as a property <code>crack.unionwithspecimen</code>
+of the crack object.
+      </para>
+    </section>
+    <section><title>Applying boundary conditions</title>
+      <para>
+	Boundary conditions in VibroSim are created as <code>BuildLater</code>
+	objects through the <code>AddBoundaryCondition()</code> function.
+	Most of the boundary conditions needed are automatically created.
+	For example, when you create couplant and isolators, the
+	continuity boundary conditions between couplant or isolator and
+	specimen are created. In addition, the dynamic boundary condition
+	on the far side of the couplant or isolator is created -- fixed
+	condition for couplant or excitation displacement for isolator --
+	is also created automatically. By contrast, static boundary
+	conditions holding the couplant and isolators in place
+	are <emphasis>not</emphasis> created automatically because the
+	forces are dependent on how the specimen is mounted. So if you
+	want to do static analysis, you will need to apply static
+	constraints as additional boundary conditions.
+      </para>
+      <para>
+	Boundary conditions are specified by physics class -- which represents
+	which classes of physics models will get the boundary condition (each physics model has a physics class specified on creation) -- and by boundary condition class. Boundary condition classes are selected for activation when the physics is used in a study step. For a boundary condition to be active on a physics model in a study step, the physics model must be of one of the physics classes specified for that boundary condition, <emphasis>and</emphasis> at least one of the boundary
+	condition classes specified for the boundary condition must be specified for the study step.
+	<segmentedlist>
+	  <title>Physics classes</title>
+	  <?dbfo   list-presentation="table"?>
+	  <?dbhtml   list-presentation="table"?>
+	  <segtitle>Physics class</segtitle><segtitle>Use</segtitle>
+	  <seglistitem><seg><code>solidmech_modal</code></seg><seg>Dynamic modal analysis</seg></seglistitem>
+	  <seglistitem><seg><code>solidmech_static</code></seg><seg>Static deformation analysis</seg></seglistitem>
+	  <seglistitem><seg><code>solidmech_harmonicper</code></seg><seg>Dynamic harmonic perturbation of static deformation</seg></seglistitem>
+	  <seglistitem><seg><code>solidmech_harmonic</code></seg><seg>Dynamic harmonic analysis -- instantiated as both <code>solidmech_harmonicsweep</code> and <code>solidmech_harmonicburst</code></seg></seglistitem>
+	  <seglistitem><seg><code>heatflow</code></seg><seg>Conduction heat transfer</seg></seglistitem>
+	</segmentedlist>
+	<segmentedlist>
+	  <title>Boundary condition classes</title>
+	  <?dbfo   list-presentation="table"?>
+	  <?dbhtml   list-presentation="table"?>
+	  <segtitle>Boundary condition class</segtitle><segtitle>Use</segtitle>
+	  <seglistitem><seg><code>continuities</code></seg><seg>Continuity boundary conditions between different pieces of an assembly</seg></seglistitem>
+	  <seglistitem><seg><code>staticloading</code></seg><seg>Static boundary conditions (DC constraint) on specimen</seg></seglistitem>
+	  <seglistitem><seg><code>excitation</code></seg><seg>Dynamic excitation boundary condition</seg></seglistitem>
+	  <seglistitem><seg><code>fixedisolators</code></seg><seg>Dynamic fixed constraint boundary condition on isolators</seg></seglistitem>
+	  <seglistitem><seg><code>crackheating</code></seg><seg>Heat flow on to crack faces</seg></seglistitem>
+	</segmentedlist>
+      </para>
+      <para>
+	The following example illustrates a static boundary condition
+	on an isolator with <code>ModelWrapper</code> <code>specimen.blisolator</code>. The new boundary condition gets tag <code>&lt;specimen.blisolator tag name&gt;_blfixed</code> for physics <code>solidmech_static</code> and boundary condition class <code>staticloading</code>. An anonymous function that wraps <code>BuildFaceFixedBC()</code> will be stored in a BuildLater object that will be
+	cloned and constructed within each applicable physics model. 
+	
+	<programlisting>
+AddBoundaryCondition(M,geom,specimen.blisolator,[specimen.blisolator.tag '_blfixed'], ...
+		     'solidmech_static', ...  % physics
+		     'staticloading', ...     % BC class
+		     @(M,physics,bcobj) ... % parameters passed to BC creation 
+		     BuildFaceFixedBC(M,geom,physics, ...
+				       specimen.blisolator, ...
+				       bcobj, ...
+				       specimen.blisolator.getfreefaceselection)); % function to identify boundary
+	</programlisting>
+      </para>
+
+    </section>
+  </section>
+  <section><title>Modal Analysis</title>
+    <para>
+      Typically, once you have loaded and meshed a new geometry, you
+      will want to do a modal analysis. The modal analysis determines
+      the vibrational resonant structure of the specimen. It is
+      controlled by the <code>simulationeigsaround</code> parameter
+      and the <code>simulationneigs</code> parameter, which determine
+      near what frequency (in Hz) to search and how many modes to
+      find.
+    </para>
+    <para>
+      The result of the modal analysis is a set of mode frequencies,
+      each each with a different mode shape. Usually you would select
+      some subset to focus on in a vibrothermography test (if you use
+      a broadband vibrothermography system), or you may be exciting a
+      range of them simultaneously through exciter tip contact
+      nonlinearity (if you use a narrowband vibrothermography
+      system). Typically you will want to determine which resonances
+      give large amounts of dynamic strain across the region of likely
+      crack locations. Your goal in performing the NDE test will be to
+      excite enough of these modes with enough amplitude to detect a
+      crack regardless of the exact position of the crack.
+    </para>
+    <para>
+      You can identify suitable modes by viewing the modal analysis
+      results and selecting each mode in turn. You will want to
+      identify modes where there are large strains in the relevant
+      region.  Crack heating is believed to originate from strains
+      normal to the crack face and from shearing strains on the crack
+      face, so verify that the strains in the relevant region include
+      components in the necessary directions.
+    </para>
+    <para>
+      The modal analysis model can be created by <code>CreateVibroModal()</code> and is instantiated <code>VibroPhysics()</code>  when <code>mode</code> is set to <code>'modal'</code>, <code>'process'</code>, or <code>'all'</code>.
+    </para>
+  </section>
+  <section><title>Static Analysis</title>
+    <para>
+      Static analysis is used to determine the static forces on the couplant
+      and isolators as well as any static deformation of the specimen. It is
+      not part of the normal vibrothermography process, but can be useful
+      in some circumstances:
+      <itemizedlist>
+	<listitem>
+	  Where couplant or isolators are nonlinear-elastic, to determine the linearization point for harmonic or harmonic perturbation analysis. 
+	</listitem>
+	<listitem>
+	  To consider (in combination with harmonic perturbation analysis, and with the nonlinear flags set) geometric nonlinearity and the effect of geometric nonlinearity on resonant frequencies.
+	</listitem>
+	<listitem>
+	  To consider (in combination with harmonic perturbation analysis) the total (static+dynamic) stresses applied to a part and to make sure that those stresses do not approach the fatigue limit or have a risk of reducing the lifetime of the part
+	</listitem>
+      </itemizedlist>
+      The static analysis model can be created by <code>CreateVibroStatic()</code> and is instantiated <code>VibroPhysics()</code> (but without the nonlinear flag set) when <code>mode</code> is set to <code>'static'</code> or <code>'all'</code>.
+    </para>
+  </section>
+  <section><title>Harmonic Perturbation Analysis</title>
+    <para>
+      Harmonic perturbation analysis is used to determine
+      vibrational perturbations that are superimposed over static
+      deformation. It is useful       
+      <itemizedlist>
+	<listitem>
+	  Where couplant or isolators are nonlinear-elastic, to perform linearized vibration analysis around a linearization point. 
+	</listitem>
+	<listitem>
+	  To consider (in combination with static analysis, and with the nonlinear flags set) geometric nonlinearity and the effect of geometric nonlinearity on resonant frequencies.
+	</listitem>
+	<listitem>
+	  To consider (in combination with static analysis) the total (static+dynamic) stresses applied to a part and to make sure that those stresses do not approach the fatigue limit or have a risk of reducing the lifetime of the part
+	</listitem>
+      </itemizedlist>
+      The harmonic perturbation analysis model can be created by <code>CreateVibroHarmonicPer()</code>. It is not instantiated <code>VibroPhysics()</code>.
+    </para>
+  </section>
+  <section><title>Harmonic Analysis -- Sweep mode</title>
+    <para>
+      Harmonic analysis in sweep mode is used to fine-tune
+      the identification of resonant modes and frequencies. Typically
+      you will enter a range of frequencies immediately surrounding
+      a desired resonance. This is
+      important because not all characteristics -- for example material
+      and couplant/isolator loss factors -- are modeled identically
+      in harmonic analysis vs. modal analysis, so there can be a slight
+      frequency shift from that predicted in modal analysis. Similar
+      narrowband frequency sweeps are similarly used
+      in physical experiments to identify small shifts in frequency that
+      tend to occur as amplitude is increased, due to nonlinearity in the
+      transducer and/or specimen. 
+    </para>
+    <para>
+      The sweep mode harmonic analysis generates a pair of spectral
+      plots of motion at the selected laser vibrometer location
+      (parameters <code>laserx</code>, <code>lasery</code>, <code>laserz</code>
+      control the location and <code>laserdx</code>,  <code>laserdy</code>, and <code>laserdz</code> control the direction of sensitivity) and of strain magnitude across the hypothesized crack. These are useful in fine-tuning the frequency as well as identifying how much heating might occur. 
+    </para>
+    <para>
+      The harmonic sweep physics is controlled by three DC parameters:
+      <orderedlist>
+	<listitem>
+	  <code>simulationfreqstart</code>: Starting frequency for the sweep
+	</listitem>
+	<listitem>
+	  <code>simulationfreqstep</code>: Step frequency for the sweep
+	</listitem>
+	<listitem>
+	  <code>simulationfreqend</code>: end frequency for the sweep
+	</listitem>
+      </orderedlist>
+    </para>
+    <para>
+      The harmonic analysis model can be created by <code>CreateVibroHarmonic()</code> and a sweep-mode form is instantiated by <code>VibroPhysics()</code>  when <code>mode</code> is set to <code>'harmonicsweep'</code>, <code>'process'</code>, or <code>'all'</code>.
+    </para>
+  </section>
+  <section><title>Harmonic Analysis -- Burst mode</title>
+    <para>
+      Harmonic analysis in burst mode is used to simulate a
+      vibrothermographic test at a particular excitation frequency.
+      The magnitude of the engineering dynamic strain across the crack
+      (defined as the vector magnitude of the complex magnitude of the
+      tensor product
+      <inlineequation><alt>$\epsilon_{ij}n_{j}$</alt></inlineequation>
+      between engineering dynamic strain tensor
+      <inlineequation><alt>$\epsilon_{ij}$</alt></inlineequation> and
+      the crack face normal
+      <inlineequation><alt>$n_{j}$</alt></inlineequation>) is usually
+      used as an input to the crack heating model to determine the
+      energy flux boundary condition for the heat flow analysis. 
+    </para>
+    <para>
+      The term "engineering strain" is used in this context to refer
+      to the strain that would exist at the crack location if the
+      crack were not present. This parameter is used to predict heating
+      for several reasons:
+      <orderedlist>
+	<listitem>
+	  The presence of the crack perturbs the strain field in its
+	  immediate vicinity in a complicated way. There is no clear
+	  alternative. 
+	</listitem>
+	<listitem>
+	  Engineering strain is the parameter captured during
+	  the calibration experiments used to evaluate the parameters
+	  of the crack heating model.
+	</listitem>
+	<listitem>
+	  In almost all cases where predicting crack heating is
+	  important, the hypothetical crack is small enough that its
+	  effect on the modal vibration pattern and frequency will be
+	  minimal.
+	</listitem>
+      </orderedlist>
+      Therefore it is very important that the burst mode harmonic
+      analysis used to calculate the vibrational input to the crack
+      heating model should <emphasis>not</emphasis> include a
+      discontinuity between crack faces. This is accomplished by
+      not setting the <code>crackdiscontinuity</code> flag to
+      <code>CreateVibroHarmonic()</code>. It can be verified by
+      observing surface plots of the resulting stress field and
+      confirming that no stress concentration is visible around
+      the crack. 
+    </para>
+    <para>
+      The harmonic analysis model can be created by <code>CreateVibroHarmonic()</code> and a burst-mode form is instantiated by <code>VibroPhysics()</code>  when <code>mode</code> is set to <code>'harmonicburst'</code>, <code>'process'</code>, or <code>'all'</code>. The frequency of the burst is controlled by the
+      DC parameter <code>simulationburstfreq</code>.
+
+    </para>
+  </section>
+  <section><title>Heat Flow Analysis</title>
+    <para>
+      Heat flow analysis is used to simulate the flow of heat from the
+      partial annuli that make up the crack faces. The amount of heat
+      flow can be specified as the final argument
+      <code>QbExpressions</code> to CreateCrack(), or, if not
+      provided, will be calculated from the crack heating model based
+      on the last harmonic burst vibration physics referenced in the
+      <code>vibration_physicstags</code> parameter to
+      <code>CreateCrack()</code>.
+    </para>
+    <para>
+      When viewing the results of the heat flow analysis it is common
+      to subtract COMSOL's default background temperature of 20 deg.
+      C (293.15 deg. K) and also to add in synthetic camera noise.
+      The recommended expression is <code>T-293.15 + cameranoise(x,y,z)</code>.
+      The noise-equivalent temperature difference (NETD) of the camera noise
+      is specified using the DC parameter <code>simulationcameranetd</code>.
+    </para>
+    <para>
+      The heatflow analysis model can be created by <code>CreateVibroHeatFlow()</code> and is instantiated by <code>VibroPhysics()</code>  when <code>mode</code> is set to <code>'heatflow'</code>, <code>'process'</code>, or <code>'all'</code>.
+    </para>
+  </section>
+</chapter>

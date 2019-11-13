@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+<book xmlns="http://docbook.org/ns/docbook" version="5.0"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>VibroSim</title>
+  <xi:include href="introduction.dbk"/>
+  <xi:include href="installation.dbk"/>
+  <xi:include href="tutorial.dbk"/>
+  <xi:include href="process.dbk"/>
+  <xi:include href="structure.dbk"/>
+  <xi:include href="reference.dbk"/>
+  
+</book>

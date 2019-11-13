@@ -1,0 +1,59 @@
+Documentation guidelines
+1.1 Introduction
+The doxygen software (http://www.doxygen.org) allows you to extract code comments from your code to automatically generate documentation.
+Doxygen builds automatically a documentation based on C++ components (classes, functions, structs, variables,...) using syntaxic analysis. Doxygen extends this documentation by extracting special comments.
+1.2 Extract code comments from Matlab files (.m files)
+Matlab code is not supported nativly by Doxygen : a perl filter allowing the conversion from .m to C++ has been developped, the m2cpp.pl script.
+This filter extracts only :
+• lines beginning with %> : these lines are converted into C++ comments, ie beginning by ///
+• lines beginning with the function keyword : these lines are converted into C++ functions
+• lines beginning with the classdef keyword : these lines are converted into C++ classes
+• lines beginning with the properties keyword : these lines are converted into C++ properties
+• lines beginning with the enumeration keyword : these lines are converted into C++ enum
+• lines beginning with the events keyword : these lines are converted into C++ enum Events Note
+for enumeration definition : this script only supports the following declaration :
+           enumeration
+             first_enum
+             second_enum
+end
+This one is not yet supported :
+           enumeration
+             first_enum, second_enum
+end
+The file classDocumentationExample.m provides an example of enumeration definition with comments extracted by Doxygen.
+See Installation details if you want more details about how to make this script work.
+2 Documentation guidelines
+￼Attention
+Each line belonging to the doxygen documentation must begin with %> . Example
+ % Matlab comment ignored by doxygen
+ %> comment analyzed by doxygen
+Attention
+Doxygen keyword have to begin by @, for example @b to bold the text (the use of \ instead of @ is not supported)
+1.3 Function description
+The keyword @param and @retval will be used to describe the input and output parameters of a function. For function description, the description should follow the following presentation :
+ * % ======================================================================
+ * %> @brief Brief description of the function
+ * %>
+ * %> More detailed description.
+ * %>
+ * %> @param arg1 First argument
+ * %> @param arg2 Second argument
+ * %>
+ * %> @retval out1 return value for the first output variable
+ * %> @retval out2 return value for the second output variable
+ * % ======================================================================
+ * [out1, out2] = function( arg1, arg2)
+*
+*
+* end
+out1 = arg2;
+out2 = arg1; *
+1.4 Class description
+For class description, the following description can be used :
+* % ======================================================================
+* %> @brief Brief description of the class
+* %>
+* %> More detailed description of the class
+* %>
+* % ======================================================================
+*

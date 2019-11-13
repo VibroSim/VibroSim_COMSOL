@@ -1,0 +1,27 @@
+if "vibrotherm_simulation_dcc" not in globals():
+    vibrotherm_simulation_dcc=True
+
+
+    # call createparamserver() if dbus (i.e. python/matlab/etc.) access to the parameter 
+    # database is likely to be needed.
+    createparamserver()  # Multiple calls to createparamserver() are OK
+    
+    include("vibrotherm_simulation_isolator.dcc")
+    include("vibrotherm_simulation_mounts.dcc")
+    include("vibrotherm_simulation_couplant.dcc")
+    include("vibrotherm_simulation_specimen.dcc")
+    include("vibrotherm_simulation_modal.dcc")
+    include("vibrotherm_simulation_crackpos.dcc")
+
+    # results output
+    #paramdb.addparam("exportresults",stringv,options=["YES","NO"])
+    #paramdb["exportresults"].requestvalstr_sync("NO")
+    
+    # Matlab/Comsol output log
+    paramdb.addparam("simulationoutput",stringv)
+
+    # Mode shpe image filename
+    paramdb.addparam("simulation_modeshape",hrefv)
+    # 
+
+

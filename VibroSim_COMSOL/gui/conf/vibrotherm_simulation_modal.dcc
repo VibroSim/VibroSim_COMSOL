@@ -1,0 +1,14 @@
+if "vibrotherm_simulation_modal_dcc" not in globals():
+    vibrotherm_simulation_modal_dcc = True
+    
+    
+    # number of eigen frequencies to simulate
+    paramdb.addparam("simulationneigs",stringv)
+    paramdb["simulationneigs"].requestvalstr_sync("50")
+
+    # central frequency for eign value solution
+    paramdb.addparam("simulationeigsaround",numericunitsv,defunits='Hz')
+    paramdb["simulationeigsaround"].requestvalstr_sync("0 Hz")
+
+
+    pass

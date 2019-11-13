@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-requires dg_gui_widgets 0.0 -->
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="guiwindow">
+    <child>
+      <object class="GtkVBox" id="vbox1">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel" id="label3">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Parametric sweep. Select parameters by either start, step and end values or 
+a list of parameters to  iterate over, BUT NOT BOTH!</property>
+          </object>
+          <packing>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="frame1">
+            <property name="visible">True</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment1">
+                <property name="visible">True</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkVBox" id="vbox2">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="labelled_adjustparamreadout" id="labelled_adjustparamreadout1">
+                        <property name="visible">True</property>
+                        <property name="labelmarkup">Parameter name</property>
+                        <property name="paramname">varyparam1</property>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkHBox" id="hbox1">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="labelled_adjustparamreadout" id="labelled_adjustparamreadout3">
+                            <property name="visible">True</property>
+                            <property name="labelmarkup">Start Value</property>
+                            <property name="paramname">param1startval</property>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="labelled_adjustparamreadout" id="labelled_adjustparamreadout4">
+                            <property name="visible">True</property>
+                            <property name="labelmarkup">Step size</property>
+                            <property name="paramname">param1stepval</property>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="labelled_adjustparamreadout" id="labelled_adjustparamreadout5">
+                            <property name="visible">True</property>
+                            <property name="labelmarkup">End Value</property>
+                            <property name="paramname">param1endval</property>
+                          </object>
+                          <packing>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="labelled_adjustparamreadout" id="labelled_adjustparamreadout9">
+                        <property name="visible">True</property>
+                        <property name="labelmarkup">Parameter Values (optional)</property>
+                        <property name="paramname">param1vals</property>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&lt;b&gt;Parameter1 &lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+                <attributes>
+                  <attribute name="foreground" value="#72721515e5e5"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="frame2">
+            <property name="visible">True</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment2">
+                <property name="visible">True</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkVBox" id="vbox3">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="labelled_adjustparamreadout" id="labelled_adjustparamreadout2">
+                        <property name="visible">True</property>
+                        <property name="labelmarkup">Parameter 2 name</property>
+                        <property name="paramname">varyparam2</property>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkHBox" id="hbox2">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="labelled_adjustparamreadout" id="labelled_adjustparamreadout6">
+                            <property name="visible">True</property>
+                            <property name="labelmarkup">Start Value</property>
+                            <property name="paramname">param2startval</property>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="labelled_adjustparamreadout" id="labelled_adjustparamreadout7">
+                            <property name="visible">True</property>
+                            <property name="labelmarkup">Step size</property>
+                            <property name="paramname">param2stepval</property>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="labelled_adjustparamreadout" id="labelled_adjustparamreadout8">
+                            <property name="visible">True</property>
+                            <property name="labelmarkup">End Value</property>
+                            <property name="paramname">param2endval</property>
+                          </object>
+                          <packing>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="labelled_adjustparamreadout" id="labelled_adjustparamreadout10">
+                        <property name="visible">True</property>
+                        <property name="labelmarkup">Parameter Values (optional)</property>
+                        <property name="paramname">param2vals</property>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label2">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&lt;b&gt;Parameter2&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+                <attributes>
+                  <attribute name="foreground" value="#72721515e5e5"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="labelled_selectableparamreadout" id="labelled_selectableparamreadout1">
+            <property name="visible">True</property>
+            <property name="labelmarkup">Sweep Type</property>
+            <property name="paramname">sweeptype</property>
+            <property name="editable">False</property>
+          </object>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="frame3">
+            <property name="visible">True</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment3">
+                <property name="visible">True</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="paragraphparam" id="paragraphparam1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <property name="paramname">notes</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label4">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&lt;b&gt;notes&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+                <attributes>
+                  <attribute name="foreground" value="#72721515e5e5"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">4</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

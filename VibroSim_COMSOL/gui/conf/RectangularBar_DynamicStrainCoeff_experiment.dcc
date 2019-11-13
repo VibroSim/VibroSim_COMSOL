@@ -1,0 +1,27 @@
+# Note: datacollect config files are passed through an m4 preprocessor
+# so you can use e.g. "m4_include([[includefile.dcc]])" to include
+# another file. As an alternative you can manually load multiple config
+# files before opening your experiment log, either from the 
+# datacollect command line or from the datacollect gui
+
+# call createparamserver() if dbus (i.e. python/matlab/etc.) access to the parameter 
+# database is likely to be needed.
+createparamserver()  # Multiple calls to createparamserver() are OK
+
+# NOTE:
+# this file is to be used when dynamic strain coefficient has to be calculated during an experiment. Ideally, once the central vibrotherm_simulation.dcc has been replaced with the one in this directory, this file is redundant and can be deleted
+
+m4_include([[imports.dcc]])
+
+
+# specimen mesh facemethod
+paramdb.addparam("spcfacemethod",stringv,options=["freequad","triangles","mapped"])
+paramdb["spcfacemethod"].requestvalstr_sync("mapped")
+
+
+# specimen mesh facemethod
+paramdb.addparam("couplantfacemethod",stringv,options=["freequad","triangles","mapped"])
+paramdb["couplantfacemethod"].requestvalstr_sync("mapped")
+
+
+
