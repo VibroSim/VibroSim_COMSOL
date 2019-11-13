@@ -64,4 +64,5 @@ should do the trick.
 
 Rebuilding .mltbx file from source
 ----------------------------------
-Load in VibroSim_COMSOL.prj
+Open VibroSim_COMSOL.prj in Matlab and press Package...Package.
+

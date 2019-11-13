@@ -6,7 +6,7 @@
    <website/>
    <description>Comsol scripts for the VibroSim vibrothermography simulation package</description>
    <demosection>
-      <label>VibroSim</label>
+      <label>VibroSim_COMSOL</label>
       <demoitem>
          <label>vibrosim_demo3</label>
          <type>other</type>
