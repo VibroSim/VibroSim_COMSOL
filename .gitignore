@@ -9,7 +9,6 @@ old_sep2014
 old_jan2014
 old_jan2015
 .databrowse
-*.png
 *.unison*
 .bak*
 UNISON_NOTES

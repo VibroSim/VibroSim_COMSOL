@@ -6,7 +6,7 @@
     <param.company>Iowa State University</param.company>
     <param.summary>COMSOL scripts for VibroSim</param.summary>
     <param.description>Comsol scripts for the VibroSim vibrothermography simulation package</param.description>
-    <param.screenshot>/tmp/transducer_velocity_time_domain.png</param.screenshot>
+    <param.screenshot>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_image.png</param.screenshot>
     <param.version>0.1</param.version>
     <param.output>${PROJECT_ROOT}/VibroSim_COMSOL.mltbx</param.output>
     <param.products.name />
@@ -76,26 +76,25 @@
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/VERSION.txt</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/calc_straincoefficient.m</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/comsolmatlab</file>
-      <file>${PROJECT_ROOT}/VibroSim_COMSOL/comsolmatlab~</file>
-      <file>${PROJECT_ROOT}/VibroSim_COMSOL/m_files</file>
-      <file>${PROJECT_ROOT}/VibroSim_COMSOL/demos.xml</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/doc</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/gui</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/html</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/m_files</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_demo.m</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_demo2.m</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_demo3.m</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_image.png</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_test.m</file>
     </fileset.rootfiles>
     <fileset.depfun.included />
     <fileset.depfun.excluded />
     <fileset.package />
     <build-deliverables>
-      <file location=".." name="VibroSim_COMSOL.mltbx" optional="false">../VibroSim_COMSOL.mltbx</file>
+      <file location="." name="VibroSim_COMSOL.mltbx" optional="false">VibroSim_COMSOL.mltbx</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/usr/local/MATLAB/R2018a</root>
+      <root>/home/usr_local_el7/MATLAB/R2018a</root>
       <toolboxes>
         <toolbox name="fixedpoint" />
         <toolbox name="matlabcoder" />

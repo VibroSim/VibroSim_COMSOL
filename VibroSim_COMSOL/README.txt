@@ -64,5 +64,10 @@ should do the trick.
 
 Rebuilding .mltbx file from source
 ----------------------------------
-Open VibroSim_COMSOL.prj in Matlab and press Package...Package.
-
+1. Make sure all changes have been committed to git
+2. Run git status --ignored to check for ignored files. Make sure
+   all ignored files are either deleted or added to the repository
+   as appropriate. (VibroSim_COMSOL.mtlbx should be deleted)
+3. Open VibroSim_COMSOL.prj in Matlab and press Package...Package.
+4. Make sure VibroSim_COMSOL.prj has not been changed, or if it has
+   that absolute paths have not been added back in.
