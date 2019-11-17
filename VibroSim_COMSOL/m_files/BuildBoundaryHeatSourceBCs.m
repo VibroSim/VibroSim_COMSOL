@@ -42,7 +42,7 @@ function [bcobj] = BuildBoundaryHeatSourceBCs(M,geom,physics,object,bcobj,getfac
       %~prod(size(weakformpdephysicstag))
       %if ~exist('weakformpdephysicstag','var') |  ~prod(size(weakformpdephysicstag))
       %bcobj.children{cnt}.node.set('Qb',[ '(' timedependence ')*(' heatflowQb ')' ]);
-      bcobj.children{cnt}.node.set('Qb',[ '('heatflowQb ')' ]);
+bcobj.children{cnt}.node.set('Qb',[ '(' heatflowQb ')' ]);
       %else
       %  weakformpdephysicsnode=M.node.physics(weakformpdephysicstag);
       %  % Enable this boundary for weakformpdephysicsnode

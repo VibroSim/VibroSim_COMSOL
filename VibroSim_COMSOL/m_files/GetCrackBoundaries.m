@@ -42,4 +42,6 @@ sorted_boundaries=crack_boundaries.entities(sortorder); % sorted from shortest t
 % Suggested algorithm: Go back to the ellipses, calculate their equations, and check which edges have points that 
 % (nearly) satisfy the equations of which ellipses. That will identify the edges, from which the boundaries can be 
 % properly organized from innermost group to outermost group
-assert(length(sorted_boundaries)==size(crack.closure,1));
+
+%assert(length(sorted_boundaries)==size(crack.closure,1));
+assert(length(sorted_boundaries)==size(crack.annuliradii,2));

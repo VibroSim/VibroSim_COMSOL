@@ -1,8 +1,9 @@
 %> CREATECRACK Creates a a crack at a given position
 %>   [crack] = CREATECRACK(M, geom, tag, specimen, centerpoint, semimajoraxislen,
 %>                         semiminoraxislen, axismajordirection,
-%>                         axisminordirection,closure,
-%>                         vibration_physicstags)
+%>                         axisminordirection,annuliradii,
+%>                         vibration_physicstags,
+%>                         heatingfile)
 %> Parameters:
 %> -----------
 %> M:                   Top level ModelWrapper
@@ -30,7 +31,11 @@
 %>                      continuity mechanical boundary conditions across the
 %>                      crack (otherwise strain isn't well defined for a
 %>                      discontinuity).
-
+%> heatingfile:         File with crack heating data. It should have four
+%>                      columns: Time, surface radius, side1 heating, 
+%>                      side2 heating. Side 1 corresponds to the negative
+%>                      major axis direction; side2 corresponds to the 
+%>                      positive major axis direction. 
 
 
 
@@ -68,12 +73,12 @@
   %> axisminordirection=[0,0,-1];
   %> closure=[ .001, -30 ; .002, 0 ; .003, 60];
   %> QbExpressions='heatintensity%.2d'
-function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxislen, semiminoraxislen, axismajordirection,axisminordirection,annuliradii,vibration_physicstags)
+function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxislen, semiminoraxislen, axismajordirection,axisminordirection,annuliradii,vibration_physicstags,heatingfile)
 
   % axismajordirection, axisminordirection, annuliradii are row vectors
   axismajordirection=reshape(axismajordirection,1,3);
   axisminordirection=reshape(axisminordirection,1,3);
-  annuliradii = reshape(annuliradii,1,3);
+  annuliradii = reshape(annuliradii,1,prod(size(annuliradii)));
   
 
   % axisminor should not have any component parallel to axismajordirection.
@@ -242,9 +247,9 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   position_along_surface = innerprod_cellstr_array(position_from_center,to_cellstr_array(axismajordirection));
   position_into_depth = innerprod_cellstr_array(position_from_center,to_cellstr_array(axisminordirection));
 
-  scaled_position_into_depth = ['((' to_string(semimajoraxislen) ')/(' to_string(semiminoraxislen '))*' position_into_depth ];
+  scaled_position_into_depth = ['((' to_string(semimajoraxislen) ')/(' to_string(semiminoraxislen) '))*' position_into_depth ];
   
-  r_equiv_surface = [ 'sqrt(' '(' position_along_surface ')^2' '+' '(' scaled_position_into_depth ')^2' ')' ] 
+  r_equiv_surface = [ 'sqrt(' '(' position_along_surface ')^2' '+' '(' scaled_position_into_depth ')^2' ')' ]; 
   
 
   addprop(crack,'r_equiv_surface');
@@ -261,16 +266,21 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   %  data to be loaded from an external file based on external (non-COMSOL) calculations
   addprop(crack,'heatingfunction');
   crack.heatingfunction = CreateFunction(M,[ tag '_heatingfunction' ], 'Interpolation');
-  crack.heatingfunction.label([ tag '_heatingfunction' ]);
-  crack.heatingfunction.set('sourcetype','user');
-  crack.heatingfunction.set('source','file');
-  crack.heatingfunction.set('struct','spreadsheet');
-  crack.heatingfunction.set('filename',heatingfile);
-  crack.heatingfunction.set('argunit','s,m');  
-  crack.heatingfunction.set('fununit','W/m^2');  
-  crack.heatingfunction.set('nargs',2); % function of two parameters (first column time, second column radius)
-  crack.heatingfunction.set('funcs',{ [ tag '_heatingfunction_side1' ], 1, % side 1 is first column after parameter columns
-				      [ tag '_heatingfunction_side2' ], 2}); % side 2 is 2nd column after parameter columns
+  crack.heatingfunction.node.label([ tag '_heatingfunction' ]);
+  crack.heatingfunction.node.set('sourcetype','user');
+  crack.heatingfunction.node.set('source','file');
+  crack.heatingfunction.node.set('struct','spreadsheet');
+  crack.heatingfunction.node.set('filename',buildabspath(heatingfile)); % must use absolute path here because COMSOL current directory is the mli (LiveLink) directory
+  crack.heatingfunction.node.set('argunit','s,m');  
+  crack.heatingfunction.node.set('fununit','W/m^2');  
+  crack.heatingfunction.node.set('nargs',2); % function of two parameters (first column time, second column radius)
+  % side 1 is first column after parameter columns
+  crack.heatingfunction.node.setIndex('funcs', [ tag '_heatingfunction_side1' ], 0,0);
+  crack.heatingfunction.node.setIndex('funcs', '1' , 0,1);
+
+  % side 2 is second column after parameter columns
+  crack.heatingfunction.node.setIndex('funcs', [ tag '_heatingfunction_side2' ], 1,0);
+  crack.heatingfunction.node.setIndex('funcs', '2' , 1,1);
   
   
   % Add thin elastic layers for each half-annulus
@@ -355,6 +365,6 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
 			BuildBoundaryHeatSourceBCs(M,geom,physics,crack,bcobj, ...
 						   @(M,geom,crack) ...
 						    GetCrackBoundaries(M,geom,crack), ...
-						  ['if((' crack.position_along_surface ') < 0,' tag '_heatingfunction_side1(t,' crack.r_equiv_surface '),' tag '_heatingfunction_side2(t,' crack.r_equiv_surface '))' ]));
+						  ['if((' crack.position_along_surface ') < 0[m],' tag '_heatingfunction_side1(t,' crack.r_equiv_surface '),' tag '_heatingfunction_side2(t,' crack.r_equiv_surface '))' ]));
 
 end

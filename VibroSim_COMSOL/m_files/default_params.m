@@ -55,7 +55,6 @@ AddParamToParamdb(M,'wh',20e6,'Pa');
 %ObtainDCParameter(M,'m1','m');
 %ObtainDCParameter(M,'l0','1/m');
 ObtainDCParameter(M,'wh','Pa');
-CreateCrackHeatingModel(M,'crackheatingmodel');
 
 
 

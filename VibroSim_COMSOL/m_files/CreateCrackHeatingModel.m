@@ -1,3 +1,4 @@
+% !!!*** OBSOLETE ***!!!
 function crackheatingmodel=CreateCrackHeatingModel(M,tag)
 
 if 0 % Analytic form

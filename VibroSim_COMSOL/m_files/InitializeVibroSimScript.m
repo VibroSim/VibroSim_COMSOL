@@ -108,6 +108,15 @@ function [M,model]=InitializeVibroSimScript(mphfile)
     %startupinfo = [startupinfo, sprintf('%s\n', mphversion)];
     startupinfo = [startupinfo, sprintf('Running in Scripted Mode\n')];
     startupinfo = [startupinfo, sprintf('=======================================================\n')];
+    startupinfo = [ startupinfo sprintf('\n') ];
+    startupinfo = [ startupinfo sprintf('The variables from your script should be defined\n') ];
+    startupinfo = [ startupinfo sprintf('You can rerun the script by typing its name.\n') ];
+    startupinfo = [ startupinfo sprintf('You can connect to the COMSOL server using "comsol mphclient" \n') ];
+    startupinfo = [ startupinfo sprintf('to work interactively.\n') ];
+
+    startupinfo = [ startupinfo sprintf('If running inside processtrak you can exit with: eval(retcommand);\n') ];
+
+ 
     LogMsg(startupinfo, 1);
 
     if exist('mphfile','var')
