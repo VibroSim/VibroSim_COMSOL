@@ -2,7 +2,8 @@
 %> The intensity of heat sources is set to heatflowQbs, which should be a cell array with length matching the number
 %> of returns from getfaceselectionfunc()
 %>
-%> weakformpdephysicstag, if supplied, is the tag of a weak-form boundary PDE physics node
+
+%> OBSOLETE weakformpdephysicstag, if supplied, is the tag of a weak-form boundary PDE physics node
 %> to be used to minimize the calls to the functions in heatflowQbs. This is useful 
 %> when those functions are calls to MATLAB that are slow. 
 %> the weak-form boundary PDE physics node is evaluated in a separate step and converts
@@ -11,7 +12,9 @@
 %> over the relevant selections
 
 
-function [bcobj] = BuildBoundaryHeatSourceBCs(M,geom,physics,object,bcobj,getfaceselectionfunc,timedependence,heatflowQbs,weakformpdephysicstag)
+function [bcobj] = BuildBoundaryHeatSourceBCs(M,geom,physics,object,bcobj,getfaceselectionfunc,heatflowQb)
+
+  % heatflowQbs,,weakformpdephysicstag)
 
 % !!!*** We assume the variable used in the weak form equation is called 'wfb'.
 % ... CAN WE EXTRACT THIS FROM THE PHYSICS OBJECT SOMEHOW? 
@@ -37,23 +40,24 @@ function [bcobj] = BuildBoundaryHeatSourceBCs(M,geom,physics,object,bcobj,getfac
       %weakformpdephysicstag
       %prod(size(weakformpdephysicstag))
       %~prod(size(weakformpdephysicstag))
-      if ~exist('weakformpdephysicstag','var') |  ~prod(size(weakformpdephysicstag))
-        bcobj.children{cnt}.node.set('Qb',[ '(' timedependence ')*(' heatflowQbs{cnt} ')' ]);
-      else
-        weakformpdephysicsnode=M.node.physics(weakformpdephysicstag);
-        % Enable this boundary for weakformpdephysicsnode
-	oldselection=mphgetselection(weakformpdephysicsnode.selection);
-        newselection=union(oldselection.entities,[ boundaries(cnt) ]);
-        weakformpdephysicsnode.selection.set(newselection);
-
-        % Create WeakFormPDE node for this boundary
-        bcobj.wf_pde{cnt}=CreateWrappedModel(M,sprintf('%s_wfp%.3d',bcobj.tag,cnt),weakformpdephysicsnode.feature,'WeakFormPDE',2); 
-        bcobj.wf_pde{cnt}.node.selection.set([ boundaries(cnt) ]);		       
-        bcobj.wf_pde{cnt}.node.setIndex('weak',[ 'test(wfb)*(wfb-(' heatflowQbs{cnt} '))' ],0);
-        bcobj.children{cnt}.node.set('Qb',[ '(' timedependence ')*(wfb)' ]);
-
-    
-      end
+      %if ~exist('weakformpdephysicstag','var') |  ~prod(size(weakformpdephysicstag))
+      %bcobj.children{cnt}.node.set('Qb',[ '(' timedependence ')*(' heatflowQb ')' ]);
+      bcobj.children{cnt}.node.set('Qb',[ '('heatflowQb ')' ]);
+      %else
+      %  weakformpdephysicsnode=M.node.physics(weakformpdephysicstag);
+      %  % Enable this boundary for weakformpdephysicsnode
+      %  oldselection=mphgetselection(weakformpdephysicsnode.selection);
+      %  newselection=union(oldselection.entities,[ boundaries(cnt) ]);
+      %  weakformpdephysicsnode.selection.set(newselection);
+      %
+      %  % Create WeakFormPDE node for this boundary
+      %  bcobj.wf_pde{cnt}=CreateWrappedModel(M,sprintf('%s_wfp%.3d',bcobj.tag,cnt),weakformpdephysicsnode.feature,'WeakFormPDE',2); 
+      %  bcobj.wf_pde{cnt}.node.selection.set([ boundaries(cnt) ]);		      % 
+      %  bcobj.wf_pde{cnt}.node.setIndex('weak',[ 'test(wfb)*(wfb-(' heatflowQbs{cnt} '))' ],0);
+      %  bcobj.children{cnt}.node.set('Qb',[ '(' timedependence ')*(wfb)' ]);
+      %
+      %
+      %end
       % store selection in case it is needed later...
       addprop(bcobj.children{cnt},'boundaryentities');
       bcobj.children{cnt}.boundaryentities=[boundaries(cnt)];

@@ -5,7 +5,7 @@
 %> ----------
 %> @param M:                  ModelWrapper around top level model
 %> @param geom:               Wrapped top level geometry
-%> @param tag :               Tag for physics. Should usually be 'solidmech_harmonic'
+%> @param tag :               Tag for physics. Should usually be 'solidmech_modal'
 %> @param crackdiscontinuity: Optional boolean, default false. If false the crack
 %>                            face boundary conditions are continuity conditions.
 %>                            If true, the thin elastic layer BC is used.

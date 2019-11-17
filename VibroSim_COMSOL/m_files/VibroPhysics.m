@@ -30,7 +30,7 @@ multisweep          = false ;
 harmonicburst       = false ;
 heatflow            = false ;
 timedomain   = false ;
-vibroheatconvert    = false ;
+%vibroheatconvert    = false ;
 
 process             = false ;
 all                 = false ;
@@ -51,7 +51,7 @@ multisweep       = any(strcmp('multisweep',modes)) ;
 harmonicburst       = any(strcmp('harmonicburst',modes)) ;
 heatflow            = any(strcmp('heatflow',modes)) ;
 timedomain          = any(strcmp('timedomain',modes)) ;
-vibroheatconvert    = any(strcmp('vibroheatconvert',modes)) ;
+%vibroheatconvert    = any(strcmp('vibroheatconvert',modes)) ;
 
 process             = any(strcmp('process',modes)) ;
 all                 = any(strcmp('all',modes)) ;
@@ -62,7 +62,7 @@ if process ;
     modal = 1 ;
     harmonicburst = 1 ;
     heatflow = 1 ;
-    vibroheatconvert = 1 ;
+%    vibroheatconvert = 1 ;
 end
 
 % Raise the flags for the all keyword
@@ -73,7 +73,7 @@ if all ;
     harmonicsweep = 1 ;
     multisweep = 1 ;
     harmonicburst = 1 ;
-    vibroheatconvert = 1 ;
+%    vibroheatconvert = 1 ;
     heatflow = 1 ;
 end
 
@@ -155,23 +155,25 @@ if harmonicburst
 end
 
 
-if vibroheatconvert
-  % Create weak-form pde physics for accelerating transfer of MATLAB-calculated 
-  % heating values into heat flow model
+%if vibroheatconvert
+%  % Create weak-form pde physics for accelerating transfer of MATLAB-calculated 
+%  % heating values into heat flow model
  
-  % To disable weak-form pde acceleration, comment out these two lines and change the 'vibroheatconvert' parameter to CreateCrack() to [].
-  addprop(M,'vibroheatconvert');
-  M.vibroheatconvert=CreateVibroHeatConvert(M,geom,'vibroheatconvert',M.solidmech_harmonicburst,1);
-end
+%  % To disable weak-form pde acceleration, comment out these two lines and change the 'vibroheatconvert' parameter to CreateCrack() to [].
+%  addprop(M,'vibroheatconvert');
+%  M.vibroheatconvert=CreateVibroHeatConvert(M,geom,'vibroheatconvert',M.solidmech_harmonicburst,1);
+%end
 
 if heatflow
   % Create heat transfer physics
 
   addprop(M,'heatflow');
 
-  if isprop(M,'vibroheatconvert')
-    M.heatflow=CreateVibroHeatFlow(M,geom,'heatflow',M.solidmech_harmonicburst,1,M.vibroheatconvert);
-  else
-    M.heatflow=CreateVibroHeatFlow(M,geom,'heatflow',M.solidmech_harmonicburst,1);
-  end
+  %if isprop(M,'vibroheatconvert')
+  %  M.heatflow=CreateVibroHeatFlow(M,geom,'heatflow',M.solidmech_harmonicburst,1,M.vibroheatconvert);
+  %else
+  %  M.heatflow=CreateVibroHeatFlow(M,geom,'heatflow',M.solidmech_harmonicburst,1);
+  %end
+
+  M.heatflow=CreateVibroHeatFlow(M,geom,'heatflow');
 end
