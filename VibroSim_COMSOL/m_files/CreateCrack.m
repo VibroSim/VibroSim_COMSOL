@@ -2,7 +2,7 @@
 %>   [crack] = CREATECRACK(M, geom, tag, specimen, centerpoint, semimajoraxislen,
 %>                         semiminoraxislen, axismajordirection,
 %>                         axisminordirection,closure,
-%>                         vibration_physicstags,QbExpressions)
+%>                         vibration_physicstags)
 %> Parameters:
 %> -----------
 %> M:                   Top level ModelWrapper
@@ -13,11 +13,14 @@
 %>                      in the specimen
 %> semimajoraxislen:    Half-crack length, along semi-major (surface) axis
 %> semiminoraxislen:    Half-crack length, along semi-minor (depth) axis
-%> axismajordirection:  Direction of semi-major axis
-%> axisminordirection:  Direction of semi-minor axis
-%> closure:             A 2 column matrix of (axismajor_endboundary,
-%>                      closurestate_MPa). Last entry of first column of
-%>                      closure should match the value of semimajoraxislen.
+%> axismajordirection:  Direction of semi-major (surface) axis
+%> axisminordirection:  Direction of semi-minor (depth) axis
+%> annuliradii:         A vector of axismajor_endboundary values.
+%>                      The last element should match the value of
+%>                      semimajoraxislen. The crack boundary will be split
+%>                      into these annuli, with the real purpose of enforcing
+%>                      a sufficiently fine mesh to be able to resolve the
+%>                      spatial distribution of predicted heating. 
 %> vibration_physicstags: A cell array of tag names representing physics models
 %>                      used for vibration calculation. For each of these a
 %>                      variable [ cracktag '_centerstrainmag_' physicstag ]
@@ -26,12 +29,25 @@
 %>                      meaningful that physics should be configured for
 %>                      continuity mechanical boundary conditions across the
 %>                      crack (otherwise strain isn't well defined for a
-%>                      discontinuity). The LAST of the physicstags provided
-%>                      will be the one used for the heatsrc (Qb) boundary condition
-%> weakformpdephysicstag A parameter, may be blank [] that is passed to 
+%>                      discontinuity).
+
+
+
+
+% Documentation of obsolete (removed) parameters: 
+  
+%> closure:             A 2 column matrix of (axismajor_endboundary,
+%>                      closurestate_MPa). Last entry of first column of
+%>                      closure should match the value of semimajoraxislen.
+%>  weakformpdephysicstag (obsolete, removed) A parameter, may be blank [] that is passed to 
 %>                       BuildBoundaryHeatSourceBCs to accelerate MATLAB 
 %>                       heat source calculations through an intermediate
 %>                       weak form PDE physics calculation 
+%>
+%> Closure is measured in MPa. Positions should be in order, representing the
+%> outer radius of each semi-annular ring, with the corresponding closure stress
+%> representing the average closure stress over that semi-annular ring.
+
 %> QbExpressions:       An optional parameter, used for or to generate the
 %>                      expressions used for the heat source intensity Qb.
 %>                      It can be:
@@ -43,11 +59,6 @@
 %>                       * Numeric values -- passed directly as heating param.
 %>                       * If QbExpressions is not provided, the vibrothermography
 %>                         crack heating model is used instead.
-%>
-%> Closure is measured in MPa. Positions should be in order, representing the
-%> outer radius of each semi-annular ring, with the corresponding closure stress
-%> representing the average closure stress over that semi-annular ring.
-
 
   %> Example parameter values:
   %> centerpoint=[.07,.0254/2,.012];
@@ -57,11 +68,13 @@
   %> axisminordirection=[0,0,-1];
   %> closure=[ .001, -30 ; .002, 0 ; .003, 60];
   %> QbExpressions='heatintensity%.2d'
-function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxislen, semiminoraxislen, axismajordirection,axisminordirection,closure,vibration_physicstags,weakformpdephysicstag,QbExpressions)
+function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxislen, semiminoraxislen, axismajordirection,axisminordirection,annuliradii,vibration_physicstags)
 
-  % axismajordirection, axisminordirection are row vectors
+  % axismajordirection, axisminordirection, annuliradii are row vectors
   axismajordirection=reshape(axismajordirection,1,3);
   axisminordirection=reshape(axisminordirection,1,3);
+  annuliradii = reshape(annuliradii,1,3);
+  
 
   % axisminor should not have any component parallel to axismajordirection.
   % remove it if present. This is like a Gram-Schimdt orthonormalization step
@@ -98,22 +111,22 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   addprop(crack,'axisminordirection');
   crack.axisminordirection=axisminordirection;
 
-  addprop(crack,'closure');
-  crack.closure=closure;
+  addprop(crack,'annuliradii');
+  crack.annuliradii=annuliradii;
 
 
   % Create ellipses on workplane
   addprop(crack,'ellipses');
   crack.ellipses={};
-  for cnt=1:size(closure,1)
+  for cnt=1:size(annuliradii,2)
     crack.ellipses{cnt}=ModelWrapper(M,sprintf('%s_ellipse%.3d',crack.tag,cnt),crack.node.geom.feature);
     crack.ellipses{cnt}.node=crack.node.geom.feature.create(crack.ellipses{cnt}.tag,'Ellipse');
     crack.ellipses{cnt}.node.label(crack.ellipses{cnt}.tag);
     crack.ellipses{cnt}.node.set('type','solid');
     crack.ellipses{cnt}.node.set('base','center');
     crack.ellipses{cnt}.node.set('pos',{ '0','0' });
-    thissemimajoraxislen = to_string(closure(cnt,1),'m');
-    thissemiminorlen = ['(' to_string(closure(cnt,1),'m') ')' '*' '(' to_string(semiminoraxislen) ')' '/' '(' to_string(semimajoraxislen) ')' ];
+    thissemimajoraxislen = to_string(annuliradii(1,cnt),'m');
+    thissemiminorlen = ['(' to_string(annuliradii(1,cnt),'m') ')' '*' '(' to_string(semiminoraxislen) ')' '/' '(' to_string(semimajoraxislen) ')' ];
     crack.ellipses{cnt}.node.set('a',{thissemimajoraxislen}); % length along major axis
     crack.ellipses{cnt}.node.set('b',{thissemiminorlen}); % length along minor axis
   end
@@ -221,12 +234,51 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   end
 
 
+  % Create variables representing equivalent surface radius from crack center and which side
+  % we are on
+
+  position = { 'x', 'y', 'z' };
+  position_from_center = sub_cellstr_array(position,to_cellstr_array(centerpoint,'m'));
+  position_along_surface = innerprod_cellstr_array(position_from_center,to_cellstr_array(axismajordirection));
+  position_into_depth = innerprod_cellstr_array(position_from_center,to_cellstr_array(axisminordirection));
+
+  scaled_position_into_depth = ['((' to_string(semimajoraxislen) ')/(' to_string(semiminoraxislen '))*' position_into_depth ];
+  
+  r_equiv_surface = [ 'sqrt(' '(' position_along_surface ')^2' '+' '(' scaled_position_into_depth ')^2' ')' ] 
+  
+
+  addprop(crack,'r_equiv_surface');
+  crack.r_equiv_surface = CreateVariable(M,[tag '_r_equiv_surface'],r_equiv_surface); % NOTE: CreateVariable returns the variable name, not the variable object itself. 
+
+  %addprop(crack,'crack_side'); % has value 1 for left side of crack, 2 for right side of crack
+  %crack.crack_side = CreateVariable(M,[tag '_crack_side'],[ 'if((' position_along_surface ') < 0,1,2)' ]); 
+
+  addprop(crack,'position_along_surface'); 
+  crack.position_along_surface = CreateVariable(M,[tag '_position_along_surface'],position_along_surface); 
+
+
+  % Create an interpolation function representing crack heating --
+  %  data to be loaded from an external file based on external (non-COMSOL) calculations
+  addprop(crack,'heatingfunction');
+  crack.heatingfunction = CreateFunction(M,[ tag '_heatingfunction' ], 'Interpolation');
+  crack.heatingfunction.label([ tag '_heatingfunction' ]);
+  crack.heatingfunction.set('sourcetype','user');
+  crack.heatingfunction.set('source','file');
+  crack.heatingfunction.set('struct','spreadsheet');
+  crack.heatingfunction.set('filename',heatingfile);
+  crack.heatingfunction.set('argunit','s,m');  
+  crack.heatingfunction.set('fununit','W/m^2');  
+  crack.heatingfunction.set('nargs',2); % function of two parameters (first column time, second column radius)
+  crack.heatingfunction.set('funcs',{ [ tag '_heatingfunction_side1' ], 1, % side 1 is first column after parameter columns
+				      [ tag '_heatingfunction_side2' ], 2}); % side 2 is 2nd column after parameter columns
+  
+  
   % Add thin elastic layers for each half-annulus
 
   % geom.node.run;  % build geometry
 
   % crack.elasticlayers={};
-  % for cnt=1:size(closure,1)
+  % for cnt=1:size(annuliradii,2)
 
 
   % Create thin elastic layer on crack surfaces, to represent discontinuity if that is desired
@@ -253,55 +305,56 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   % GetCrackBoundaries() returns a sorted list of boundaries (contact areas) from the
   % center to the outside. We provide a cell array of heat intensity parameters
   % as input.
-  if ~exist('QbExpressions','var')
-    % No explicit parameter provided... Use Crack Heating Model
-    prevpos='0.0[m]';
-    for cnt=1:size(closure,1)
+  %if ~exist('QbExpressions','var')
+  %  % No explicit parameter provided... Use Crack Heating Model
+  %  prevpos='0.0[m]';
+  %  for cnt=1:size(annuliradii,2)
+  %
+  %    CrackBoundaryQbs{cnt}=['meeker_statmodel_040815_eval(freq, ' tag '_centerstrainmag_' vibration_physicstags{length(vibration_physicstags)} ',' to_string(semimajoraxislen,'m') ',' to_string(closure(cnt,2),'MPa') ', ' prevpos ',' to_string(closure(cnt,1),'m') ', wh, 50.0)' ];
+  %
+  %    prevpos=to_string(closure(cnt,1),'m');
+  %  end
+  %
+  %elseif isa(QbExpressions,'cell')
+  %  % QbExpressions passed as cell array... use it directly
+  %  CrackBoundaryQbs=QbExpressions;
+  %elseif isa(QbExpressions,'char')
+  %% Apply sprintf in loop to provided expression string
+  %  CrackBoundaryQbs={};
+  %  for cnt=1:size(closure,1)
+  %    CrackBoundaryQbs{cnt}=sprintf(QbExpressions,cnt);
+  %  end
+  %  
+  %else
+  %  assert(isa(QbExpressions,'double'));
+      
+      % numeric parameter
+  %  %
 
-      CrackBoundaryQbs{cnt}=['meeker_statmodel_040815_eval(freq, ' tag '_centerstrainmag_' vibration_physicstags{length(vibration_physicstags)} ',' to_string(semimajoraxislen,'m') ',' to_string(closure(cnt,2),'MPa') ', ' prevpos ',' to_string(closure(cnt,1),'m') ', wh, 50.0)' ];
-
-      prevpos=to_string(closure(cnt,1),'m');
-    end
-
-  elseif isa(QbExpressions,'cell')
-    % QbExpressions passed as cell array... use it directly
-    CrackBoundaryQbs=QbExpressions;
-  elseif isa(QbExpressions,'char')
-    % Apply sprintf in loop to provided expression string
-    CrackBoundaryQbs={};
-    for cnt=1:size(closure,1)
-      CrackBoundaryQbs{cnt}=sprintf(QbExpressions,cnt);
-    end
-  else
-    assert(isa(QbExpressions,'double'));
-
-    % numeric parameter
-    %
-
-    if prod(size(QbExpressions)) > 1
-      % multiple values
-      CrackBoundaryQbs={};
-      for cnt=1:size(closure,1)
-        CrackBoundaryQbs{cnt}=to_string(QbExpressions(cnt),'W/m^2');
-      end
-    else
-      % single value
-      CrackBoundaryQbs={};
-      for cnt=1:size(closure,1)
-        CrackBoundaryQbs{cnt}=to_string(QbExpressions,'W/m^2');
-      end
-
-    end
-  end
-
+  %  if prod(size(QbExpressions)) > 1
+  %    % multiple values
+  %    CrackBoundaryQbs={};
+  %    for cnt=1:size(closure,1)
+  %      CrackBoundaryQbs{cnt}=to_string(QbExpressions(cnt),'W/m^2');
+  %    end
+  %  else
+  %    % single value
+  %    CrackBoundaryQbs={};
+  %    for cnt=1:size(closure,1)
+  %      CrackBoundaryQbs{cnt}=to_string(QbExpressions,'W/m^2');
+  %    end
+  %
+  %  end
+  %end
+  
 
   AddBoundaryCondition(M,geom,crack, sprintf('%s_heatsrc',crack.tag), ...
 		       { 'heatflow' }, ... % physicses
                        { 'crackheating' }, ...  % BC classes
 		       @(M,physics,bcobj) ...
-		       BuildBoundaryHeatSourceBCs(M,geom,physics,crack,bcobj, ...
-						  @(M,geom,crack) ...
-						  GetCrackBoundaries(M,geom,crack), ...
-						  'excitationwindow(t)',CrackBoundaryQbs, ...
-						  weakformpdephysicstag));
+			BuildBoundaryHeatSourceBCs(M,geom,physics,crack,bcobj, ...
+						   @(M,geom,crack) ...
+						    GetCrackBoundaries(M,geom,crack), ...
+						  ['if((' crack.position_along_surface ') < 0,' tag '_heatingfunction_side1(t,' crack.r_equiv_surface '),' tag '_heatingfunction_side2(t,' crack.r_equiv_surface '))' ]));
+
 end
