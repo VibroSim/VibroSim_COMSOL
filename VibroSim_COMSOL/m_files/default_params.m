@@ -60,7 +60,7 @@ CreateCrackHeatingModel(M,'crackheatingmodel');
 
 
 AddParamToParamdb(M,'amplitude',1.0,'V');
-AddParamToParamdb(M,'xducercalib',fullfile(fileparts(which('BuildVibroModel')),'support','constant_10micronpervolt_displacementampl.dat'));
+AddParamToParamdb(M,'xducercalib',fullfile(fileparts(which('BuildVibroModel')),'m_files','constant_10micronpervolt_displacementampl.dat'));
 AddParamToParamdb(M,'spclength',.14,'m');
 AddParamToParamdb(M,'spcwidth',.0254,'m');
 AddParamToParamdb(M,'spcthickness',.012,'m');
