@@ -1,4 +1,4 @@
-%> function strainmag=CrackStrain(model,cracktag,freqidx,solutiontag)
+%> function [normalstrain,shearstrain]=CrackStrain(model,cracktag,freqidx,solutiontag)
 %>
 %> Determine the magnitude of the strain across the specified crack
 %> in the center of its face (NOTE: Does not work if the crack center is

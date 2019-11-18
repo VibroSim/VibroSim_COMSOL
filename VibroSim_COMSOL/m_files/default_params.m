@@ -59,7 +59,6 @@ ObtainDCParameter(M,'wh','Pa');
 
 
 AddParamToParamdb(M,'amplitude',1.0,'V');
-AddParamToParamdb(M,'xducercalib',fullfile(fileparts(which('BuildVibroModel')),'m_files','constant_10micronpervolt_displacementampl.dat'));
 AddParamToParamdb(M,'spclength',.14,'m');
 AddParamToParamdb(M,'spcwidth',.0254,'m');
 AddParamToParamdb(M,'spcthickness',.012,'m');
@@ -154,8 +153,6 @@ AddParamToParamdb(M,'timedomain_start_time',-4e-6,'s');
 AddParamToParamdb(M,'timedomain_step_time',1e-6,'s');
 AddParamToParamdb(M,'timedomain_end_time',10e-3,'s');
 
-% Load in xducercalib file to xducercalib function, set up xducerdisplacement as variable (WARNING: This step can be slow!)
-CreateTransducerDisplacementVariable(M);
 
 CreateExcitationWindow(M,'excitationwindow', ...
 		       ObtainDCParameter(M,'excitation_t0','s'), ...

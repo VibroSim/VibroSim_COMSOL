@@ -274,13 +274,15 @@ if DataSetExistsForSolution(model,'solidmech_harmonicsweep_solution')
   model.result('vibro_harmonicsweep_plot').run
 
 
-  if string_in_cellstr_array('crack_centerstrainmag',to_cellstr_array(model.variable.tags))
+  if string_in_cellstr_array('crack_centerstrain',to_cellstr_array(model.variable.tags))
     CreateOrReplace(model.result,'vibro_harmonicsweep_spectrum','PlotGroup1D');
     model.result('vibro_harmonicsweep_spectrum').label('vibro_harmonicsweep_spectrum');
     model.result('vibro_harmonicsweep_spectrum').set('data', GetDataSetForSolution(model,'solidmech_harmonicsweep_solution'));
     model.result('vibro_harmonicsweep_spectrum').create('vibro_harmonicsweep_spectrum_global','Global');
-    model.result('vibro_harmonicsweep_spectrum').feature('vibro_harmonicsweep_spectrum_global').set('expr',{'crack_centerstrainmag_solidmech_harmonicsweep'});
+    model.result('vibro_harmonicsweep_spectrum').feature('vibro_harmonicsweep_spectrum_global').set('expr',{'crack_centerstrainmag_solidmech_harmonicsweep','crack_centerstrainnormal_solidmech_harmonicsweep','crack_centerstrainshear_solidmech_harmonicsweep'});
     model.result('vibro_harmonicsweep_spectrum').feature('vibro_harmonicsweep_spectrum_global').setIndex('descr','Magnitude of engineering dynamic strain at crack location', 0);
+    model.result('vibro_harmonicsweep_spectrum').feature('vibro_harmonicsweep_spectrum_global').setIndex('descr','Engineering dynamic normal strain at crack location', 1);
+    model.result('vibro_harmonicsweep_spectrum').feature('vibro_harmonicsweep_spectrum_global').setIndex('descr','Engineering dynamic shear strain at crack location', 2);
     model.result('vibro_harmonicsweep_spectrum').feature('vibro_harmonicsweep_spectrum_global').label('vibro_harmonicsweep_spectrum_global');
     model.result('vibro_harmonicsweep_spectrum').run;
   end

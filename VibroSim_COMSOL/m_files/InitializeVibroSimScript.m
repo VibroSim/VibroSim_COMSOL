@@ -25,7 +25,7 @@ function [M,model]=InitializeVibroSimScript(mphfile)
     scriptpwd = fileparts(mfilename('fullpath'));
 
     % Add all of the paths needed 
-    addpath(fullfile(scriptpwd, 'm_files'));
+    %addpath(fullfile(scriptpwd, 'm_files'));
     %addpath([scriptpwd, '/conf']);
     %addpath([scriptpwd, '/conf']);
     %addpath([scriptpwd, '/definitions']);
