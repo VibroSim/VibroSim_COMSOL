@@ -46,11 +46,32 @@ solidmech_harmonicper.node.prop('EquationForm').setIndex('form', 'Frequency', 0)
 viscosity = ObtainDCParameter(M,'spcviscousdamping','N*s');
 
 
-CreateWrappedProperty(M,solidmech_harmonicper,'damping',[ solidmech_harmonicper.tag '_damping' ], solidmech_harmonicper.node.feature('lemm1').feature,'Damping',3); % 3-dimensional domains
-solidmech_harmonicper.damping.node.set('DampingType','ViscousDamping');
+% Add damping to default linear elastic material node...
+% Physics has default "Linear Elastic Material" node lemm1
+% to which we add damping
 
-solidmech_harmonicper.damping.node.set('etab',viscosity);
-solidmech_harmonicper.damping.node.set('etav',viscosity);
+CreateWrappedProperty(M,solidmech_harmonicper,'damping',[ solidmech_harmonicper.tag '_damping' ], solidmech_harmonicper.node.feature('lemm1').feature,'Damping',3); % 3-dimensional domains
+
+dampingtype=GetDCParamStringValue(M,'spcmaterialdampingtype');
+if strcmp(dampingtype.value,'ViscousDamping')
+  solidmech_harmonicper.damping.node.set('DampingType','ViscousDamping');
+
+  viscosity = ObtainDCParameter(M,'spcviscousdamping','N*s');
+
+  
+  solidmech_harmonicper.damping.node.set('etab',viscosity);
+  solidmech_harmonicper.damping.node.set('etav',viscosity);
+elseif strcmp(dampingtype.value,'RayleighDamping')
+  solidmech_harmonicper.damping.node.set('DampingType','RayleighDamping');
+ 
+  spcrayleighdamping_alpha = ObtainDCParameter(M,'spcrayleighdamping_alpha','1/s');
+  spcrayleighdamping_beta = ObtainDCParameter(M,'spcrayleighdamping_beta','s');
+
+  solidmech_harmonicper.damping.node.set('alpha_dM',spcrayleighdamping_alpha);
+  solidmech_harmonicper.damping.node.set('beta_dK',spcrayleighdamping_beta);
+else
+  fprintf(1,'CreateVibroHarmonicPer(): Unknown damping type "%s"\n',dampingtype.value);
+end
 
 
 % Boundary conditions

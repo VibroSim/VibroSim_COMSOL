@@ -5,7 +5,7 @@
 %> ----------
 %> @param M:                  ModelWrapper around top level model
 %> @param geom:               Wrapped top level geometry
-%> @param tag :               Tag for physics. Should usually be 'solidmech_harmonic'
+%> @param tag :               Tag for physics. Should usually be 'solidmech_timedomain'
 %> @param couplant_coord:     Coordinates of transducer -- used to correctly locate transducer contact point motion probe 
 %> @param crackdiscontinuity: Optional boolean, default false. If false the crack
 %>                            face boundary conditions are continuity conditions.
@@ -36,13 +36,33 @@ solidmech_timedomain.timedomain=true;
 % with modal analysis to observe ringdown, need to make damping 
 % compatible !!!***
 
-viscosity = ObtainDCParameter(M,'spcviscousdamping','N*s');
+% Add damping to default linear elastic material node...
+% Physics has default "Linear Elastic Material" node lemm1
+% to which we add damping
 
 CreateWrappedProperty(M,solidmech_timedomain,'damping',[ solidmech_timedomain.tag '_damping' ], solidmech_timedomain.node.feature('lemm1').feature,'Damping',3); % 3-dimensional domains
-solidmech_timedomain.damping.node.set('DampingType','ViscousDamping');
 
-solidmech_timedomain.damping.node.set('etab',viscosity);
-solidmech_timedomain.damping.node.set('etav',viscosity);
+dampingtype=GetDCParamStringValue(M,'spcmaterialdampingtype');
+if strcmp(dampingtype.value,'ViscousDamping')
+  solidmech_timedomain.damping.node.set('DampingType','ViscousDamping');
+
+  viscosity = ObtainDCParameter(M,'spcviscousdamping','N*s');
+
+  
+  solidmech_timedomain.damping.node.set('etab',viscosity);
+  solidmech_timedomain.damping.node.set('etav',viscosity);
+elseif strcmp(dampingtype.value,'RayleighDamping')
+  %solidmech_timedomain.damping.node.set('DampingType','RayleighDamping');
+  fprintf(1,'CreateVibroTimeDomain(): Time domain excitation incompatible with Rayleigh Damping; Damping is disabled\n');  
+
+  %spcrayleighdamping_alpha = ObtainDCParameter(M,'spcrayleighdamping_alpha','1/s');
+  %spcrayleighdamping_beta = ObtainDCParameter(M,'spcrayleighdamping_beta','s');
+
+  %solidmech_timedomain.damping.node.set('alpha_dM',spcrayleighdamping_alpha);
+  %solidmech_timedomain.damping.node.set('beta_dK',spcrayleighdamping_beta);
+else
+  fprintf(1,'CreateVibroTimeDomain(): Unknown damping type "%s"\n',dampingtype.value);
+end
 
 % Boundary conditions
 BuildBoundaryConditions(M,geom,solidmech_timedomain,'solidmech_timedomain'); % apply boundary condtions

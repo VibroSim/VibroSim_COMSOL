@@ -39,13 +39,29 @@ solidmech_multisweep.node.prop('EquationForm').setIndex('form', 'Frequency', 0);
 % Add damping to default linear elastic material node...
 % Physics has default "Linear Elastic Material" node lemm1
 % to which we add damping
-viscosity = ObtainDCParameter(M,'spcviscousdamping','N*s');
+
 CreateWrappedProperty(M,solidmech_multisweep,'damping',[ solidmech_multisweep.tag '_damping' ], solidmech_multisweep.node.feature('lemm1').feature,'Damping',3); % 3-dimensional domains
-solidmech_multisweep.damping.node.set('DampingType','ViscousDamping');
 
+dampingtype=GetDCParamStringValue(M,'spcmaterialdampingtype');
+if strcmp(dampingtype.value,'ViscousDamping')
+  solidmech_multisweep.damping.node.set('DampingType','ViscousDamping');
 
-solidmech_multisweep.damping.node.set('etab',viscosity);
-solidmech_multisweep.damping.node.set('etav',viscosity);
+  viscosity = ObtainDCParameter(M,'spcviscousdamping','N*s');
+
+  
+  solidmech_multisweep.damping.node.set('etab',viscosity);
+  solidmech_multisweep.damping.node.set('etav',viscosity);
+elseif strcmp(dampingtype.value,'RayleighDamping')
+  solidmech_multisweep.damping.node.set('DampingType','RayleighDamping');
+
+  spcrayleighdamping_alpha = ObtainDCParameter(M,'spcrayleighdamping_alpha','1/s');
+  spcrayleighdamping_beta = ObtainDCParameter(M,'spcrayleighdamping_beta','s');
+
+  solidmech_multisweep.damping.node.set('alpha_dM',spcrayleighdamping_alpha);
+  solidmech_multisweep.damping.node.set('beta_dK',spcrayleighdamping_beta);
+else
+  fprintf(1,'CreateVibroMultiSweep(): Unknown damping type "%s"\n',dampingtype.value);
+end
 
 
 % Boundary conditions
