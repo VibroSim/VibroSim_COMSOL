@@ -10,6 +10,8 @@ if isa(inp,'double') || isa(inp,'int64') || isa(inp,'int32') || isa(inp,'uint32'
   else
     str=num2str(inp,18);
   end
+elseif isa(inp,'java.lang.String')
+  str=inp.toCharArray';
 else
-   str=inp;
+  str=inp;
 end

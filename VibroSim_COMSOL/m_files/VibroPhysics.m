@@ -1,4 +1,4 @@
-%> @param mode: 'modal', 'static', 'harmonicsweep', 'harmonicburst', 'heatflow', 'process', 'timedomain', or 'all'
+%> @param mode: 'modal', 'static', 'harmonicsweep', 'harmonicburst', 'heatflow', 'broadbandprocess', 'welderprocess', 'timedomain', or 'all'
 
 function M = VibroPhysics(M,geom,specimen,flaw_notused,mode,use_impulse_force_excitation)
 % 
@@ -14,7 +14,8 @@ function M = VibroPhysics(M,geom,specimen,flaw_notused,mode,use_impulse_force_ex
 %   - timedomain
 %
 % 2. Combination keywords, (primarily for backwards compatibility)
-%   - process
+%   - broadbandprocess
+%   - welderprocess
 %   - all
 
 if ~exist('use_impulse_force_excitation','var')
@@ -32,7 +33,8 @@ heatflow            = false ;
 timedomain   = false ;
 %vibroheatconvert    = false ;
 
-process             = false ;
+broadbandprocess    = false ;
+welderprocess       = false ;
 all                 = false ;
 
 % Split the mode string at the |'s
@@ -53,14 +55,25 @@ heatflow            = any(strcmp('heatflow',modes)) ;
 timedomain          = any(strcmp('timedomain',modes)) ;
 %vibroheatconvert    = any(strcmp('vibroheatconvert',modes)) ;
 
-process             = any(strcmp('process',modes)) ;
+broadbandprocess    = any(strcmp('broadbandprocess',modes)) | any(strcmp('process',modes)); % backward compatibility: "process" as a synonym for "broadbandprocess
+
+welderprocess       = any(strcmp('welderprocess',modes)) ;
 all                 = any(strcmp('all',modes)) ;
 
+
+
 % Raise the flags for the process keyword
-if process ;
+if broadbandprocess ;
     harmonicsweep = 1 ;
     modal = 1 ;
     harmonicburst = 1 ;
+    heatflow = 1 ;
+%    vibroheatconvert = 1 ;
+end
+
+if welderprocess ;
+    modal = 1 ;
+    multisweep = 1 ;
     heatflow = 1 ;
 %    vibroheatconvert = 1 ;
 end
