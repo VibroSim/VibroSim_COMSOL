@@ -258,7 +258,7 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   position_along_surface = innerprod_cellstr_array(position_from_center,to_cellstr_array(axismajordirection));
   position_into_depth = innerprod_cellstr_array(position_from_center,to_cellstr_array(axisminordirection));
 
-  scaled_position_into_depth = ['((' to_string(semimajoraxislen) ')/(' to_string(semiminoraxislen) '))*' position_into_depth ];
+  scaled_position_into_depth = ['((' to_string(semimajoraxislen) ')/(' to_string(semiminoraxislen) '))*(' position_into_depth ')'];
   
   r_equiv_surface = [ 'sqrt(' '(' position_along_surface ')^2' '+' '(' scaled_position_into_depth ')^2' ')' ]; 
   

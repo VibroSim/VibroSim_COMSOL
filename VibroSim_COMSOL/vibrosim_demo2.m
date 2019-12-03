@@ -29,6 +29,12 @@ isolator_coords=[.13,     .0254/2,     0,   0.0,  % top-left
 % Call a function that sets various parameters to be used by the model. 
 default_params(M);
 
+% simulationtimestart, simulationtimestep, and simulationtimeend specify the time range of the heat flow simulation
+AddParamToParamdb(M,'simulationtimestart',0.2,'s');
+AddParamToParamdb(M,'simulationtimestep',0.02,'s');
+AddParamToParamdb(M,'simulationtimeend',1.8,'s');
+
+
 % Define a procedure for building the geometry. Steps can be sequenced by using
 % the pipe (vertical bar | ) character. 
 bldgeom = @(M,geom) CreateRectangularBarSpecimen(M,geom,'specimen') | ...

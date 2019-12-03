@@ -19,9 +19,6 @@ AddParamToParamdb(M,'simulationburstfreq',15270,'Hz');
 AddParamToParamdb(M,'simulationneigs',40);  % Number of frequencies for modal analysis to seek out
 AddParamToParamdb(M,'simulationeigsaround',10000,'Hz'); % Center frequency for modal analysis
 
-AddParamToParamdb(M,'simulationtimestart',0.2,'s');
-AddParamToParamdb(M,'simulationtimestep',0.02,'s');
-AddParamToParamdb(M,'simulationtimeend',1.8,'s');
 
 AddParamToParamdb(M,'simulationcameranetd',.022,'K');
 AddParamToParamdb(M,'simulationsurfaceemissivity',1.0);
@@ -141,14 +138,10 @@ AddParamToParamdb(M,'couplantSpecificHeatCapacity',2500,'J/kg/K');  % this numbe
 AddParamToParamdb(M,'meshsizemin',.001,'m');
 AddParamToParamdb(M,'meshsize',.004,'m');
 
-AddParamToParamdb(M,'excitation_t0',0.2,'s');
-AddParamToParamdb(M,'excitation_t1',0.21,'s');
-AddParamToParamdb(M,'excitation_t2',1.199,'s');
-AddParamToParamdb(M,'excitation_t3',1.2,'s');
-
 AddParamToParamdb(M,'impulseexcitation_t0',0.0,'s');
 AddParamToParamdb(M,'impulseexcitation_width',2.0e-6,'s');
 
+% Parameters for time-domain vibration simulations
 AddParamToParamdb(M,'timedomain_start_time',-4e-6,'s');
 AddParamToParamdb(M,'timedomain_step_time',1e-6,'s');
 AddParamToParamdb(M,'timedomain_end_time',10e-3,'s');
