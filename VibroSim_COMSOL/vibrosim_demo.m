@@ -28,6 +28,9 @@
 % Call a function that sets various parameters to be used by the model. 
 default_params(M);
 
+% Amplitude setting for the excitation system
+AddParamToParamdb(M,'amplitude',1.0,'V');
+
 % simulationtimestart, simulationtimestep, and simulationtimeend specify the time range of the heat flow simulation
 AddParamToParamdb(M,'simulationtimestart',0.2,'s');
 AddParamToParamdb(M,'simulationtimestep',0.02,'s');

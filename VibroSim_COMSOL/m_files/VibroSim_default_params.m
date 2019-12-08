@@ -55,7 +55,6 @@ ObtainDCParameter(M,'wh','Pa');
 
 
 
-AddParamToParamdb(M,'amplitude',1.0,'V');
 AddParamToParamdb(M,'spclength',.14,'m');
 AddParamToParamdb(M,'spcwidth',.0254,'m');
 AddParamToParamdb(M,'spcthickness',.012,'m');
