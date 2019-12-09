@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.toolbox" plugin-version="1.0">
-  <configuration build-checksum="2156557372" file="VibroSim_COMSOL.prj" location="." name="VibroSim_COMSOL" target="target.toolbox" target-name="Package Toolbox">
+  <configuration build-checksum="1058425771" file="VibroSim_COMSOL.prj" location="." name="VibroSim_COMSOL" target="target.toolbox" target-name="Package Toolbox">
     <param.appname>VibroSim_COMSOL</param.appname>
     <param.authnamewatermark>Stephen D. Holland</param.authnamewatermark>
     <param.email>sdh4@iastate.edu</param.email>
@@ -7,7 +7,7 @@
     <param.summary>COMSOL scripts for VibroSim</param.summary>
     <param.description>Comsol scripts for the VibroSim vibrothermography simulation package</param.description>
     <param.screenshot>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_image.png</param.screenshot>
-    <param.version>0.1</param.version>
+    <param.version>0.1.1</param.version>
     <param.output>${PROJECT_ROOT}/VibroSim_COMSOL.mltbx</param.output>
     <param.products.name />
     <param.products.id />
@@ -68,18 +68,17 @@
       <file>${PROJECT_ROOT}/VibroSim_COMSOL</file>
     </fileset.rootdir>
     <fileset.rootfiles>
-      <file>${PROJECT_ROOT}/VibroSim_COMSOL/BuildVibroModel.m</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/COPYING.txt</file>
-      <file>${PROJECT_ROOT}/VibroSim_COMSOL/InitializeVibroSimScript.m</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/Makefile</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/README.txt</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/VERSION.txt</file>
-      <file>${PROJECT_ROOT}/VibroSim_COMSOL/calc_straincoefficient.m</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/comsolmatlab</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/demos.xml</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/doc</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/gui</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/html</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/m_files</file>
+      <file>${PROJECT_ROOT}/VibroSim_COMSOL/transducer_data</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_demo.m</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_demo2.m</file>
       <file>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_demo3.m</file>
