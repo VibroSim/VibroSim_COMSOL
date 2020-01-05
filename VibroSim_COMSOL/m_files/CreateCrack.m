@@ -217,7 +217,7 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
     sxz=[ tag '_centerevaluate(' vibration_physicstag '.sxz)' ];
     sy=[ tag '_centerevaluate(' vibration_physicstag '.sy)' ];
     syz=[ tag '_centerevaluate(' vibration_physicstag '.syz)' ];
-    szz=[ tag '_centerevaluate(' vibration_physicstag '.szz)' ];
+    sz=[ tag '_centerevaluate(' vibration_physicstag '.sz)' ];
     
 
     % The differential motion is evaluated from the the normal

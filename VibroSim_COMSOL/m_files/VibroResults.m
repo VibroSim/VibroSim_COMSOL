@@ -398,18 +398,18 @@ end
 
 if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
 
-  if string_in_cellstr_array('crack_centerstrain',to_cellstr_array(model.variable.tags))
+  if string_in_cellstr_array('crack_centerstress',to_cellstr_array(model.variable.tags))
 
     CreateOrReplace(model.result.numerical,'solidmech_multisweep_seg1_crackcenterstress','EvalGlobal');
     model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').label('solidmech_multisweep_seg1_crackcenterstress');
     model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').set('data',GetDataSetForSolution(model,'solidmech_multisweep_seg1_solution'));
     
-    model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').setIndex('expr','crack_centerstressnmag_solidmech_multisweep',0);
-    model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').setIndex('descr','Magnitude_of_strain_at_crack_center_seg1',0);
+    model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').setIndex('expr','crack_centerstressmag_solidmech_multisweep',0);
+    model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').setIndex('descr','Magnitude_of_stress_at_crack_center_seg1',0);
     model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').setIndex('expr','crack_centerstressnormal_solidmech_multisweep',1);
-    model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').setIndex('descr','Normal_strain_at_crack_center_seg1',1);
+    model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').setIndex('descr','Normal_stress_at_crack_center_seg1',1);
     model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').setIndex('expr','crack_centerstressshear_solidmech_multisweep',2);
-    model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').setIndex('descr','Shear_strain_at_crack_center_seg1',2);
+    model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').setIndex('descr','Shear_stress_at_crack_center_seg1',2);
 
     CreateOrReplace(model.result.table,'solidmech_multisweep_seg1_crackcenterstress_table','Table');
     model.result.table('solidmech_multisweep_seg1_crackcenterstress_table').label('solidmech_multisweep_seg1_crackcenterstress_table');
@@ -670,11 +670,11 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
     model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').set('data',GetDataSetForSolution(model,'solidmech_multisweep_seg2_solution'));
     
     model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').setIndex('expr','crack_centerstressmag_solidmech_multisweep',0);
-    model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').setIndex('descr','Magnitude_of_strain_at_crack_center_seg2',0);
+    model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').setIndex('descr','Magnitude_of_stress_at_crack_center_seg2',0);
     model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').setIndex('expr','crack_centerstressnormal_solidmech_multisweep',1);
-    model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').setIndex('descr','Normal_strain_at_crack_center_seg2',1);
+    model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').setIndex('descr','Normal_stress_at_crack_center_seg2',1);
     model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').setIndex('expr','crack_centerstressshear_solidmech_multisweep',2);
-    model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').setIndex('descr','Shear_strain_at_crack_center_seg2',2);
+    model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').setIndex('descr','Shear_stress_at_crack_center_seg2',2);
 
     CreateOrReplace(model.result.table,'solidmech_multisweep_seg2_crackcenterstress_table','Table');
     model.result.table('solidmech_multisweep_seg2_crackcenterstress_table').label('solidmech_multisweep_seg2_crackcenterstress_table');
@@ -934,11 +934,11 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
     model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').set('data',GetDataSetForSolution(model,'solidmech_multisweep_seg3_solution'));
     
     model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').setIndex('expr','crack_centerstressmag_solidmech_multisweep',0);
-    model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').setIndex('descr','Magnitude_of_strain_at_crack_center_seg3',0);
+    model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').setIndex('descr','Magnitude_of_stress_at_crack_center_seg3',0);
     model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').setIndex('expr','crack_centerstressnormal_solidmech_multisweep',1);
-    model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').setIndex('descr','Normal_strain_at_crack_center_seg3',1);
+    model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').setIndex('descr','Normal_stress_at_crack_center_seg3',1);
     model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').setIndex('expr','crack_centerstressshear_solidmech_multisweep',2);
-    model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').setIndex('descr','Shear_strain_at_crack_center_seg3',2);
+    model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').setIndex('descr','Shear_stress_at_crack_center_seg3',2);
 
     CreateOrReplace(model.result.table,'solidmech_multisweep_seg3_crackcenterstress_table','Table');
     model.result.table('solidmech_multisweep_seg3_crackcenterstress_table').label('solidmech_multisweep_seg3_crackcenterstress_table');
@@ -1199,11 +1199,11 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
     model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').set('data',GetDataSetForSolution(model,'solidmech_multisweep_seg4_solution'));
     
     model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').setIndex('expr','crack_centerstressmag_solidmech_multisweep',0);
-    model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').setIndex('descr','Magnitude_of_strain_at_crack_center_seg4',0);
+    model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').setIndex('descr','Magnitude_of_stress_at_crack_center_seg4',0);
     model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').setIndex('expr','crack_centerstressnormal_solidmech_multisweep',1);
-    model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').setIndex('descr','Normal_strain_at_crack_center_seg4',1);
+    model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').setIndex('descr','Normal_stress_at_crack_center_seg4',1);
     model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').setIndex('expr','crack_centerstressshear_solidmech_multisweep',2);
-    model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').setIndex('descr','Shear_strain_at_crack_center_seg4',2);
+    model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').setIndex('descr','Shear_stress_at_crack_center_seg4',2);
 
     CreateOrReplace(model.result.table,'solidmech_multisweep_seg4_crackcenterstress_table','Table');
     model.result.table('solidmech_multisweep_seg4_crackcenterstress_table').label('solidmech_multisweep_seg4_crackcenterstress_table');
