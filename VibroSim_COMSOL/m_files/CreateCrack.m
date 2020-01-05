@@ -24,12 +24,12 @@
 %>                      spatial distribution of predicted heating. 
 %> vibration_physicstags: A cell array of tag names representing physics models
 %>                      used for vibration calculation. For each of these a
-%>                      variable [ cracktag '_centerstrainmag_' physicstag ]
-%>                      will be created representing the local strain field
+%>                      variable [ cracktag '_centerstress_' physicstag ]
+%>                      will be created representing the local stress field
 %>                      at the centerpoint. Please note that for this to be
 %>                      meaningful that physics should be configured for
 %>                      continuity mechanical boundary conditions across the
-%>                      crack (otherwise strain isn't well defined for a
+%>                      crack (otherwise stress isn't well defined for a
 %>                      discontinuity).
 %> heatingfile:         Optional file with crack heating data. It should have four
 %>                      columns: Time, surface radius, side1 heating, 
@@ -177,7 +177,7 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   crack.centerevaluate.node.selection.named([ geom.tag '_' crack.centerpoint.tag '_pnt' ]);
   crack.centerevaluate.node.set('method','summation');  % sum over single point -- get value at that point.
 
-  % Create a variable node to represent dynamic strain
+  % Create a variable node to represent dynamic stress
 
   % obtain cellstr array representing normal direction to crack
   cracknormal=normalize_cellstr_array(crossproduct_cellstr_array(to_cellstr_array(axismajordirection),to_cellstr_array(axisminordirection)));
@@ -192,25 +192,33 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
     vibration_physicstags={ vibration_physicstags };
   end
 
-  % create a variable <cracktag>_centerstrainmag_<physicstag
-  % representing the motion at the crack for each physics.
+  % create a variable <cracktag>_centerstress_<physicstag
+  % representing the stress at the crack for each physics.
   % Create a single variable node that will hold multiple variables
   % (one per physics)
-  CreateWrappedProperty(M,crack,'centerstrain',[tag '_centerstrain'],M.node.variable);
-  crack.centerstrain.node.model(M.component.tag); % variable goes under component, not top level model
-  crack.centerstrain.node.selection.global; % Set "Geometric entity level" to "entire model"
+  CreateWrappedProperty(M,crack,'centerstress',[tag '_centerstress'],M.node.variable);
+  crack.centerstress.node.model(M.component.tag); % variable goes under component, not top level model
+  crack.centerstress.node.selection.global; % Set "Geometric entity level" to "entire model"
 
   for cnt=1:length(vibration_physicstags)
     vibration_physicstag=vibration_physicstags{cnt};
 
     % Obtain strain tensor components
-    eXX=[ tag '_centerevaluate(' vibration_physicstag '.eXX)' ];
-    eXY=[ tag '_centerevaluate(' vibration_physicstag '.eXY)' ];
-    eXZ=[ tag '_centerevaluate(' vibration_physicstag '.eXZ)' ];
-    eYY=[ tag '_centerevaluate(' vibration_physicstag '.eYY)' ];
-    eYZ=[ tag '_centerevaluate(' vibration_physicstag '.eYZ)' ];
-    eZZ=[ tag '_centerevaluate(' vibration_physicstag '.eZZ)' ];
+    %eXX=[ tag '_centerevaluate(' vibration_physicstag '.eXX)' ];
+    %eXY=[ tag '_centerevaluate(' vibration_physicstag '.eXY)' ];
+    %eXZ=[ tag '_centerevaluate(' vibration_physicstag '.eXZ)' ];
+    %eYY=[ tag '_centerevaluate(' vibration_physicstag '.eYY)' ];
+    %eYZ=[ tag '_centerevaluate(' vibration_physicstag '.eYZ)' ];
+    %eZZ=[ tag '_centerevaluate(' vibration_physicstag '.eZZ)' ];
 
+    % Obtain stress tensor components
+    sx=[ tag '_centerevaluate(' vibration_physicstag '.sx)' ];
+    sxy=[ tag '_centerevaluate(' vibration_physicstag '.sxy)' ];
+    sxz=[ tag '_centerevaluate(' vibration_physicstag '.sxz)' ];
+    sy=[ tag '_centerevaluate(' vibration_physicstag '.sy)' ];
+    syz=[ tag '_centerevaluate(' vibration_physicstag '.syz)' ];
+    szz=[ tag '_centerevaluate(' vibration_physicstag '.szz)' ];
+    
 
     % The differential motion is evaluated from the the normal
     % [ nX nY nZ ] multiplied by the local
@@ -225,25 +233,41 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
 
     % obtain cellstr array representing this product
 
-    centerstrainvec = {[ '(' eXX ')*(' nX ') + (' eXY ')*(' nY ') + (' eXZ ')*(' nZ ')' ], ...
-    		       [ '(' eXY ')*(' nX ') + (' eYY ')*(' nY ') + (' eYZ ')*(' nZ ')' ], ...
-    		       [ '(' eXZ ')*(' nX ') + (' eYZ ')*(' nY ') + (' eZZ ')*(' nZ ')' ]};
+    %centerstrainvec = {[ '(' eXX ')*(' nX ') + (' eXY ')*(' nY ') + (' eXZ ')*(' nZ ')' ], ...
+    %		       [ '(' eXY ')*(' nX ') + (' eYY ')*(' nY ') + (' eYZ ')*(' nZ ')' ], ...
+    %		       [ '(' eXZ ')*(' nX ') + (' eYZ ')*(' nY ') + (' eZZ ')*(' nZ ')' ]};
 
+    centerstressvec = {[ '(' sx ')*(' nX ') + (' sxy ')*(' nY ') + (' sxz ')*(' nZ ')' ], ...
+    		       [ '(' sxy ')*(' nX ') + (' sy ')*(' nY ') + (' syz ')*(' nZ ')' ], ...
+    		       [ '(' sxz ')*(' nX ') + (' syz ')*(' nY ') + (' sz ')*(' nZ ')' ]};
+    
     % calculate magnitude of strain vector
 
-    centerstrainmag = magnitude_cellstr_array(centerstrainvec);
+    %centerstrainmag = magnitude_cellstr_array(centerstrainvec);
+    centerstressmag = magnitude_cellstr_array(centerstressvec);
 
+
+    
     % normal strain is inner product of strain vector with unit vector in crack normal direction
-    centerstrainnormal = innerprod_cellstr_array(centerstrainvec,cracknormal);
+    %centerstrainnormal = innerprod_cellstr_array(centerstrainvec,cracknormal);
 
+    % normal stress is inner product of stress vector with unit vector in crack normal direction
+    centerstressnormal = innerprod_cellstr_array(centerstressvec,cracknormal);
+    
     % shear strain is inner product of strain vector with unit vector in crack semimajor (surface) direction 
 
-    centerstrainshear = innerprod_cellstr_array(centerstrainvec,normalize_cellstr_array(to_cellstr_array(axismajordirection)));
+    %centerstrainshear = innerprod_cellstr_array(centerstrainvec,normalize_cellstr_array(to_cellstr_array(axismajordirection)));
+
+
+    % shear stress is inner product of stress vector with unit vector in crack semimajor (surface) direction 
+
+    centerstressshear = innerprod_cellstr_array(centerstressvec,normalize_cellstr_array(to_cellstr_array(axismajordirection)));
+
     %CreateVariable(M,[tag '_centerstrainmag'],centerstrainmag);
     % add this variable to our variable node
-    crack.centerstrain.node.set([tag '_centerstrainmag_' vibration_physicstag ],centerstrainmag);
-    crack.centerstrain.node.set([tag '_centerstrainnormal_' vibration_physicstag ],centerstrainnormal);
-    crack.centerstrain.node.set([tag '_centerstrainshear_' vibration_physicstag ],centerstrainshear);
+    crack.centerstress.node.set([tag '_centerstressmag_' vibration_physicstag ],centerstressmag);
+    crack.centerstress.node.set([tag '_centerstressnormal_' vibration_physicstag ],centerstressnormal);
+    crack.centerstress.node.set([tag '_centerstressshear_' vibration_physicstag ],centerstressshear);
 
     
 
