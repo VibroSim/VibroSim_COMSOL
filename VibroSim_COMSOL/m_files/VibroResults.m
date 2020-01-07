@@ -274,7 +274,7 @@ if DataSetExistsForSolution(model,'solidmech_harmonicsweep_solution')
   model.result('vibro_harmonicsweep_plot').run
 
 
-  if string_in_cellstr_array('crack_centerstrain',to_cellstr_array(model.variable.tags))
+  if string_in_cellstr_array('crack_centerstress',to_cellstr_array(model.variable.tags))
     CreateOrReplace(model.result,'vibro_harmonicsweep_spectrum','PlotGroup1D');
     model.result('vibro_harmonicsweep_spectrum').label('vibro_harmonicsweep_spectrum');
     model.result('vibro_harmonicsweep_spectrum').set('data', GetDataSetForSolution(model,'solidmech_harmonicsweep_solution'));
