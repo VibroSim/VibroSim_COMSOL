@@ -133,7 +133,7 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
     crack.ellipses{cnt}.node.set('pos',{ '0','0' });
     thissemimajoraxislen = to_string(annuliradii(1,cnt),'m');
     thissemiminorlen = ['(' to_string(annuliradii(1,size(annuliradii,2)),'m') ')' '*' '(' to_string(semiminoraxislen) ')' '/' '(' to_string(semimajoraxislen) ')' ];
-    crack.ellipses{cnt}.node.set('size',{thissemimajoraxislen, thissemiminorlen})
+    crack.ellipses{cnt}.node.set('size',{thissemimajoraxislen, thissemiminorlen});
     % crack.ellipses{cnt}.node.set('a',{thissemimajoraxislen}); % length along major axis
     % crack.ellipses{cnt}.node.set('b',{thissemiminorlen}); % length along minor axis
   end
@@ -403,7 +403,7 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
 			  BuildBoundaryHeatSourceBCs(M,geom,physics,crack,bcobj, ...
 						     @(M,geom,crack) ...
 						      GetCrackBoundaries(M,geom,crack), ...
-						     ['if((' crack.position_along_surface ') < 0[m],' tag '_heatingfunction_side1(t,' crack.r_equiv_surface '),' tag '_heatingfunction_side2(t,' crack.r_equiv_surface '))' ]));
+						     ['if((' crack.position_along_surface ') > 0[m],' tag '_heatingfunction_side1(t,' crack.r_equiv_surface '),' tag '_heatingfunction_side2(t,' crack.r_equiv_surface '))' ]));
     
   end
 end
