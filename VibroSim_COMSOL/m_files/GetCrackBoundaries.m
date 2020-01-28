@@ -21,7 +21,7 @@
 %> Will fail if crack intersects an internal boundary or similar
 function sorted_boundaries=GetCrackBoundaries(M,geom,crack)
 
-% crack boundaries are the set of semi-annuli, the union of which form the crack.
+% crack boundaries are the set of sub-shapes, the union of which form the crack.
 crack_boundaries=mphgetselection(M.node.selection([ geom.tag '_' crack.tag '_bnd' ]));
 % entity numbers are now in crack_boundaries.entities
 
@@ -44,4 +44,5 @@ sorted_boundaries=crack_boundaries.entities(sortorder); % sorted from shortest t
 % properly organized from innermost group to outermost group
 
 %assert(length(sorted_boundaries)==size(crack.closure,1));
-assert(length(sorted_boundaries)==size(crack.annuliradii,2));
+%assert(length(sorted_boundaries)==size(crack.annuliradii,2));
+%assert(length(sorted_boundaries)==size(crack.subradii,2));

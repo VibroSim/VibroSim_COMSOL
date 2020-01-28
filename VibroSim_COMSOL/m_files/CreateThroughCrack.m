@@ -1,9 +1,9 @@
 %> CREATETHROUGHCRACK Creates a a crack at a given position
 %>   [crack] = CREATETHROUGHCRACK(M, geom, tag, specimen, centerpoint, semimajoraxislen,
 %>                         semiminoraxislen, axismajordirection,
-%>                         axisminordirection,annuliradii,
+%>                         axisminordirection, subradii,
 %>                         vibration_physicstags,
-%>                         heatingfile)
+%>                         heatingfile, cracktype)
 %> Parameters:
 %> -----------
 %> M:                   Top level ModelWrapper
@@ -16,12 +16,14 @@
 %> semiminoraxislen:    Half-crack length, along semi-minor (depth) axis
 %> axismajordirection:  Direction of semi-major (surface) axis
 %> axisminordirection:  Direction of semi-minor (depth) axis
-%> CHANGE annuliradii:         A vector of axismajor_endboundary values.
+%> subradii:            A vector of axismajor_endboundary values.
 %>                      The last element should match the value of
 %>                      semimajoraxislen. The crack boundary will be split
-%>                      into these annuli, with the real purpose of enforcing
+%>                      into sub boundaries, with the real purpose of enforcing
 %>                      a sufficiently fine mesh to be able to resolve the
-%>                      spatial distribution of predicted heating. 
+%>                      spatial distribution of predicted heating. The shape 
+%>                      depend on the crack type, annuli for penny shaped
+%>                      and rectangles for through cracks.
 %> vibration_physicstags: A cell array of tag names representing physics models
 %>                      used for vibration calculation. For each of these a
 %>                      variable [ cracktag '_centerstress_' physicstag ]
@@ -38,6 +40,7 @@
 %>                      positive major axis direction. 
 %>                      If not provided then the heat generation boundary 
 %>                      condition will not be created. 
+%> cracktype:           A string that is either 'through' or 'penny'
 
 
 % Documentation of obsolete (removed) parameters: 
@@ -74,12 +77,15 @@
   %> axisminordirection=[0,0,-1];
   %> closure=[ .001, -30 ; .002, 0 ; .003, 60];
   %> QbExpressions='heatintensity%.2d'
-function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxislen, semiminoraxislen, axismajordirection,axisminordirection,annuliradii,vibration_physicstags,heatingfile)
+function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxislen, semiminoraxislen, axismajordirection,axisminordirection,subradii,vibration_physicstags,heatingfile,cracktype)
 
-  % axismajordirection, axisminordirection, annuliradii are row vectors
+  % Assert cracktype is either 'penny' or 'through'
+  assert( cracktype=='penny' || cracktype=='through' );
+
+  % axismajordirection, axisminordirection, subradii are row vectors
   axismajordirection=reshape(axismajordirection,1,3);
   axisminordirection=reshape(axisminordirection,1,3);
-  annuliradii = reshape(annuliradii,1,prod(size(annuliradii)));
+  subradii = reshape(subradii,1,prod(size(subradii)));
   
 
   % axisminor should not have any component parallel to axismajordirection.
@@ -117,25 +123,30 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   addprop(crack,'axisminordirection');
   crack.axisminordirection=axisminordirection;
 
-  addprop(crack,'annuliradii');
-  crack.annuliradii=annuliradii;
+  addprop(crack,'subradii');
+  crack.subradii=subradii;
 
 
-  % Create ellipses on workplane % CHANGE TO RECTANGLE
-  addprop(crack,'ellipses');
-  crack.ellipses={};
-  for cnt=1:size(annuliradii,2)
-    crack.ellipses{cnt}=ModelWrapper(M,sprintf('%s_ellipse%.3d',crack.tag,cnt),crack.node.geom.feature);
-    crack.ellipses{cnt}.node=crack.node.geom.feature.create(crack.ellipses{cnt}.tag,'Rectangle');
-    crack.ellipses{cnt}.node.label(crack.ellipses{cnt}.tag);
-    crack.ellipses{cnt}.node.set('type','solid');
-    crack.ellipses{cnt}.node.set('base','center');
-    crack.ellipses{cnt}.node.set('pos',{ '0','0' });
-    thissemimajoraxislen = to_string(annuliradii(1,cnt),'m');
-    thissemiminorlen = ['(' to_string(annuliradii(1,size(annuliradii,2)),'m') ')' '*' '(' to_string(semiminoraxislen) ')' '/' '(' to_string(semimajoraxislen) ')' ];
-    crack.ellipses{cnt}.node.set('size',{thissemimajoraxislen, thissemiminorlen});
-    % crack.ellipses{cnt}.node.set('a',{thissemimajoraxislen}); % length along major axis
-    % crack.ellipses{cnt}.node.set('b',{thissemiminorlen}); % length along minor axis
+  % Create sub-shapes on workplane % CHANGE TO RECTANGLE
+  addprop(crack,'subs');
+  crack.subs={};
+  for cnt=1:size(subradii,2)
+    crack.subs{cnt}=ModelWrapper(M,sprintf('%s_sub%.3d',crack.tag,cnt),crack.node.geom.feature);
+    thissemimajoraxislen = to_string(subradii(1,cnt),'m');
+    if cracktype == 'through'
+      thissemiminoraxislen = ['(' to_string(subradii(1,size(subradii,2)),'m') ')' '*' '(' to_string(semiminoraxislen) ')' '/' '(' to_string(semimajoraxislen) ')' ];
+      crack.subs{cnt}.node=crack.node.geom.feature.create(crack.subs{cnt}.tag,'Rectangle');
+      crack.subs{cnt}.node.set('size',{thissemimajoraxislen, thissemiminoraxislen});
+    else
+      thissemiminoraxislen = ['(' to_string(subradii(1,cnt),'m') ')' '*' '(' to_string(semiminoraxislen) ')' '/' '(' to_string(semimajoraxislen) ')' ];
+      crack.subs{cnt}.node=crack.node.geom.feature.create(crack.subs{cnt}.tag,'Ellipse');
+      crack.subs{cnt}.node.set('a',{thissemimajoraxislen}); % length along major axis
+      crack.subs{cnt}.node.set('b',{thissemiminoraxislen}); % length along minor axis
+    end
+    crack.subs{cnt}.node.label(crack.subs{cnt}.tag);
+    crack.subs{cnt}.node.set('type','solid');
+    crack.subs{cnt}.node.set('base','center');
+    crack.subs{cnt}.node.set('pos',{ '0','0' });
   end
 
   crack.node.set('createselection','on');
@@ -260,15 +271,17 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
     %centerstrainshear = innerprod_cellstr_array(centerstrainvec,normalize_cellstr_array(to_cellstr_array(axismajordirection)));
 
 
-    % shear stress is inner product of stress vector with unit vector in crack semimajor (surface) direction 
-
-    centerstressshear = innerprod_cellstr_array(centerstressvec,normalize_cellstr_array(to_cellstr_array(axismajordirection)));
+    % shear stress major is inner product of stress vector with unit vector in crack semimajor (surface) direction 
+    centerstressshearminor = innerprod_cellstr_array(centerstressvec,normalize_cellstr_array(to_cellstr_array(axismajordirection)));
+    % shear stress minor is inner product of stress vector with unit vector in crack semimajor (surface) direction 
+    centerstressshearmajor = innerprod_cellstr_array(centerstressvec,normalize_cellstr_array(to_cellstr_array(axisminordirection)));
 
     %CreateVariable(M,[tag '_centerstrainmag'],centerstrainmag);
     % add this variable to our variable node
     crack.centerstress.node.set([tag '_centerstressmag_' vibration_physicstag ],centerstressmag);
     crack.centerstress.node.set([tag '_centerstressnormal_' vibration_physicstag ],centerstressnormal);
-    crack.centerstress.node.set([tag '_centerstressshear_' vibration_physicstag ],centerstressshear);
+    crack.centerstress.node.set([tag '_centerstressshearmajor_' vibration_physicstag ],centerstressshearmajor);
+    crack.centerstress.node.set([tag '_centerstressshearminor_' vibration_physicstag ],centerstressshearminor);
 
     
 
@@ -403,7 +416,7 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
 			  BuildBoundaryHeatSourceBCs(M,geom,physics,crack,bcobj, ...
 						     @(M,geom,crack) ...
 						      GetCrackBoundaries(M,geom,crack), ...
-						     ['if((' crack.position_along_surface ') > 0[m],' tag '_heatingfunction_side1(t,' crack.r_equiv_surface '),' tag '_heatingfunction_side2(t,' crack.r_equiv_surface '))' ]));
+						     ['if((' crack.position_along_surface ') < 0[m],' tag '_heatingfunction_side1(t,' crack.r_equiv_surface '),' tag '_heatingfunction_side2(t,' crack.r_equiv_surface '))' ]));
     
   end
 end

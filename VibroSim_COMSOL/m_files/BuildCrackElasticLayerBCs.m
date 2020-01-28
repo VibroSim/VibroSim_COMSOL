@@ -1,7 +1,7 @@
 function bcobj=BuildCrackElasticLayerBCs(M,geom,physics,crack,bcobj)
 
 
-sorted_boundaries=GetCrackBoundaries(M,geom,crack);
+ sorted_boundaries=GetCrackBoundaries(M,geom,crack);
 
 
 % if ~isprop(crack,'elasticlayers')

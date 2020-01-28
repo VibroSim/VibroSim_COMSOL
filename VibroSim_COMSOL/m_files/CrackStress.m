@@ -21,7 +21,7 @@
 %>                      	   solidmech_harmonic_solution or
 %>                      	   solidmech_harmonicper_solution). Defaults
 %>                      	   to [ physicstag '_solution' ]
-function [normalstress,shearstress] = CrackStress(model,geomtag,cracktag,physicstag,freqidx,solutiontag)
+function [normalstress,shearstressmajor,shearstressminor] = CrackStress(model,geomtag,cracktag,physicstag,freqidx,solutiontag)
 
 if ~exist('solutiontag','var')
   solutiontag=[ physicstag '_solution' ];
@@ -67,4 +67,6 @@ stressvector=(cracknormal/norm(cracknormal))*stresstensor;
 %strainmag=norm(strainvector);
 normalstress = stressvector*(cracknormal'/norm(cracknormal));
 
-shearstress = stressvector*(cracksemimajor'/norm(cracksemimajor));
+shearstressmajor = stressvector*(cracksemimajor'/norm(cracksemimajor));
+
+shearstressminor = stressvector*(cracksemiminor'/norm(cracksemiminor));
