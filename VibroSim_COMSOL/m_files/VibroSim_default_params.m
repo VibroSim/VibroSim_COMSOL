@@ -20,7 +20,7 @@ AddParamToParamdb(M,'simulationneigs',40);  % Number of frequencies for modal an
 AddParamToParamdb(M,'simulationeigsaround',10000,'Hz'); % Center frequency for modal analysis
 
 
-AddParamToParamdb(M,'simulationcameranetd',.022,'K');
+%AddParamToParamdb(M,'simulationcameranetd',.022,'K'); % camera NETD parameter moved to experiment log
 AddParamToParamdb(M,'simulationsurfaceemissivity',1.0);
 ObtainDCParameter(M,'simulationsurfaceemissivity');
 
@@ -60,13 +60,14 @@ AddParamToParamdb(M,'spcwidth',.0254,'m');
 AddParamToParamdb(M,'spcthickness',.012,'m');
 %AddParamToParamdb(M,'spcviscousdamping',0,'N*s'); 
 
-% These parameters are book values for Ti-6-4 material 
-AddParamToParamdb(M,'spcmaterial','Ti-6-4');
-AddParamToParamdb(M,'spcYoungsModulus',113.8e9,'Pa');
-AddParamToParamdb(M,'spcDensity',4430,'kg/m^3');
-AddParamToParamdb(M,'spcPoissonsRatio',0.34,''); % book value
-AddParamToParamdb(M,'spcThermalConductivity',6.7,'W/m/K');
-AddParamToParamdb(M,'spcSpecificHeatCapacity',526.3,'J/kg/K');
+%% These parameters are book values for Ti-6-4 material
+% -- Now moved to be parameters of the _comsol.m file
+%AddParamToParamdb(M,'spcmaterial','Ti-6-4');
+%AddParamToParamdb(M,'spcYoungsModulus',113.8e9,'Pa');
+%AddParamToParamdb(M,'spcDensity',4430,'kg/m^3');
+%AddParamToParamdb(M,'spcPoissonsRatio',0.34,''); % book value
+%AddParamToParamdb(M,'spcThermalConductivity',6.7,'W/m/K');
+%AddParamToParamdb(M,'spcSpecificHeatCapacity',526.3,'J/kg/K');
 
 %% These parameters are book values for Inconel 718  material 
 %AddParamToParamdb(M,'spcmaterial','Inconel-718');
@@ -156,5 +157,5 @@ CreateImpulseExcitation(M,'impulse_excitation', ...
 			ObtainDCParameter(M,'impulseexcitation_t0','s'), ...
 			ObtainDCParameter(M,'impulseexcitation_width','s'));
 
-CreateCameraNoise(M,'cameranoise',ObtainDCParameter(M,'simulationcameranetd','K'));
+%CreateCameraNoise(M,'cameranoise',ObtainDCParameter(M,'simulationcameranetd','K')); % camera NETD parameter moved to experiment log -- CreateCameraNoise() should be explicit in the model construction
 
