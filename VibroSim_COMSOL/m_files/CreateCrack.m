@@ -133,7 +133,7 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   for cnt=1:size(subradii,2)
     crack.subs{cnt}=ModelWrapper(M,sprintf('%s_sub%.3d',crack.tag,cnt),crack.node.geom.feature);
     thissemimajoraxislen = to_string(subradii(1,cnt),'m');
-    if cracktype == 'through'
+    if strcmp(cracktype,'through')
       thissemiminoraxislen = ['(' to_string(subradii(1,size(subradii,2)),'m') ')' '*' '(' to_string(semiminoraxislen) ')' '/' '(' to_string(semimajoraxislen) ')' ];
       crack.subs{cnt}.node=crack.node.geom.feature.create(crack.subs{cnt}.tag,'Rectangle');
       crack.subs{cnt}.node.set('size',{thissemimajoraxislen, thissemiminoraxislen});
