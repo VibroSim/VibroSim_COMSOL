@@ -360,6 +360,31 @@ if DataSetExistsForSolution(model,'solidmech_harmonicburst_solution')
   model.result('vibro_harmonicburst_plot').feature('vibro_harmonicburst_plot_surface').set('expr', 'solidmech_harmonicburst.SX');
   model.result('vibro_harmonicburst_plot').feature('vibro_harmonicburst_plot_surface').set('descr', 'Second Piola-Kirchhoff stress, X component');
   model.result('vibro_harmonicburst_plot').run
+  
+  % Jared added to put laser in the burst analysis
+  if string_in_cellstr_array('solidmech_harmonicburst_laser',cell(model.probe.tags))
+    CreateOrReplace(model.result,'vibro_harmonicburst_laser_displ','PlotGroup1D');
+    model.result('vibro_harmonicburst_laser_displ').label('vibro_harmonicburst_laser_displ');
+    model.result('vibro_harmonicburst_laser_displ').set('data', GetDataSetForSolution(model,'solidmech_harmonicburst_solution'));
+    model.result('vibro_harmonicburst_laser_displ').create('vibro_harmonicburst_laser_displ_global','Global');
+    model.result('vibro_harmonicburst_laser_displ').feature('vibro_harmonicburst_laser_displ_global').set('expr',{'abs(solidmech_harmonicburst_laser_displ)'});
+    model.result('vibro_harmonicburst_laser_displ').feature('vibro_harmonicburst_laser_displ_global').set('unit',{'um'});
+    model.result('vibro_harmonicburst_laser_displ').feature('vibro_harmonicburst_laser_displ_global').setIndex('descr','Magnitude of laser vibrometer displacement response', 0);
+    model.result('vibro_harmonicburst_laser_displ').feature('vibro_harmonicburst_laser_displ_global').label('vibro_harmonicburst_laser_displ_global');
+    model.result('vibro_harmonicburst_laser_displ').run;
+
+    CreateOrReplace(model.result,'vibro_harmonicburst_laser_vel','PlotGroup1D');
+    model.result('vibro_harmonicburst_laser_vel').label('vibro_harmonicburst_laser_vel');
+    model.result('vibro_harmonicburst_laser_vel').set('data', GetDataSetForSolution(model,'solidmech_harmonicburst_solution'));
+    model.result('vibro_harmonicburst_laser_vel').create('vibro_harmonicburst_laser_vel_global','Global');
+model.result('vibro_harmonicburst_laser_vel').feature('vibro_harmonicburst_laser_vel_global').set('expr',{'abs(solidmech_harmonicburst_laser_vel)','imag(log(solidmech_harmonicburst_laser_vel))'});
+    model.result('vibro_harmonicburst_laser_vel').feature('vibro_harmonicburst_laser_vel_global').set('unit',{'mm/s'});
+    model.result('vibro_harmonicburst_laser_vel').feature('vibro_harmonicburst_laser_vel_global').setIndex('descr','Magnitude of laser vibrometer velocity response', 0);
+    model.result('vibro_harmonicburst_laser_vel').feature('vibro_harmonicburst_laser_vel_global').setIndex('descr','Angle of laser vibrometer velocity response', 1);
+    model.result('vibro_harmonicburst_laser_vel').feature('vibro_harmonicburst_laser_vel_global').label('vibro_harmonicburst_laser_vel_global');
+    model.result('vibro_harmonicburst_laser_vel').run;
+
+  end
 end
 
 % Should plot synthetic burst signal:
