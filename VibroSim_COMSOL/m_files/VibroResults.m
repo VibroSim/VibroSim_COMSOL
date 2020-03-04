@@ -361,7 +361,7 @@ if DataSetExistsForSolution(model,'solidmech_harmonicburst_solution')
   model.result('vibro_harmonicburst_plot').feature('vibro_harmonicburst_plot_surface').set('descr', 'Second Piola-Kirchhoff stress, X component');
   model.result('vibro_harmonicburst_plot').run
   
-  % Jared added to put laser in the burst analysis
+  % Added laser in the burst analysis
   if string_in_cellstr_array('solidmech_harmonicburst_laser',cell(model.probe.tags))
     CreateOrReplace(model.result,'vibro_harmonicburst_laser_displ','PlotGroup1D');
     model.result('vibro_harmonicburst_laser_displ').label('vibro_harmonicburst_laser_displ');
