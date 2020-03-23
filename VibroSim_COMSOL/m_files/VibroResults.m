@@ -25,7 +25,7 @@ if DataSetExistsForSolution(model,'solidmech_static_solution')
   model.result('vibro_static_plot').feature('vibro_static_plot_surface').label('vibro_static_plot_surface');
   model.result('vibro_static_plot').feature('vibro_static_plot_surface').create('vibro_static_plot_surface_displacement', 'Deform');
   model.result('vibro_static_plot').feature('vibro_static_plot_surface').feature('vibro_static_plot_surface_displacement').label('vibro_static_plot_surface_displacement');
-  model.result('vibro_static_plot').run;
+%   model.result('vibro_static_plot').run;
 end
 
 
@@ -43,7 +43,7 @@ if DataSetExistsForSolution(model,'solidmech_modal_solution')
   model.result('vibro_modal_plot').feature('vibro_modal_plot_surface').feature('vibro_modal_plot_surface_deform').label('vibro_modal_plot_surface_displacement');
   model.result('vibro_modal_plot').feature('vibro_modal_plot_surface').set('expr', 'solidmech_modal.sx');
   model.result('vibro_modal_plot').feature('vibro_modal_plot_surface').set('descr', 'Stress tensor, X-component');
-  model.result('vibro_modal_plot').run
+  % model.result('vibro_modal_plot').run
 end
 
 
@@ -61,7 +61,7 @@ if DataSetExistsForSolution(model,'solidmech_harmonic_solution')
   model.result('vibro_harmonic_plot').feature('vibro_harmonic_plot_surface').feature('vibro_harmonic_plot_surface_deform').label('vibro_harmonic_plot_surface_displacement');
   model.result('vibro_harmonic_plot').feature('vibro_harmonic_plot_surface').set('expr', 'solidmech_harmonic.SX');
   model.result('vibro_harmonic_plot').feature('vibro_harmonic_plot_surface').set('descr', 'Second Piola-Kirchhoff stress, X component');
-  model.result('vibro_harmonic_plot').run
+%   model.result('vibro_harmonic_plot').run
 end
 
 
@@ -80,7 +80,7 @@ if DataSetExistsForSolution(model,'solidmech_harmonicper_solution')
   model.result('vibro_harmonicper_plot').feature('vibro_harmonicper_plot_surface').feature('vibro_harmonicper_plot_surface_deform').label('vibro_harmonicper_plot_surface_displacement');
   model.result('vibro_harmonicper_plot').feature('vibro_harmonicper_plot_surface').set('expr', 'solidmech_harmonicper.SX');
   model.result('vibro_harmonicper_plot').feature('vibro_harmonicper_plot_surface').set('descr', 'Second Piola-Kirchhoff stress, X component');
-  model.result('vibro_harmonicper_plot').run
+%   model.result('vibro_harmonicper_plot').run
 end
 
 
@@ -101,7 +101,7 @@ if DataSetExistsForSolution(model,'solidmech_timedomain_solution')
   model.result('vibro_timedomain_plot').feature('vibro_timedomain_plot_surface').feature('vibro_timedomain_plot_surface_deform').label('vibro_timedomain_plot_surface_displacement');
   model.result('vibro_timedomain_plot').feature('vibro_timedomain_plot_surface').set('expr', 'solidmech_timedomain.SX');
   model.result('vibro_timedomain_plot').feature('vibro_timedomain_plot_surface').set('descr', 'Second Piola-Kirchhoff stress, X component');
-  model.result('vibro_timedomain_plot').run
+%   model.result('vibro_timedomain_plot').run
 
 
   if string_in_cellstr_array('solidmech_timedomain_laser',cell(model.probe.tags))
@@ -113,7 +113,7 @@ if DataSetExistsForSolution(model,'solidmech_timedomain_solution')
     model.result('vibro_timedomain_laser_vel').feature('vibro_timedomain_laser_vel_global').set('unit',{'mm/s'});
     model.result('vibro_timedomain_laser_vel').feature('vibro_timedomain_laser_vel_global').setIndex('descr','Laser vibrometer velocity response', 0);
     model.result('vibro_timedomain_laser_vel').feature('vibro_timedomain_laser_vel_global').label('vibro_timedomain_laser_vel_global');
-    model.result('vibro_timedomain_laser_vel').run;
+%     model.result('vibro_timedomain_laser_vel').run;
   end
 
 
@@ -133,7 +133,7 @@ if DataSetExistsForSolution(model,'solidmech_timedomain_solution')
     model.result.dataset('custom_solidmech_timedomain_laser').set('pointy', probepoint(1,2)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_solidmech_timedomain_laser').set('pointz', probepoint(1,3)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_solidmech_timedomain_laser').set('bndsnap','on');
-    model.result.dataset('custom_solidmech_timedomain_laser').run;
+%     model.result.dataset('custom_solidmech_timedomain_laser').run;
 
     CreateOrReplace(model.result.numerical,'custom_solidmech_timedomain_laser_displ','EvalPoint');
     model.result.numerical('custom_solidmech_timedomain_laser_displ').label('custom_solidmech_timedomain_laser_displ');
@@ -147,7 +147,7 @@ if DataSetExistsForSolution(model,'solidmech_timedomain_solution')
     model.result.table('custom_solidmech_timedomain_laser_displ_table').set('tablebuffersize','1000000');
     model.result.numerical('custom_solidmech_timedomain_laser_displ').set('table','custom_solidmech_timedomain_laser_displ_table');
     
-    model.result.numerical('custom_solidmech_timedomain_laser_displ').run;
+%     model.result.numerical('custom_solidmech_timedomain_laser_displ').run;
 
     
     % Now do the velocity output
@@ -163,7 +163,7 @@ if DataSetExistsForSolution(model,'solidmech_timedomain_solution')
     model.result.table('custom_solidmech_timedomain_laser_vel_table').set('tablebuffersize','1000000');
     model.result.numerical('custom_solidmech_timedomain_laser_vel').set('table','custom_solidmech_timedomain_laser_vel_table');
     
-    model.result.numerical('custom_solidmech_timedomain_laser_vel').run;
+%     model.result.numerical('custom_solidmech_timedomain_laser_vel').run;
 
 
 
@@ -188,7 +188,7 @@ if DataSetExistsForSolution(model,'solidmech_timedomain_solution')
     model.result.dataset('custom_vibrodynamic_xducercontactprobe').set('pointy', probepoint(1,2)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_vibrodynamic_xducercontactprobe').set('pointz', probepoint(1,3)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_vibrodynamic_xducercontactprobe').set('bndsnap','on');
-    model.result.dataset('custom_vibrodynamic_xducercontactprobe').run;
+%     model.result.dataset('custom_vibrodynamic_xducercontactprobe').run;
 
     CreateOrReplace(model.result.numerical,'custom_vibrodynamic_xducercontactprobe_displ','EvalPoint');
     model.result.numerical('custom_vibrodynamic_xducercontactprobe_displ').label('custom_vibrodynamic_xducercontactprobe_displ');
@@ -202,7 +202,7 @@ if DataSetExistsForSolution(model,'solidmech_timedomain_solution')
     model.result.table('custom_vibrodynamic_xducercontactprobe_displ_table').set('tablebuffersize','1000000');
     model.result.numerical('custom_vibrodynamic_xducercontactprobe_displ').set('table','custom_vibrodynamic_xducercontactprobe_displ_table');
     
-    model.result.numerical('custom_vibrodynamic_xducercontactprobe_displ').run;
+%     model.result.numerical('custom_vibrodynamic_xducercontactprobe_displ').run;
 
     
     % Now do the velocity output
@@ -218,7 +218,7 @@ if DataSetExistsForSolution(model,'solidmech_timedomain_solution')
     model.result.table('custom_vibrodynamic_xducercontactprobe_vel_table').set('tablebuffersize','1000000');
     model.result.numerical('custom_vibrodynamic_xducercontactprobe_vel').set('table','custom_vibrodynamic_xducercontactprobe_vel_table');
     
-    model.result.numerical('custom_vibrodynamic_xducercontactprobe_vel').run;
+%     model.result.numerical('custom_vibrodynamic_xducercontactprobe_vel').run;
 
 
 
@@ -234,7 +234,7 @@ if DataSetExistsForSolution(model,'solidmech_timedomain_solution')
     model.result('vibro_timedomain_contact_disp').feature('vibro_timedomain_contact_disp_global').set('unit',{'m'});
     model.result('vibro_timedomain_contact_disp').feature('vibro_timedomain_contact_disp_global').setIndex('descr','Transducer contact position normal displacement', 0);
     model.result('vibro_timedomain_contact_disp').feature('vibro_timedomain_contact_disp_global').label('vibro_timedomain_contact_disp_global');
-    model.result('vibro_timedomain_contact_disp').run;
+%     model.result('vibro_timedomain_contact_disp').run;
   end
 
   %if DataSetExistsForProbe(model,'vibrodynamic_timedomain_xducercontactprobe')
@@ -271,7 +271,7 @@ if DataSetExistsForSolution(model,'solidmech_harmonicsweep_solution')
   model.result('vibro_harmonicsweep_plot').feature('vibro_harmonicsweep_plot_surface').feature('vibro_harmonicsweep_plot_surface_deform').label('vibro_harmonicsweep_plot_surface_displacement');
   model.result('vibro_harmonicsweep_plot').feature('vibro_harmonicsweep_plot_surface').set('expr', 'solidmech_harmonicsweep.SX');
   model.result('vibro_harmonicsweep_plot').feature('vibro_harmonicsweep_plot_surface').set('descr', 'Second Piola-Kirchhoff stress, X component');
-  model.result('vibro_harmonicsweep_plot').run
+%   model.result('vibro_harmonicsweep_plot').run
 
 
   if string_in_cellstr_array('crack_centerstress',to_cellstr_array(model.variable.tags))
@@ -285,7 +285,7 @@ if DataSetExistsForSolution(model,'solidmech_harmonicsweep_solution')
     model.result('vibro_harmonicsweep_spectrum').feature('vibro_harmonicsweep_spectrum_global').setIndex('descr','Engineering dynamic shear stress in semimajor axis at crack location', 2);
     model.result('vibro_harmonicsweep_spectrum').feature('vibro_harmonicsweep_spectrum_global').setIndex('descr','Engineering dynamic shear stress in semiminor axis at crack location', 3);
     model.result('vibro_harmonicsweep_spectrum').feature('vibro_harmonicsweep_spectrum_global').label('vibro_harmonicsweep_spectrum_global');
-    model.result('vibro_harmonicsweep_spectrum').run;
+%     model.result('vibro_harmonicsweep_spectrum').run;
   end
 
   if string_in_cellstr_array('solidmech_harmonicsweep_laser',cell(model.probe.tags))
@@ -297,7 +297,7 @@ if DataSetExistsForSolution(model,'solidmech_harmonicsweep_solution')
     model.result('vibro_harmonicsweep_laser_displ').feature('vibro_harmonicsweep_laser_displ_global').set('unit',{'um'});
     model.result('vibro_harmonicsweep_laser_displ').feature('vibro_harmonicsweep_laser_displ_global').setIndex('descr','Magnitude of laser vibrometer displacement response', 0);
     model.result('vibro_harmonicsweep_laser_displ').feature('vibro_harmonicsweep_laser_displ_global').label('vibro_harmonicsweep_laser_displ_global');
-    model.result('vibro_harmonicsweep_laser_displ').run;
+%     model.result('vibro_harmonicsweep_laser_displ').run;
 
     CreateOrReplace(model.result,'vibro_harmonicsweep_laser_vel','PlotGroup1D');
     model.result('vibro_harmonicsweep_laser_vel').label('vibro_harmonicsweep_laser_vel');
@@ -308,7 +308,7 @@ model.result('vibro_harmonicsweep_laser_vel').feature('vibro_harmonicsweep_laser
     model.result('vibro_harmonicsweep_laser_vel').feature('vibro_harmonicsweep_laser_vel_global').setIndex('descr','Magnitude of laser vibrometer velocity response', 0);
     model.result('vibro_harmonicsweep_laser_vel').feature('vibro_harmonicsweep_laser_vel_global').setIndex('descr','Angle of laser vibrometer velocity response', 1);
     model.result('vibro_harmonicsweep_laser_vel').feature('vibro_harmonicsweep_laser_vel_global').label('vibro_harmonicsweep_laser_vel_global');
-    model.result('vibro_harmonicsweep_laser_vel').run;
+%     model.result('vibro_harmonicsweep_laser_vel').run;
 
   end
 
@@ -324,7 +324,7 @@ model.result('vibro_harmonicsweep_laser_vel').feature('vibro_harmonicsweep_laser
     model.result('vibrodynamic_harmonicsweep_xducercontactprobe_displ').feature('vibrodynamic_harmonicsweep_xducercontactprobe_displ_global').set('unit',{'um'});
     model.result('vibrodynamic_harmonicsweep_xducercontactprobe_displ').feature('vibrodynamic_harmonicsweep_xducercontactprobe_displ_global').setIndex('descr','Magnitude of transducer contact displacement response', 0);
     model.result('vibrodynamic_harmonicsweep_xducercontactprobe_displ').feature('vibrodynamic_harmonicsweep_xducercontactprobe_displ_global').label('vibrodynamic_harmonicsweep_xducercontactprobe_displ_global');
-    model.result('vibrodynamic_harmonicsweep_xducercontactprobe_displ').run;
+%    model.result('vibrodynamic_harmonicsweep_xducercontactprobe_displ').run;
 
     CreateOrReplace(model.result,'vibrodynamic_harmonicsweep_xducercontactprobe_vel','PlotGroup1D');
     model.result('vibrodynamic_harmonicsweep_xducercontactprobe_vel').label('vibrodynamic_harmonicsweep_xducercontactprobe_vel');
@@ -335,7 +335,7 @@ model.result('vibro_harmonicsweep_laser_vel').feature('vibro_harmonicsweep_laser
     model.result('vibrodynamic_harmonicsweep_xducercontactprobe_vel').feature('vibrodynamic_harmonicsweep_xducercontactprobe_vel_global').setIndex('descr','Magnitude of contact velocity response', 0);
     model.result('vibrodynamic_harmonicsweep_xducercontactprobe_vel').feature('vibrodynamic_harmonicsweep_xducercontactprobe_vel_global').setIndex('descr','Angle of contact velocity response', 1);
     model.result('vibrodynamic_harmonicsweep_xducercontactprobe_vel').feature('vibrodynamic_harmonicsweep_xducercontactprobe_vel_global').label('vibrodynamic_harmonicsweep_xducercontactprobe_vel_global');
-    model.result('vibrodynamic_harmonicsweep_xducercontactprobe_vel').run;
+%    model.result('vibrodynamic_harmonicsweep_xducercontactprobe_vel').run;
 
   end
 
@@ -359,7 +359,7 @@ if DataSetExistsForSolution(model,'solidmech_harmonicburst_solution')
   model.result('vibro_harmonicburst_plot').feature('vibro_harmonicburst_plot_surface').feature('vibro_harmonicburst_plot_surface_deform').label('vibro_harmonicburst_plot_surface_displacement');
   model.result('vibro_harmonicburst_plot').feature('vibro_harmonicburst_plot_surface').set('expr', 'solidmech_harmonicburst.SX');
   model.result('vibro_harmonicburst_plot').feature('vibro_harmonicburst_plot_surface').set('descr', 'Second Piola-Kirchhoff stress, X component');
-  model.result('vibro_harmonicburst_plot').run
+ %  model.result('vibro_harmonicburst_plot').run
   
   % Added laser in the burst analysis
   if string_in_cellstr_array('solidmech_harmonicburst_laser',cell(model.probe.tags))
@@ -371,7 +371,7 @@ if DataSetExistsForSolution(model,'solidmech_harmonicburst_solution')
     model.result('vibro_harmonicburst_laser_displ').feature('vibro_harmonicburst_laser_displ_global').set('unit',{'um'});
     model.result('vibro_harmonicburst_laser_displ').feature('vibro_harmonicburst_laser_displ_global').setIndex('descr','Magnitude of laser vibrometer displacement response', 0);
     model.result('vibro_harmonicburst_laser_displ').feature('vibro_harmonicburst_laser_displ_global').label('vibro_harmonicburst_laser_displ_global');
-    model.result('vibro_harmonicburst_laser_displ').run;
+ %    model.result('vibro_harmonicburst_laser_displ').run;
 
     CreateOrReplace(model.result,'vibro_harmonicburst_laser_vel','PlotGroup1D');
     model.result('vibro_harmonicburst_laser_vel').label('vibro_harmonicburst_laser_vel');
@@ -382,7 +382,7 @@ model.result('vibro_harmonicburst_laser_vel').feature('vibro_harmonicburst_laser
     model.result('vibro_harmonicburst_laser_vel').feature('vibro_harmonicburst_laser_vel_global').setIndex('descr','Magnitude of laser vibrometer velocity response', 0);
     model.result('vibro_harmonicburst_laser_vel').feature('vibro_harmonicburst_laser_vel_global').setIndex('descr','Angle of laser vibrometer velocity response', 1);
     model.result('vibro_harmonicburst_laser_vel').feature('vibro_harmonicburst_laser_vel_global').label('vibro_harmonicburst_laser_vel_global');
-    model.result('vibro_harmonicburst_laser_vel').run;
+%     model.result('vibro_harmonicburst_laser_vel').run;
 
   end
 end
@@ -408,7 +408,7 @@ if DataSetExistsForSolution(model,'heatflow_solution')
   model.result('vibro_heating_plot').feature('vibro_heating_plot_surface').set('rangecoloractive', 'on');
   model.result('vibro_heating_plot').feature('vibro_heating_plot_surface').set('rangecolormin', '-.025');
   model.result('vibro_heating_plot').feature('vibro_heating_plot_surface').set('rangecolormax', '.5');
-  model.result('vibro_heating_plot').run;
+%   model.result('vibro_heating_plot').run;
 end
 
 if DataSetExistsForSolution(model,'solidmech_modal_solution')
@@ -450,7 +450,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
        
     end
        
-    model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').run;
+%     model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').run;
     model.result.numerical('solidmech_multisweep_seg1_crackcenterstress').setResult;
 
 
@@ -472,7 +472,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
     model.result.dataset('custom_solidmech_multisweep_seg1_laser').set('pointy', probepoint(1,2)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_solidmech_multisweep_seg1_laser').set('pointz', probepoint(1,3)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_solidmech_multisweep_seg1_laser').set('bndsnap','on');
-    model.result.dataset('custom_solidmech_multisweep_seg1_laser').run;
+%     model.result.dataset('custom_solidmech_multisweep_seg1_laser').run;
 
     % laser displacement
     CreateOrReplace(model.result.numerical,'custom_solidmech_multisweep_seg1_laser_displ','EvalPoint');
@@ -493,7 +493,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
        
     end
        
-    model.result.numerical('custom_solidmech_multisweep_seg1_laser_displ').run;
+%     model.result.numerical('custom_solidmech_multisweep_seg1_laser_displ').run;
     model.result.numerical('custom_solidmech_multisweep_seg1_laser_displ').setResult;
 
 
@@ -517,7 +517,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
       model.result.table('custom_solidmech_multisweep_seg1_laser_vel_table').set('filename',sprintf('%s_laser_velspec_seg1.txt',output_base_filename));       
     end
     
-    model.result.numerical('custom_solidmech_multisweep_seg1_laser_vel').run;
+%     model.result.numerical('custom_solidmech_multisweep_seg1_laser_vel').run;
     model.result.numerical('custom_solidmech_multisweep_seg1_laser_vel').setResult;
 
 
@@ -530,7 +530,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
     model.result('custom_solidmech_multisweep_seg1_laser_dispabs_plot').feature('custom_solidmech_multisweep_seg1_laser_disp_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_displ').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg1_laser_dispabs_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg1_laser_dispabs_plot').set('ylog', true);
-    model.result('custom_solidmech_multisweep_seg1_laser_dispabs_plot').run;
+%     model.result('custom_solidmech_multisweep_seg1_laser_dispabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_solidmech_multisweep_seg1_laser_dispangle_plot','PlotGroup1D');
@@ -541,7 +541,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
     model.result('custom_solidmech_multisweep_seg1_laser_dispangle_plot').feature('custom_solidmech_multisweep_seg1_laser_disp_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_displ').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg1_laser_dispangle_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg1_laser_dispangle_plot').set('ylog', false);
-    model.result('custom_solidmech_multisweep_seg1_laser_dispangle_plot').run;
+%     model.result('custom_solidmech_multisweep_seg1_laser_dispangle_plot').run;
 
 
     CreateOrReplace(model.result,'custom_solidmech_multisweep_seg1_laser_velabs_plot','PlotGroup1D');
@@ -552,7 +552,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
     model.result('custom_solidmech_multisweep_seg1_laser_velabs_plot').feature('custom_solidmech_multisweep_seg1_laser_vel_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_vel').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg1_laser_velabs_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg1_laser_velabs_plot').set('ylog', true);
-    model.result('custom_solidmech_multisweep_seg1_laser_velabs_plot').run;
+%     model.result('custom_solidmech_multisweep_seg1_laser_velabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_solidmech_multisweep_seg1_laser_velangle_plot','PlotGroup1D');
@@ -563,7 +563,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
     model.result('custom_solidmech_multisweep_seg1_laser_velangle_plot').feature('custom_solidmech_multisweep_seg1_laser_vel_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_vel').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg1_laser_velangle_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg1_laser_velangle_plot').set('ylog', false);
-    model.result('custom_solidmech_multisweep_seg1_laser_velangle_plot').run;
+%     model.result('custom_solidmech_multisweep_seg1_laser_velangle_plot').run;
     
   end
   
@@ -583,7 +583,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
     model.result.dataset('custom_vibrodynamic_multisweep_seg1_xducercontactprobe').set('pointy', probepoint(1,2)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_vibrodynamic_multisweep_seg1_xducercontactprobe').set('pointz', probepoint(1,3)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_vibrodynamic_multisweep_seg1_xducercontactprobe').set('bndsnap','on');
-    model.result.dataset('custom_vibrodynamic_multisweep_seg1_xducercontactprobe').run;
+%     model.result.dataset('custom_vibrodynamic_multisweep_seg1_xducercontactprobe').run;
 
     CreateOrReplace(model.result.numerical,'custom_vibrodynamic_multisweep_seg1_xducercontactprobe_displ','EvalPoint');
     model.result.numerical('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_displ').label('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_displ');
@@ -603,7 +603,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
        
     end
            
-    model.result.numerical('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_displ').run;
+%     model.result.numerical('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_displ').run;
     model.result.numerical('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_displ').setResult;
 
      
@@ -626,7 +626,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
        
     end
 
-    model.result.numerical('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_vel').run;
+%     model.result.numerical('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_vel').run;
     model.result.numerical('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_vel').setResult;
 
 
@@ -642,7 +642,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_dispabs_plot').feature('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_disp_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_displ').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_dispabs_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_dispabs_plot').set('ylog', true);
-    model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_dispabs_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_dispabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_vibrodynamic_multisweep_seg1_xducercontactprobe_dispangle_plot','PlotGroup1D');
@@ -653,7 +653,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_dispangle_plot').feature('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_disp_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_displ').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_dispangle_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_dispangle_plot').set('ylog', false);
-    model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_dispangle_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_dispangle_plot').run;
 
 
     CreateOrReplace(model.result,'custom_vibrodynamic_multisweep_seg1_xducercontactprobe_velabs_plot','PlotGroup1D');
@@ -664,7 +664,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_velabs_plot').feature('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_vel_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_vel').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_velabs_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_velabs_plot').set('ylog', true);
-    model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_velabs_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_velabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_vibrodynamic_multisweep_seg1_xducercontactprobe_velangle_plot','PlotGroup1D');
@@ -675,7 +675,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg1_solution')
     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_velangle_plot').feature('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_vel_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_vel').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_velangle_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_velangle_plot').set('ylog', false);
-    model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_velangle_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg1_xducercontactprobe_velangle_plot').run;
 
 
 
@@ -717,7 +717,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
        
     end
        
-    model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').run;
+%     model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').run;
     model.result.numerical('solidmech_multisweep_seg2_crackcenterstress').setResult;
 
 
@@ -739,7 +739,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
     model.result.dataset('custom_solidmech_multisweep_seg2_laser').set('pointy', probepoint(1,2)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_solidmech_multisweep_seg2_laser').set('pointz', probepoint(1,3)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_solidmech_multisweep_seg2_laser').set('bndsnap','on');
-    model.result.dataset('custom_solidmech_multisweep_seg2_laser').run;
+%     model.result.dataset('custom_solidmech_multisweep_seg2_laser').run;
 
     % laser displacement
     CreateOrReplace(model.result.numerical,'custom_solidmech_multisweep_seg2_laser_displ','EvalPoint');
@@ -760,7 +760,8 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
        
     end
        
-    model.result.numerical('custom_solidmech_multisweep_seg2_laser_displ').run;
+%     model.result.numerical('custom_solidmech_multisweep_seg2_laser_displ').run;
+
     model.result.numerical('custom_solidmech_multisweep_seg2_laser_displ').setResult;
 
 
@@ -784,7 +785,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
       model.result.table('custom_solidmech_multisweep_seg2_laser_vel_table').set('filename',sprintf('%s_laser_velspec_seg2.txt',output_base_filename));       
     end
     
-    model.result.numerical('custom_solidmech_multisweep_seg2_laser_vel').run;
+%     model.result.numerical('custom_solidmech_multisweep_seg2_laser_vel').run;
     model.result.numerical('custom_solidmech_multisweep_seg2_laser_vel').setResult;
 
 
@@ -797,7 +798,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
     model.result('custom_solidmech_multisweep_seg2_laser_dispabs_plot').feature('custom_solidmech_multisweep_seg2_laser_disp_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_displ').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg2_laser_dispabs_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg2_laser_dispabs_plot').set('ylog', true);
-    model.result('custom_solidmech_multisweep_seg2_laser_dispabs_plot').run;
+%     model.result('custom_solidmech_multisweep_seg2_laser_dispabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_solidmech_multisweep_seg2_laser_dispangle_plot','PlotGroup1D');
@@ -808,7 +809,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
     model.result('custom_solidmech_multisweep_seg2_laser_dispangle_plot').feature('custom_solidmech_multisweep_seg2_laser_disp_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_displ').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg2_laser_dispangle_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg2_laser_dispangle_plot').set('ylog', false);
-    model.result('custom_solidmech_multisweep_seg2_laser_dispangle_plot').run;
+%     model.result('custom_solidmech_multisweep_seg2_laser_dispangle_plot').run;
 
 
     CreateOrReplace(model.result,'custom_solidmech_multisweep_seg2_laser_velabs_plot','PlotGroup1D');
@@ -819,7 +820,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
     model.result('custom_solidmech_multisweep_seg2_laser_velabs_plot').feature('custom_solidmech_multisweep_seg2_laser_vel_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_vel').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg2_laser_velabs_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg2_laser_velabs_plot').set('ylog', true);
-    model.result('custom_solidmech_multisweep_seg2_laser_velabs_plot').run;
+%     model.result('custom_solidmech_multisweep_seg2_laser_velabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_solidmech_multisweep_seg2_laser_velangle_plot','PlotGroup1D');
@@ -830,7 +831,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
     model.result('custom_solidmech_multisweep_seg2_laser_velangle_plot').feature('custom_solidmech_multisweep_seg2_laser_vel_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_vel').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg2_laser_velangle_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg2_laser_velangle_plot').set('ylog', false);
-    model.result('custom_solidmech_multisweep_seg2_laser_velangle_plot').run;
+%     model.result('custom_solidmech_multisweep_seg2_laser_velangle_plot').run;
     
   end
   
@@ -850,7 +851,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
     model.result.dataset('custom_vibrodynamic_multisweep_seg2_xducercontactprobe').set('pointy', probepoint(1,2)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_vibrodynamic_multisweep_seg2_xducercontactprobe').set('pointz', probepoint(1,3)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_vibrodynamic_multisweep_seg2_xducercontactprobe').set('bndsnap','on');
-    model.result.dataset('custom_vibrodynamic_multisweep_seg2_xducercontactprobe').run;
+%     model.result.dataset('custom_vibrodynamic_multisweep_seg2_xducercontactprobe').run;
 
     CreateOrReplace(model.result.numerical,'custom_vibrodynamic_multisweep_seg2_xducercontactprobe_displ','EvalPoint');
     model.result.numerical('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_displ').label('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_displ');
@@ -870,7 +871,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
        
     end
            
-    model.result.numerical('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_displ').run;
+%     model.result.numerical('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_displ').run;
     model.result.numerical('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_displ').setResult;
 
      
@@ -893,7 +894,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
        
     end
 
-    model.result.numerical('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_vel').run;
+%     model.result.numerical('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_vel').run;
     model.result.numerical('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_vel').setResult;
 
 
@@ -909,7 +910,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_dispabs_plot').feature('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_disp_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_displ').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_dispabs_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_dispabs_plot').set('ylog', true);
-    model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_dispabs_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_dispabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_vibrodynamic_multisweep_seg2_xducercontactprobe_dispangle_plot','PlotGroup1D');
@@ -920,7 +921,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_dispangle_plot').feature('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_disp_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_displ').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_dispangle_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_dispangle_plot').set('ylog', false);
-    model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_dispangle_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_dispangle_plot').run;
 
 
     CreateOrReplace(model.result,'custom_vibrodynamic_multisweep_seg2_xducercontactprobe_velabs_plot','PlotGroup1D');
@@ -931,7 +932,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_velabs_plot').feature('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_vel_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_vel').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_velabs_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_velabs_plot').set('ylog', true);
-    model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_velabs_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_velabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_vibrodynamic_multisweep_seg2_xducercontactprobe_velangle_plot','PlotGroup1D');
@@ -942,7 +943,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg2_solution')
     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_velangle_plot').feature('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_vel_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_vel').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_velangle_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_velangle_plot').set('ylog', false);
-    model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_velangle_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg2_xducercontactprobe_velangle_plot').run;
 
 
 
@@ -983,7 +984,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
        
     end
        
-    model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').run;
+%     model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').run;
     model.result.numerical('solidmech_multisweep_seg3_crackcenterstress').setResult;
 
 
@@ -1005,7 +1006,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
     model.result.dataset('custom_solidmech_multisweep_seg3_laser').set('pointy', probepoint(1,2)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_solidmech_multisweep_seg3_laser').set('pointz', probepoint(1,3)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_solidmech_multisweep_seg3_laser').set('bndsnap','on');
-    model.result.dataset('custom_solidmech_multisweep_seg3_laser').run;
+%     model.result.dataset('custom_solidmech_multisweep_seg3_laser').run;
 
     % laser displacement
     CreateOrReplace(model.result.numerical,'custom_solidmech_multisweep_seg3_laser_displ','EvalPoint');
@@ -1026,7 +1027,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
        
     end
        
-    model.result.numerical('custom_solidmech_multisweep_seg3_laser_displ').run;
+%     model.result.numerical('custom_solidmech_multisweep_seg3_laser_displ').run;
     model.result.numerical('custom_solidmech_multisweep_seg3_laser_displ').setResult;
 
 
@@ -1050,7 +1051,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
       model.result.table('custom_solidmech_multisweep_seg3_laser_vel_table').set('filename',sprintf('%s_laser_velspec_seg3.txt',output_base_filename));       
     end
     
-    model.result.numerical('custom_solidmech_multisweep_seg3_laser_vel').run;
+%     model.result.numerical('custom_solidmech_multisweep_seg3_laser_vel').run;
     model.result.numerical('custom_solidmech_multisweep_seg3_laser_vel').setResult;
 
 
@@ -1063,7 +1064,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
     model.result('custom_solidmech_multisweep_seg3_laser_dispabs_plot').feature('custom_solidmech_multisweep_seg3_laser_disp_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_displ').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg3_laser_dispabs_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg3_laser_dispabs_plot').set('ylog', true);
-    model.result('custom_solidmech_multisweep_seg3_laser_dispabs_plot').run;
+%     model.result('custom_solidmech_multisweep_seg3_laser_dispabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_solidmech_multisweep_seg3_laser_dispangle_plot','PlotGroup1D');
@@ -1074,7 +1075,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
     model.result('custom_solidmech_multisweep_seg3_laser_dispangle_plot').feature('custom_solidmech_multisweep_seg3_laser_disp_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_displ').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg3_laser_dispangle_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg3_laser_dispangle_plot').set('ylog', false);
-    model.result('custom_solidmech_multisweep_seg3_laser_dispangle_plot').run;
+%     model.result('custom_solidmech_multisweep_seg3_laser_dispangle_plot').run;
 
 
     CreateOrReplace(model.result,'custom_solidmech_multisweep_seg3_laser_velabs_plot','PlotGroup1D');
@@ -1085,7 +1086,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
     model.result('custom_solidmech_multisweep_seg3_laser_velabs_plot').feature('custom_solidmech_multisweep_seg3_laser_vel_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_vel').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg3_laser_velabs_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg3_laser_velabs_plot').set('ylog', true);
-    model.result('custom_solidmech_multisweep_seg3_laser_velabs_plot').run;
+ %    model.result('custom_solidmech_multisweep_seg3_laser_velabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_solidmech_multisweep_seg3_laser_velangle_plot','PlotGroup1D');
@@ -1096,7 +1097,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
     model.result('custom_solidmech_multisweep_seg3_laser_velangle_plot').feature('custom_solidmech_multisweep_seg3_laser_vel_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_vel').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg3_laser_velangle_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg3_laser_velangle_plot').set('ylog', false);
-    model.result('custom_solidmech_multisweep_seg3_laser_velangle_plot').run;
+%     model.result('custom_solidmech_multisweep_seg3_laser_velangle_plot').run;
     
   end
   
@@ -1116,7 +1117,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
     model.result.dataset('custom_vibrodynamic_multisweep_seg3_xducercontactprobe').set('pointy', probepoint(1,2)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_vibrodynamic_multisweep_seg3_xducercontactprobe').set('pointz', probepoint(1,3)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_vibrodynamic_multisweep_seg3_xducercontactprobe').set('bndsnap','on');
-    model.result.dataset('custom_vibrodynamic_multisweep_seg3_xducercontactprobe').run;
+%     model.result.dataset('custom_vibrodynamic_multisweep_seg3_xducercontactprobe').run;
 
     CreateOrReplace(model.result.numerical,'custom_vibrodynamic_multisweep_seg3_xducercontactprobe_displ','EvalPoint');
     model.result.numerical('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_displ').label('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_displ');
@@ -1136,7 +1137,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
        
     end
            
-    model.result.numerical('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_displ').run;
+%     model.result.numerical('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_displ').run;
     model.result.numerical('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_displ').setResult;
 
      
@@ -1159,7 +1160,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
        
     end
 
-    model.result.numerical('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_vel').run;
+%     model.result.numerical('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_vel').run;
     model.result.numerical('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_vel').setResult;
 
 
@@ -1175,7 +1176,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_dispabs_plot').feature('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_disp_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_displ').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_dispabs_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_dispabs_plot').set('ylog', true);
-    model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_dispabs_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_dispabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_vibrodynamic_multisweep_seg3_xducercontactprobe_dispangle_plot','PlotGroup1D');
@@ -1186,7 +1187,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_dispangle_plot').feature('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_disp_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_displ').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_dispangle_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_dispangle_plot').set('ylog', false);
-    model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_dispangle_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_dispangle_plot').run;
 
 
     CreateOrReplace(model.result,'custom_vibrodynamic_multisweep_seg3_xducercontactprobe_velabs_plot','PlotGroup1D');
@@ -1197,7 +1198,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_velabs_plot').feature('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_vel_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_vel').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_velabs_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_velabs_plot').set('ylog', true);
-    model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_velabs_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_velabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_vibrodynamic_multisweep_seg3_xducercontactprobe_velangle_plot','PlotGroup1D');
@@ -1208,7 +1209,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg3_solution')
     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_velangle_plot').feature('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_vel_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_vel').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_velangle_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_velangle_plot').set('ylog', false);
-    model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_velangle_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg3_xducercontactprobe_velangle_plot').run;
 
 
 
@@ -1250,7 +1251,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
        
     end
        
-    model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').run;
+%     model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').run;
     model.result.numerical('solidmech_multisweep_seg4_crackcenterstress').setResult;
 
 
@@ -1272,7 +1273,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
     model.result.dataset('custom_solidmech_multisweep_seg4_laser').set('pointy', probepoint(1,2)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_solidmech_multisweep_seg4_laser').set('pointz', probepoint(1,3)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_solidmech_multisweep_seg4_laser').set('bndsnap','on');
-    model.result.dataset('custom_solidmech_multisweep_seg4_laser').run;
+%     model.result.dataset('custom_solidmech_multisweep_seg4_laser').run;
 
     % laser displacement
     CreateOrReplace(model.result.numerical,'custom_solidmech_multisweep_seg4_laser_displ','EvalPoint');
@@ -1293,7 +1294,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
        
     end
        
-    model.result.numerical('custom_solidmech_multisweep_seg4_laser_displ').run;
+%     model.result.numerical('custom_solidmech_multisweep_seg4_laser_displ').run;
     model.result.numerical('custom_solidmech_multisweep_seg4_laser_displ').setResult;
 
 
@@ -1317,7 +1318,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
       model.result.table('custom_solidmech_multisweep_seg4_laser_vel_table').set('filename',sprintf('%s_laser_velspec_seg4.txt',output_base_filename));       
     end
     
-    model.result.numerical('custom_solidmech_multisweep_seg4_laser_vel').run;
+%     model.result.numerical('custom_solidmech_multisweep_seg4_laser_vel').run;
     model.result.numerical('custom_solidmech_multisweep_seg4_laser_vel').setResult;
 
 
@@ -1330,7 +1331,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
     model.result('custom_solidmech_multisweep_seg4_laser_dispabs_plot').feature('custom_solidmech_multisweep_seg4_laser_disp_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_displ').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg4_laser_dispabs_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg4_laser_dispabs_plot').set('ylog', true);
-    model.result('custom_solidmech_multisweep_seg4_laser_dispabs_plot').run;
+%     model.result('custom_solidmech_multisweep_seg4_laser_dispabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_solidmech_multisweep_seg4_laser_dispangle_plot','PlotGroup1D');
@@ -1341,7 +1342,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
     model.result('custom_solidmech_multisweep_seg4_laser_dispangle_plot').feature('custom_solidmech_multisweep_seg4_laser_disp_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_displ').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg4_laser_dispangle_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg4_laser_dispangle_plot').set('ylog', false);
-    model.result('custom_solidmech_multisweep_seg4_laser_dispangle_plot').run;
+%     model.result('custom_solidmech_multisweep_seg4_laser_dispangle_plot').run;
 
 
     CreateOrReplace(model.result,'custom_solidmech_multisweep_seg4_laser_velabs_plot','PlotGroup1D');
@@ -1352,7 +1353,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
     model.result('custom_solidmech_multisweep_seg4_laser_velabs_plot').feature('custom_solidmech_multisweep_seg4_laser_vel_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_vel').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg4_laser_velabs_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg4_laser_velabs_plot').set('ylog', true);
-    model.result('custom_solidmech_multisweep_seg4_laser_velabs_plot').run;
+%     model.result('custom_solidmech_multisweep_seg4_laser_velabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_solidmech_multisweep_seg4_laser_velangle_plot','PlotGroup1D');
@@ -1363,7 +1364,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
     model.result('custom_solidmech_multisweep_seg4_laser_velangle_plot').feature('custom_solidmech_multisweep_seg4_laser_vel_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('solidmech_multisweep_laser').feature('solidmech_multisweep_laser_vel').getString('expr'))));
     model.result('custom_solidmech_multisweep_seg4_laser_velangle_plot').set('xlog', true);
     model.result('custom_solidmech_multisweep_seg4_laser_velangle_plot').set('ylog', false);
-    model.result('custom_solidmech_multisweep_seg4_laser_velangle_plot').run;
+%     model.result('custom_solidmech_multisweep_seg4_laser_velangle_plot').run;
     
   end
   
@@ -1383,7 +1384,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
     model.result.dataset('custom_vibrodynamic_multisweep_seg4_xducercontactprobe').set('pointy', probepoint(1,2)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_vibrodynamic_multisweep_seg4_xducercontactprobe').set('pointz', probepoint(1,3)); % This extracts the coordinates from the laser probe
     model.result.dataset('custom_vibrodynamic_multisweep_seg4_xducercontactprobe').set('bndsnap','on');
-    model.result.dataset('custom_vibrodynamic_multisweep_seg4_xducercontactprobe').run;
+%     model.result.dataset('custom_vibrodynamic_multisweep_seg4_xducercontactprobe').run;
 
     CreateOrReplace(model.result.numerical,'custom_vibrodynamic_multisweep_seg4_xducercontactprobe_displ','EvalPoint');
     model.result.numerical('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_displ').label('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_displ');
@@ -1403,7 +1404,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
        
     end
            
-    model.result.numerical('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_displ').run;
+%     model.result.numerical('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_displ').run;
     model.result.numerical('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_displ').setResult;
 
      
@@ -1426,7 +1427,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
        
     end
 
-    model.result.numerical('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_vel').run;
+%     model.result.numerical('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_vel').run;
     model.result.numerical('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_vel').setResult;
 
 
@@ -1442,7 +1443,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_dispabs_plot').feature('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_disp_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_displ').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_dispabs_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_dispabs_plot').set('ylog', true);
-    model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_dispabs_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_dispabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_vibrodynamic_multisweep_seg4_xducercontactprobe_dispangle_plot','PlotGroup1D');
@@ -1453,7 +1454,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_dispangle_plot').feature('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_disp_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_displ').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_dispangle_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_dispangle_plot').set('ylog', false);
-    model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_dispangle_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_dispangle_plot').run;
 
 
     CreateOrReplace(model.result,'custom_vibrodynamic_multisweep_seg4_xducercontactprobe_velabs_plot','PlotGroup1D');
@@ -1464,7 +1465,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_velabs_plot').feature('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_vel_abs').set('expr',sprintf('abs(%s)',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_vel').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_velabs_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_velabs_plot').set('ylog', true);
-    model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_velabs_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_velabs_plot').run;
 
 
     CreateOrReplace(model.result,'custom_vibrodynamic_multisweep_seg4_xducercontactprobe_velangle_plot','PlotGroup1D');
@@ -1475,7 +1476,7 @@ if DataSetExistsForSolution(model,'solidmech_multisweep_seg4_solution')
     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_velangle_plot').feature('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_vel_angle').set('expr',sprintf('imag(log(%s))',to_string(model.probe('vibrodynamic_multisweep_xducercontactprobe').feature('vibrodynamic_multisweep_xducercontactprobe_vel').getString('expr'))));
     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_velangle_plot').set('xlog', true);
     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_velangle_plot').set('ylog', false);
-    model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_velangle_plot').run;
+%     model.result('custom_vibrodynamic_multisweep_seg4_xducercontactprobe_velangle_plot').run;
 
 
 
