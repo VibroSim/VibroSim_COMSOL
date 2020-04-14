@@ -3,7 +3,7 @@
 %> As another alternative you can store parameters in the M structure
 %> (fields can be added to M, with addprop()).
 
-function default_params(M)
+function VibroSim_default_params(M)
 
 % crack parameters
 AddParamToParamdb(M,'cracksemimajoraxislen',3e-3,'m');

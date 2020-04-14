@@ -1,4 +1,4 @@
-function example_physics(M,geom,specimen,flaw)
+function example_physics2(M,geom,specimen,flaw)
 
 % In a physicsfunc, create each physics and corresponding studies
 

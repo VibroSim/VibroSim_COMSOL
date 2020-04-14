@@ -4,7 +4,7 @@
 %> This is intended to be sequenced with a pipe after VibroPhysics to add 
 %> a transducer contact probe to the relevant physics nodes. 
 
-function M = AddXDucerContactProbe(M,geom,specimen,xducercoord)
+function M = AddXducerContactProbe(M,geom,specimen,xducercoord)
 
 
   %% Create time domain model
