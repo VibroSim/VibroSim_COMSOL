@@ -272,9 +272,9 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
 
 
     % shear stress major is inner product of stress vector with unit vector in crack semimajor (surface) direction 
-    centerstressshearminor = innerprod_cellstr_array(centerstressvec,normalize_cellstr_array(to_cellstr_array(axismajordirection)));
+    centerstressshearmajor = innerprod_cellstr_array(centerstressvec,normalize_cellstr_array(to_cellstr_array(axismajordirection)));
     % shear stress minor is inner product of stress vector with unit vector in crack semimajor (surface) direction 
-    centerstressshearmajor = innerprod_cellstr_array(centerstressvec,normalize_cellstr_array(to_cellstr_array(axisminordirection)));
+    centerstressshearminor = innerprod_cellstr_array(centerstressvec,normalize_cellstr_array(to_cellstr_array(axisminordirection)));
 
     %CreateVariable(M,[tag '_centerstrainmag'],centerstrainmag);
     % add this variable to our variable node
