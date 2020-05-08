@@ -7,7 +7,7 @@
     <param.summary>COMSOL scripts for VibroSim</param.summary>
     <param.description>Comsol scripts for the VibroSim vibrothermography simulation package</param.description>
     <param.screenshot>${PROJECT_ROOT}/VibroSim_COMSOL/vibrosim_image.png</param.screenshot>
-    <param.version>0.1.1</param.version>
+    <param.version>0.2.0</param.version>
     <param.output>${PROJECT_ROOT}/VibroSim_COMSOL.mltbx</param.output>
     <param.products.name />
     <param.products.id />
