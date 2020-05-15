@@ -212,6 +212,11 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   crack.centerstress.node.model(M.component.tag); % variable goes under component, not top level model
   crack.centerstress.node.selection.global; % Set "Geometric entity level" to "entire model"
 
+  % Create a variable <cracktag>_stress_<physicstag>
+  % representing stress as a function of position for each physics
+  CreateWrappedProperty(M,crack,'stress',[tag '_stress'],M.node.variable);
+  crack.centerstress.node.model(M.component.tag); % variable goes under component, not top level model
+    
   for cnt=1:length(vibration_physicstags)
     vibration_physicstag=vibration_physicstags{cnt};
 
@@ -224,13 +229,22 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
     %eZZ=[ tag '_centerevaluate(' vibration_physicstag '.eZZ)' ];
 
     % Obtain stress tensor components
-    sx=[ tag '_centerevaluate(' vibration_physicstag '.sx)' ];
-    sxy=[ tag '_centerevaluate(' vibration_physicstag '.sxy)' ];
-    sxz=[ tag '_centerevaluate(' vibration_physicstag '.sxz)' ];
-    sy=[ tag '_centerevaluate(' vibration_physicstag '.sy)' ];
-    syz=[ tag '_centerevaluate(' vibration_physicstag '.syz)' ];
-    sz=[ tag '_centerevaluate(' vibration_physicstag '.sz)' ];
-    
+    % ... at center
+    center_sx=[ tag '_centerevaluate(' vibration_physicstag '.sx)' ];
+    center_sxy=[ tag '_centerevaluate(' vibration_physicstag '.sxy)' ];
+    center_sxz=[ tag '_centerevaluate(' vibration_physicstag '.sxz)' ];
+    center_sy=[ tag '_centerevaluate(' vibration_physicstag '.sy)' ];
+    center_syz=[ tag '_centerevaluate(' vibration_physicstag '.syz)' ];
+    center_sz=[ tag '_centerevaluate(' vibration_physicstag '.sz)' ];
+
+    % ... everywhere
+    sx=[ vibration_physicstag '.sx)' ];
+    sxy=[ vibration_physicstag '.sxy)' ];
+    sxz=[ vibration_physicstag '.sxz)' ];
+    sy=[ vibration_physicstag '.sy)' ];
+    syz=[ vibration_physicstag '.syz)' ];
+    sz=[ vibration_physicstag '.sz)' ];
+
 
     % The differential motion is evaluated from the the normal
     % [ nX nY nZ ] multiplied by the local
@@ -249,14 +263,20 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
     %		       [ '(' eXY ')*(' nX ') + (' eYY ')*(' nY ') + (' eYZ ')*(' nZ ')' ], ...
     %		       [ '(' eXZ ')*(' nX ') + (' eYZ ')*(' nY ') + (' eZZ ')*(' nZ ')' ]};
 
-    centerstressvec = {[ '(' sx ')*(' nX ') + (' sxy ')*(' nY ') + (' sxz ')*(' nZ ')' ], ...
+    centerstressvec = {[ '(' center_sx ')*(' nX ') + (' center_sxy ')*(' nY ') + (' center_sxz ')*(' nZ ')' ], ...
+    		       [ '(' center_sxy ')*(' nX ') + (' center_sy ')*(' nY ') + (' center_syz ')*(' nZ ')' ], ...
+    		       [ '(' center_sxz ')*(' nX ') + (' center_syz ')*(' nY ') + (' center_sz ')*(' nZ ')' ]};
+
+    stressvec = {[ '(' sx ')*(' nX ') + (' sxy ')*(' nY ') + (' sxz ')*(' nZ ')' ], ...
     		       [ '(' sxy ')*(' nX ') + (' sy ')*(' nY ') + (' syz ')*(' nZ ')' ], ...
     		       [ '(' sxz ')*(' nX ') + (' syz ')*(' nY ') + (' sz ')*(' nZ ')' ]};
+
     
     % calculate magnitude of strain vector
 
     %centerstrainmag = magnitude_cellstr_array(centerstrainvec);
     centerstressmag = magnitude_cellstr_array(centerstressvec);
+    stressmag = magnitude_cellstr_array(stressvec);
 
 
     
@@ -265,6 +285,7 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
 
     % normal stress is inner product of stress vector with unit vector in crack normal direction
     centerstressnormal = innerprod_cellstr_array(centerstressvec,cracknormal);
+    stressnormal = innerprod_cellstr_array(stressvec,cracknormal);
     
     % shear strain is inner product of strain vector with unit vector in crack semimajor (surface) direction 
 
@@ -273,8 +294,10 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
 
     % shear stress major is inner product of stress vector with unit vector in crack semimajor (surface) direction 
     centerstressshearmajor = innerprod_cellstr_array(centerstressvec,normalize_cellstr_array(to_cellstr_array(axismajordirection)));
+    stressshearmajor = innerprod_cellstr_array(stressvec,normalize_cellstr_array(to_cellstr_array(axismajordirection)));
     % shear stress minor is inner product of stress vector with unit vector in crack semimajor (surface) direction 
     centerstressshearminor = innerprod_cellstr_array(centerstressvec,normalize_cellstr_array(to_cellstr_array(axisminordirection)));
+    stressshearminor = innerprod_cellstr_array(stressvec,normalize_cellstr_array(to_cellstr_array(axisminordirection)));
 
     %CreateVariable(M,[tag '_centerstrainmag'],centerstrainmag);
     % add this variable to our variable node
@@ -283,6 +306,12 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
     crack.centerstress.node.set([tag '_centerstressshearmajor_' vibration_physicstag ],centerstressshearmajor);
     crack.centerstress.node.set([tag '_centerstressshearminor_' vibration_physicstag ],centerstressshearminor);
 
+
+    crack.stress.node.set([tag '_stressmag_' vibration_physicstag ],stressmag);
+    crack.stress.node.set([tag '_stressnormal_' vibration_physicstag ],stressnormal);
+    crack.stress.node.set([tag '_stressshearmajor_' vibration_physicstag ],stressshearmajor);
+    crack.stress.node.set([tag '_stressshearminor_' vibration_physicstag ],stressshearminor);
+    
     
 
   end
