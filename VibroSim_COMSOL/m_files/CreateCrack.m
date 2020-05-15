@@ -214,6 +214,8 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
 
   % Create a variable <cracktag>_stress_<physicstag>
   % representing stress as a function of position for each physics
+  % This represents a transform of the stress field to the crack
+  % plane coordinate frame
   CreateWrappedProperty(M,crack,'stress',[tag '_stress'],M.node.variable);
   crack.centerstress.node.model(M.component.tag); % variable goes under component, not top level model
     
