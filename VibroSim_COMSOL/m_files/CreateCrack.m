@@ -240,12 +240,12 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
     center_sz=[ tag '_centerevaluate(' vibration_physicstag '.sz)' ];
 
     % ... everywhere
-    sx=[ vibration_physicstag '.sx)' ];
-    sxy=[ vibration_physicstag '.sxy)' ];
-    sxz=[ vibration_physicstag '.sxz)' ];
-    sy=[ vibration_physicstag '.sy)' ];
-    syz=[ vibration_physicstag '.syz)' ];
-    sz=[ vibration_physicstag '.sz)' ];
+    sx=[ vibration_physicstag '.sx' ];
+    sxy=[ vibration_physicstag '.sxy' ];
+    sxz=[ vibration_physicstag '.sxz' ];
+    sy=[ vibration_physicstag '.sy' ];
+    syz=[ vibration_physicstag '.syz' ];
+    sz=[ vibration_physicstag '.sz' ];
 
 
     % The differential motion is evaluated from the the normal
@@ -327,10 +327,16 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   position_along_surface = innerprod_cellstr_array(position_from_center,to_cellstr_array(axismajordirection));
   position_into_depth = innerprod_cellstr_array(position_from_center,to_cellstr_array(axisminordirection));
 
-  % scaled_position_into_depth = ['((' to_string(semimajoraxislen) ')/(' to_string(semiminoraxislen) '))*(' position_into_depth ')'];
   
-  % r_quiv_surface and position_along_surface are the same for a through crack. Keeping both to minimize changes in Heatflow study.
-  r_equiv_surface =  [ 'abs(' position_along_surface ')' ] ;
+  if strcmp(cracktype,'through') 
+    % r_equiv_surface and position_along_surface are the same for a through crack. Keeping both to minimize changes in Heatflow study.
+    r_equiv_surface =  [ 'abs(' position_along_surface ')' ] ;
+  else
+
+    scaled_position_into_depth = ['((' to_string(semimajoraxislen) ')/(' to_string(semiminoraxislen) '))*(' position_into_depth ')'];
+    r_equiv_surface = [ 'sqrt(' '(' position_along_surface ')^2' '+' '(' scaled_position_into_depth ')^2' ')' ]; 
+
+  end 
 
   addprop(crack,'r_equiv_surface');
   crack.r_equiv_surface = CreateVariable(M,[tag '_r_equiv_surface'],r_equiv_surface); % NOTE: CreateVariable returns the variable name, not the variable object itself. 

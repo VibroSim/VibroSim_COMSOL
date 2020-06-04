@@ -10,87 +10,69 @@ AddParamToParamdb(M,'cracksemimajoraxislen',3e-3,'m');
 AddParamToParamdb(M,'cracksemiminoraxislen',1.5e-3,'m');
 
 
-AddParamToParamdb(M,'staticload_mount',10000,'N');
-AddParamToParamdb(M,'xducerforce',100,'N');
+% Parameters for static loading step -- we usually don't bother with this anymore
+%AddParamToParamdb(M,'staticload_mount',10000,'N');
+%AddParamToParamdb(M,'xducerforce',100,'N');
+
+% Parameters for the sweep -- generally overridden by parameters entered during testing and/or by the experiment log
 AddParamToParamdb(M,'simulationfreqstart',15150,'Hz');
 AddParamToParamdb(M,'simulationfreqstep',10,'Hz');
 AddParamToParamdb(M,'simulationfreqend',15350,'Hz');
+
+% Parameters for burst step -- generally overridden by parameters entered during testing and/or by the experiment log
 AddParamToParamdb(M,'simulationburstfreq',15270,'Hz');
+
+% Parameters for eigenvalue (modal) analysis
 AddParamToParamdb(M,'simulationneigs',40);  % Number of frequencies for modal analysis to seek out
 AddParamToParamdb(M,'simulationeigsaround',10000,'Hz'); % Center frequency for modal analysis
 
 
-%AddParamToParamdb(M,'simulationcameranetd',.022,'K'); % camera NETD parameter moved to experiment log
+% Assumed surface emissivity
 AddParamToParamdb(M,'simulationsurfaceemissivity',1.0);
 ObtainDCParameter(M,'simulationsurfaceemissivity');
 
 % Laser (displacement or velocity detection) coordinates
+% Generally override this from model definition or experiment log
 AddParamToParamdb(M,'laserx',.07,'m');
 AddParamToParamdb(M,'lasery',.0254/4.0,'m');
 AddParamToParamdb(M,'laserz',0.0,'m');
 
 % Laser (displacement or velocity detection) direction vector
+% Generally override this from model definition or experiment log
 AddParamToParamdb(M,'laserdx',0);
 AddParamToParamdb(M,'laserdy',0);
 AddParamToParamdb(M,'laserdz',1);
 
 % Crack position
-AddParamToParamdb(M,'simulationcrackx',.07,'m');
-AddParamToParamdb(M,'simulationcracky',.0254/2.0,'m');
-AddParamToParamdb(M,'simulationcrackz',0,'m');
+%% Generally override this from model definition or experiment log
+%AddParamToParamdb(M,'simulationcrackx',.07,'m');
+%AddParamToParamdb(M,'simulationcracky',.0254/2.0,'m');
+%AddParamToParamdb(M,'simulationcrackz',0,'m');
 
-% Crack heating model parameters
-%AddParamToParamdb(M,'expV0',20000e6,'W*Pa/m^2/Hz'); % Power law strain dependence: leading coefficient
-%AddParamToParamdb(M,'V1',1.7); % Power law strain dependence: exponent
-%AddParamToParamdb(M,'m1',0.00152,'m')
-%AddParamToParamdb(M,'l0',1.0/0.000762,'1/m')
-AddParamToParamdb(M,'wh',20e6,'Pa');
+% Specimen geometry 
+% -- generally specify in model definition or experiment log
+%AddParamToParamdb(M,'spclength',.14,'m');
+%AddParamToParamdb(M,'spcwidth',.0254,'m');
+%AddParamToParamdb(M,'spcthickness',.012,'m');
 
-% Crack heating model requires these parameters instantiated
-%ObtainDCParameter(M,'expV0','W*Pa/m^2/Hz');
-%ObtainDCParameter(M,'V1');
-%ObtainDCParameter(M,'m1','m');
-%ObtainDCParameter(M,'l0','1/m');
-ObtainDCParameter(M,'wh','Pa');
-
-
-
-AddParamToParamdb(M,'spclength',.14,'m');
-AddParamToParamdb(M,'spcwidth',.0254,'m');
-AddParamToParamdb(M,'spcthickness',.012,'m');
-%AddParamToParamdb(M,'spcviscousdamping',0,'N*s'); 
-
-%% These parameters are book values for Ti-6-4 material
-% -- Now moved to be parameters of the _comsol.m file
-%AddParamToParamdb(M,'spcmaterial','Ti-6-4');
-%AddParamToParamdb(M,'spcYoungsModulus',113.8e9,'Pa');
-%AddParamToParamdb(M,'spcDensity',4430,'kg/m^3');
-%AddParamToParamdb(M,'spcPoissonsRatio',0.34,''); % book value
-%AddParamToParamdb(M,'spcThermalConductivity',6.7,'W/m/K');
-%AddParamToParamdb(M,'spcSpecificHeatCapacity',526.3,'J/kg/K');
-
-%% These parameters are book values for Inconel 718  material 
-%AddParamToParamdb(M,'spcmaterial','Inconel-718');
-%AddParamToParamdb(M,'spcYoungsModulus',200e9,'Pa');
-%AddParamToParamdb(M,'spcDensity',8190,'kg/m^3');
-%AddParamToParamdb(M,'spcPoissonsRatio',0.33,''); % book value
-%AddParamToParamdb(M,'spcEta',1e-5,'');
-%AddParamToParamdb(M,'spcThermalConductivity',11.4,'W/m/K');
-%AddParamToParamdb(M,'spcSpecificHeatCapacity',435.0,'J/kg/K');
-
+% Meshing characteristics
 AddParamToParamdb(M,'spcmeshtype','TETRAHEDRAL');
 %AddParamToParamdb(M,'spcmeshtype','HEXAHEDRAL');
 AddParamToParamdb(M,'spcmeshsize',.004,'m');
 %AddParamToParamdb(M,'spcfacemethod','FreeQuad');
 %AddParamToParamdb(M,'spcsweepelements',15)
 
-AddParamToParamdb(M,'tlmountoffsetx',.13,'m');
-AddParamToParamdb(M,'blmountoffsetx',.12,'m');
-AddParamToParamdb(M,'brmountoffsetx',.02,'m');
-AddParamToParamdb(M,'trmountoffsetx',.01,'m');
-AddParamToParamdb(M,'xduceroffsetx',.07,'m');
+
+% Mount coordinates
+%AddParamToParamdb(M,'tlmountoffsetx',.13,'m');
+%AddParamToParamdb(M,'blmountoffsetx',.12,'m');
+%AddParamToParamdb(M,'brmountoffsetx',.02,'m');
+%AddParamToParamdb(M,'trmountoffsetx',.01,'m');
+%AddParamToParamdb(M,'xduceroffsetx',.07,'m');
 
 
+
+% Isolator size/matprops/meshing parameters 
 
 % NOTE: isolatornlayers removed -- assume something else 
 % is doing the multiplication to determine total isolatorthickness
@@ -109,11 +91,8 @@ AddParamToParamdb(M,'isolatormaterial','isocardstock');
 AddParamToParamdb(M,'isolatorYoungsModulus',3.5e6,'Pa');
 AddParamToParamdb(M,'isolatorDensity',870,'kg/m^3');
 AddParamToParamdb(M,'isolatorPoissonsRatio',0.3,'');
-% 6/11/18 change isolator damping behavior from Eta to d_A.... where d_A=(spring_constant_per_unit_area/(2*pi*f))*eta  
-% This works in time domain and is more physically consistent with observations (behaves like dashpot)
-% !!!*** Should do the same for couplant and perhaps specimen
-%AddParamToParamdb(M,'isolatorEta',.5,'');
 AddParamToParamdb(M,'isolatordashpotcoeff',11e3,'Pa*s/m');
+
 
 AddParamToParamdb(M,'couplantthickness',.00025,'m');
 AddParamToParamdb(M,'couplantlength',.010,'m');
@@ -134,10 +113,13 @@ AddParamToParamdb(M,'couplantdashpotcoeff',11e3,'Pa*s/m');
 AddParamToParamdb(M,'couplantThermalConductivity',.05,'W/m/K');  % this number may not be very meaningful
 AddParamToParamdb(M,'couplantSpecificHeatCapacity',2500,'J/kg/K');  % this number may not be very meaningful
 
-
+% Overall mesh size parameters
 AddParamToParamdb(M,'meshsizemin',.001,'m');
 AddParamToParamdb(M,'meshsize',.004,'m');
 
+
+% Sharpness of impulse excitation for time-domain analysis that
+% we usually don't do anymore
 AddParamToParamdb(M,'impulseexcitation_t0',0.0,'s');
 AddParamToParamdb(M,'impulseexcitation_width',2.0e-6,'s');
 
