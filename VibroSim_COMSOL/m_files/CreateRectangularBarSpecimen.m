@@ -67,13 +67,14 @@ function [specimen] = CreateRectangularBarSpecimen(M,geom,tag)
 
   % Set camera position for view
   % Our rectangular bar specimens are upside-down with COMSOL's default view
-  CreateWrappedProperty(M,specimen,'view',[ specimen.tag '_view' ],M.node.view,3);
-  specimen.view.node.label(specimen.view.tag);
-  specimen.view.node.camera().set('zoomanglefull',11.54);
-  specimen.view.node.camera().set('position',{ '-.32[m]','-.5[m]','-.39[m]' });
-  specimen.view.node.camera().set('target',{ '.07[m]','.0127[m]','.006[m]' });
-  specimen.view.node.camera().set('up',{ '.3087','.4116','-.857' });
-  specimen.view.node.camera().set('rotationpoint', {'.07[m]' '.0127[m]' '.006[m]'});
+  % !!! View now should be set by piping geometry function into AddView() !!!
+  %CreateWrappedProperty(M,specimen,'view',[ specimen.tag '_view' ],M.node.view,3);
+  %specimen.view.node.label(specimen.view.tag);
+  %specimen.view.node.camera().set('zoomanglefull',11.54);
+  %specimen.view.node.camera().set('position',{ '-.32[m]','-.5[m]','-.39[m]' });
+  %specimen.view.node.camera().set('target',{ '.07[m]','.0127[m]','.006[m]' });
+  %specimen.view.node.camera().set('up',{ '.3087','.4116','-.857' });
+  %specimen.view.node.camera().set('rotationpoint', {'.07[m]' '.0127[m]' '.006[m]'});
 
 
 
