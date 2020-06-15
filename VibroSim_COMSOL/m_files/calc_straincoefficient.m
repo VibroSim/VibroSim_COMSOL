@@ -59,7 +59,7 @@ function calc_straincoefficient(basename, id)
     couplant_coord={ xduceroffsetx,   mountoffsety,     bottomoffsetz,      'NaN'   };
 
     
-    bldgeom = @(M,geom) CreateRectangularBarSpecimen(M,geom,'specimen') | ...
+    bldgeom = @(M,geom) CreateRectangularBarSpecimen(M,geom,'specimen',ObtainDCParameter(M,'spclength','m'),ObtainDCParameter(M,'spcwidth','m'),ObtainDCParameter(M,'spcthickness','m'),ObtainDCParameter(M,'spcmaterial')) | ...
 	      @(specimen) AttachThinCouplantIsolators(M,geom,specimen, ...
 						      couplant_coord, ...
 						      isolators_coords) | ...
@@ -110,7 +110,7 @@ function calc_straincoefficient(basename, id)
     
     
   else 
-    bldgeom = @(M,geom) CreateRectangularBarSpecimen(M,geom,'specimen');
+    bldgeom = @(M,geom) CreateRectangularBarSpecimen(M,geom,'specimen',ObtainDCParameter(M,'spclength','m'),ObtainDCParameter(M,'spcwidth','m'),ObtainDCParameter(M,'spcthickness','m'),ObtainDCParameter(M,'spcmaterial'));
   end
 
   

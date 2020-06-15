@@ -1,5 +1,5 @@
 %>  NOTE: tag hardwired to 'xducerdisplacement'
-function [xducerdispvar] = CreateTransducerDisplacementVariable(M)
+function [xducerdispvar] = CreateTransducerDisplacementVariable(M,xducercalib)
 % CREATETRANSDUCERDISPLACEMENTFUNCTION Creates the Transducer Displacement Function
 %   [xducerdispvar] = CREATETRANSDUCERDISPLACEMENTFUNCTION(M)
 
@@ -15,9 +15,8 @@ function [xducerdispvar] = CreateTransducerDisplacementVariable(M)
   % Make sure we have amplitude
   ObtainDCParameter(M,'amplitude','V');
 
-xducercalib=GetDCParamStringValue(M,'xducercalib');  % This really should be an hrefvalue!!!
 
-  % filename is xducercalib.repr
+  % filename is xducercalib
 
   addprop(variable,'xducercalib');
   variable.xducercalib=CreateFunction(M,'xducercalib','Interpolation');
@@ -26,7 +25,7 @@ xducercalib=GetDCParamStringValue(M,'xducercalib');  % This really should be an 
   variable.xducercalib.node.setIndex('funcs','1',0,1);
   variable.xducercalib.node.setIndex('funcs','xducercalib_imag',1,0);
   variable.xducercalib.node.setIndex('funcs','2',1,1);
-  variable.xducercalib.node.set('filename',xducercalib.repr);
+  variable.xducercalib.node.set('filename',xducercalib);
   variable.xducercalib.node.set('nargs','1');
   variable.xducercalib.node.set('argunit','Hz');
   variable.xducercalib.node.set('fununit','m/V');

@@ -1,15 +1,16 @@
-%> Auto-names tag according to value of [dcprefix 'material']
+%> function material=CreateDCMaterialIfNeeded(M,geom,materialname,materialprefix)
+%> Auto-names tag according to value of materialname
 %> Only creates material if it doesn't already exist. Otherwise
 %> silently returns existing material
-%> materialprefix is used to identify the material DC parameters:
+%> materialprefix is used to identify the material DC parameters
+%> from the DC database (AddParamToParamDB, etc.):
 %> e.g. [ materialprefix 'YoungsModulus' ]
-%> If materialprefix is not given, it defaults to the value of DC parameter [ dcprefix 'material' ]
-function material=CreateDCMaterialIfNeeded(M,geom,dcprefix,materialprefix)
-
-materialname=GetDCParamStringValue(M,[ dcprefix 'material' ]);
+%> if the materialprefix is not given, the material name is used in its
+%> place (with spaces and dashes converted to underscores)
+function material=CreateDCMaterialIfNeeded(M,geom,materialname,materialprefix)
 
 materialnamenospace=strrep(materialname.repr,' ','_'); % convert spaces to underscore
-materialnamenospace=strrep(materialnamenospace,'-','_'); % convert spaces to underscore
+materialnamenospace=strrep(materialnamenospace,'-','_'); % convert dashes to underscore
 
 if ~exist('materialprefix','var')
   materialprefix=materialnamenospace;

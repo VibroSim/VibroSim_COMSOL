@@ -1,6 +1,6 @@
 %> CREATERECTANGULARBARSPECIMEN Creates a Rectangular Bar Specimen
-%>   [specimen] = CREATERECTANGULARBARSPECIMEN(M, geom, tag) Creates Bar Inside Given Geometry and Mesh Tags using datacollect parameters
-function [specimen] = CreateRectangularBarSpecimen(M,geom,tag)
+%>   [specimen] = CREATERECTANGULARBARSPECIMEN(M, geom, tag, spclength, spcwidth, spcthickness) Creates Bar With given geometry
+function [specimen] = CreateRectangularBarSpecimen(M,geom,tag,spclength,spcwidth,spcthickness,spcmaterial)
 
   specimen=ModelWrapper(M,tag,geom.node.feature);
 
@@ -11,10 +11,9 @@ function [specimen] = CreateRectangularBarSpecimen(M,geom,tag)
 
   % for consistency the parameters should probably be prefixed by tag, but they are not
 
-  specimen.node.set('lx',ObtainDCParameter(M,'spclength','m'));
-  specimen.node.set('ly',ObtainDCParameter(M, 'spcwidth', 'm'));
-  specimen.node.set('lz',ObtainDCParameter(M, 'spcthickness', 'm'));
-  material=GetDCParamStringValue(M,'spcmaterial');
+  specimen.node.set('lx',spclength);
+  specimen.node.set('ly',spcwidth);
+  specimen.node.set('lz',spcthickness);
 	 	    
   % Create top face and bottom face selections (used for meshing, below)
   % These are anonymous functions that can be called later to extract
@@ -35,13 +34,13 @@ function [specimen] = CreateRectangularBarSpecimen(M,geom,tag)
 
 
   % define needed materials
-  CreateDCMaterialIfNeeded(M,geom,'spc','spc');
+  CreateDCMaterialIfNeeded(M,geom,spcmaterial,'spc');
 
   % Set Material -- by providing anonymous build function
   specimen.applymaterial=BuildLater(M,[specimen.tag '_applymaterial'],...
 				    'applymaterial', ...
 				    @(M,obj) ...
-				    ReferenceNamedMaterial(M,geom,specimen,strrep(strrep(material.repr,' ','_'),'-','_'),specimen.getdomainselection));
+				    ReferenceNamedMaterial(M,geom,specimen,strrep(strrep(spcmaterial,' ','_'),'-','_'),specimen.getdomainselection));
 
 
   % % Specify mesh -- by providing anonymous build function
@@ -57,7 +56,7 @@ function [specimen] = CreateRectangularBarSpecimen(M,geom,tag)
 
 
   % Notify User We Are Building Geometry
-  LogMsg(sprintf('Created %s Rectangular Bar Specimen', material.repr), 1);
+  LogMsg(sprintf('Created %s Rectangular Bar Specimen', spcmaterial), 1);
 
   % Extract dimensions for showing to the user
   DimensionString=sprintf('%f x ',specimen.node.getDoubleArray('size'));
