@@ -14,11 +14,7 @@
 %> target:                Position vector or cellstr array representing camera target
 %> up:                    Unit vector or cellstr array representing up direction
 %> rotationpoint:         Position vector or cellstr array representing rotation point
-function specimen=AddView(M,specimen,zoomanglefull,
-			  position,
-			  target,
-			  up,
-			  rotationpoint)
+function specimen=AddView(M,specimen,zoomanglefull,position,target,up,rotationpoint)
 
   CreateWrappedProperty(M,specimen,'view',[ specimen.tag '_view' ],M.node.view,3);
   specimen.view.node.label(specimen.view.tag);
