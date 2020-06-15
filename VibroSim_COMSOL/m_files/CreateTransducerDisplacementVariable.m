@@ -1,5 +1,5 @@
 %>  NOTE: tag hardwired to 'xducerdisplacement'
-function [xducerdispvar] = CreateTransducerDisplacementVariable(M,xducercalib)
+function [xducerdispvar] = CreateTransducerDisplacementVariable(M,xducercalib,amplitude)
 % CREATETRANSDUCERDISPLACEMENTFUNCTION Creates the Transducer Displacement Function
 %   [xducerdispvar] = CREATETRANSDUCERDISPLACEMENTFUNCTION(M)
 
@@ -9,11 +9,9 @@ function [xducerdispvar] = CreateTransducerDisplacementVariable(M,xducercalib)
   % Formula for displacement variable from ExcitationModeling.xoj/pdf
 
   % Create Variable Reference
-  variabletag = CreateVariable(M, tag, 'amplitude*(xducercalib_real(freq)+i*xducercalib_imag(freq))/2.0');
+  variabletag = CreateVariable(M, tag, mul_cellstrs(to_string(amplitude),'(xducercalib_real(freq)+i*xducercalib_imag(freq))/2.0'));
   variable=FindWrappedObject(M,variabletag);
 
-  % Make sure we have amplitude
-  ObtainDCParameter(M,'amplitude','V');
 
 
   % filename is xducercalib

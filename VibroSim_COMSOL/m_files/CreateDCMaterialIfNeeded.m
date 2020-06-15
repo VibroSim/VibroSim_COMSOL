@@ -9,7 +9,7 @@
 %> place (with spaces and dashes converted to underscores)
 function material=CreateDCMaterialIfNeeded(M,geom,materialname,materialprefix)
 
-materialnamenospace=strrep(materialname.repr,' ','_'); % convert spaces to underscore
+materialnamenospace=strrep(materialname,' ','_'); % convert spaces to underscore
 materialnamenospace=strrep(materialnamenospace,'-','_'); % convert dashes to underscore
 
 if ~exist('materialprefix','var')
@@ -60,9 +60,9 @@ else
 %  SetMaterialProperty(M,material,'cijmat',cijmat.repr);
 %end
 
-  try
-    % eta_s is the isotropic structural loss factor (unitless)
-    eta_s=ObtainDCParameter(M,[materialprefix 'Eta']);
-    SetMaterialProperty(M,material,'lossfactor',eta_s);
-  end
+  %try
+  %  % eta_s is the isotropic structural loss factor (unitless)
+  %  eta_s=ObtainDCParameter(M,[materialprefix 'Eta']);
+  %  SetMaterialProperty(M,material,'lossfactor',eta_s);
+  %end
 end
