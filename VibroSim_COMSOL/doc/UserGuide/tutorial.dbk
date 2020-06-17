@@ -65,24 +65,6 @@
 	tone-burst analysis. 
       </para>
     </section>
-    <section><title>Performing a frequency sweep</title>
-      <para>
-	Select the <code>solidmech_harmonicsweep_study</code> study in the
-	COMSOL Desktop and expand it it up to see the step contained within (<code>solidmech_harmonicsweep_step</code>). Adjust the <code>Frequencies</code>
-	setting to specify a range surrounding the resonant mode you found
-	in the modal analysis, e.g. <code>range(15650,10,15850)</code>, representing from 15650 Hz to 15860 Hz in steps of 10 Hz. 
-	Now click the <code>compute</code> button.
-	This will perform a frequency sweep to precisely identify that 
-	particular resonant mode of the specimen. When the calculation is complete,
-	it will bring up a 3D plot of the mode shape (selectable by frequency) plus plots of the modal amplitude as measured by crack strain magnitude and
-	by displacement at the location of the simulated laser vibrometer.
-      </para>
-      <para>
-	Identify the dominant frequency from the crack strain magnitude and
-	vibrometer plots, and make note of this frequency for use in the
-	tone-burst analysis. 
-      </para>
-    </section>
     <section><title>Performing a simulated tone-burst vibrothermography excitation</title>
       <para>
 	Select the <code>solidmech_harmonicburst_study</code> study in the

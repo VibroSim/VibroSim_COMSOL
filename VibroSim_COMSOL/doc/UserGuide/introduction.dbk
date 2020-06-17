@@ -3,7 +3,7 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Introduction</title>
   <para>
-    VibroSim is a toolkit for modeling vibrothermographic NDE.
+    VibroSim COMSOL is a toolkit for modeling vibrothermographic NDE.
     It is implemented as a set of MATLAB scripts which configure COMSOL
     to run the vibrothermographic simulation.
   </para>
@@ -22,9 +22,9 @@
     on the relative motion of the two crack faces. 
   </para>
   <para>
-    VibroSim separates out your geometric and material model of your
-    specimen from VibroSim's physics models of the vibrothermography
-    process. The normal use of VibroSim is to predict vibrothermographic
+    VibroSim COMSOL separates out your geometric and material model of your
+    specimen from VibroSim COMSOL's physics models of the vibrothermography
+    process. The normal use of VibroSim COMSOL is to predict vibrothermographic
     response by following a test process parallel to that which
     would be used in physical experiments.
   </para>
@@ -39,7 +39,7 @@
 	precisely.
       </listitem>
       <listitem>
-	Tone burst vibrational excitations at desired vibrational resonances
+      Modeling of the vibrothermography excitation
       </listitem>
       <listitem>
 	Heatflow simulations predicting the resulting heat flow

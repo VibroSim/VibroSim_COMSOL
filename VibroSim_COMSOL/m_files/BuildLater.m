@@ -1,6 +1,6 @@
 %> This class is intended to represent wrapped models that
 %> are not instantiated immediately on creation, but need
-%. to be built at some later time.
+%> to be built at some later time.
 
 %> This is a common need, because often you want to define things
 %> together, but one of the things must be built much later in
@@ -8,12 +8,12 @@
 %> it often makes sense to integrate the specification of some
 %> boundary conditions with the geometry construction. Unfortunately,
 %> boundary conditions cannot be set until much later, after
-%> the physics nodes have been selected and create. Similar
+%> the physics nodes have been selected and created. Similar
 %> situations occur with meshing, material selection, and with
 %> autodetermining orientations through surface-normal extraction.
 %>
 %> The way all this is accomplished is by instantiating BuildLater
-%> objects, which provide an immediate lasting references to
+%> objects, which provide immediate lasting references to
 %> objects that don't exist yet. The BuildLater objects
 %> also store the callable object to be used to create
 %> the object when the time comes.

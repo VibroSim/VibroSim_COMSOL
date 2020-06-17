@@ -19,20 +19,14 @@
     <para>
       MATLAB and COMSOL must be installed. Follow the procedure in the
       LiveLink for MATLAB manual for configuring the version of MATLAB
-      in the COMSOL desktop. The VibroSim archive should be expanded
-      into a convenent directory. To run the VibroSim scripts, you must
-      either change directory to the VibroSim directory, or add the
-      VibroSim directory to your Matlab Path.
+      in the COMSOL desktop. To run the VibroSim scripts, you must
+      either install the toolbox provided with the software, or add the
+      <code>VibroSim_COMSOL</code> directory to your Matlab Path. The source directory
+      should be used if changes to the source code need to be made.
     </para>
   </section>
   <section>
-    <title>Running VibroSim</title>
-    <para>
-      To run VibroSim scripts you need to have a COMSOL server and
-      MATLAB running simultaneously. See COMSOL's LiveLink for MATLAB
-      installation and user's guides for more information on running
-      COMSOL server and MATLAB together. 
-    </para>
+    <title>Using VibroSim COMSOL</title>
     <para>
       VibroSim scripts can be run directly from MATLAB. Your script
       can set up variables and then call BuildVibroModel() to build
@@ -40,13 +34,16 @@
       geometry, flaw, physics, and result processing.
     </para>
     <para>
-      In general you will want to build the VibroSim model from MATLAB
-      with no graphical frontend connected to the COMSOL server (the
-      graphical front end can sometimes interfere).
-      Once the VibroSim scripts have constructed a model on the COMSOL server,
-      you can connect to the COMSOL server from the COMSOL Desktop (an option in the Client/Server Menu), import the VibroSim model from the server (another
-      option in the Client/Server Menu), and then work with the model
-      from both MATLAB and the COMSOL Desktop. 
+        In general you will want to build the VibroSim model from MATLAB
+        with no graphical frontend connected to the COMSOL server (the
+        graphical front end can sometimes interfere). Once the VibroSim scripts
+        have constructed a model on the COMSOL server,
+        you can connect to the COMSOL server from the COMSOL Desktop (an option
+        in the Client/Server Menu), import the VibroSim model from the server
+        (another option in the Client/Server Menu), and then work with the model
+        from both MATLAB and the COMSOL Desktop. Best practice is to use the
+        companion package VibroSim Simulator to manage the running of studies
+        and management of data.
     </para>
   </section>
 </chapter>
