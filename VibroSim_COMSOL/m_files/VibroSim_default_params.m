@@ -6,8 +6,25 @@
 function VibroSim_default_params(M)
 
 % crack parameters
-AddParamToParamdb(M,'cracksemimajoraxislen',3e-3,'m');
-AddParamToParamdb(M,'cracksemiminoraxislen',1.5e-3,'m');
+
+% Dummy segment boundaries -- generally set by vibrocomsol_set_freqbands_comsol
+AddParamToParamdb(M,'seg1_freqstart',0.000,'Hz');
+AddParamToParamdb(M,'seg1_freqstep',1.0,'Hz');
+AddParamToParamdb(M,'seg1_freqend',0.0,'Hz');
+
+AddParamToParamdb(M,'seg2_freqstart',0.0,'Hz');
+AddParamToParamdb(M,'seg2_freqstep',1.0,'Hz');
+AddParamToParamdb(M,'seg2_freqend',0.0,'Hz');
+
+AddParamToParamdb(M,'seg3_freqstart',0.0,'Hz');
+AddParamToParamdb(M,'seg3_freqstep',1.0,'Hz');
+AddParamToParamdb(M,'seg3_freqend',0.0,'Hz');
+
+AddParamToParamdb(M,'seg4_freqstart',0.0,'Hz');
+AddParamToParamdb(M,'seg4_freqstep',1.0,'Hz');
+AddParamToParamdb(M,'seg4_freqend',0.0,'Hz');
+
+
 
 
 % Parameters for static loading step -- we usually don't bother with this anymore
@@ -33,15 +50,15 @@ ObtainDCParameter(M,'simulationsurfaceemissivity');
 
 % Laser (displacement or velocity detection) coordinates
 % Generally override this from model definition or experiment log
-AddParamToParamdb(M,'laserx',.07,'m');
-AddParamToParamdb(M,'lasery',.0254/4.0,'m');
-AddParamToParamdb(M,'laserz',0.0,'m');
+%AddParamToParamdb(M,'laserx',.07,'m');
+%AddParamToParamdb(M,'lasery',.0254/4.0,'m');
+%AddParamToParamdb(M,'laserz',0.0,'m');
 
 % Laser (displacement or velocity detection) direction vector
 % Generally override this from model definition or experiment log
-AddParamToParamdb(M,'laserdx',0);
-AddParamToParamdb(M,'laserdy',0);
-AddParamToParamdb(M,'laserdz',1);
+%AddParamToParamdb(M,'laserdx',0);
+%AddParamToParamdb(M,'laserdy',0);
+%AddParamToParamdb(M,'laserdz',1);
 
 % Crack position
 %% Generally override this from model definition or experiment log
