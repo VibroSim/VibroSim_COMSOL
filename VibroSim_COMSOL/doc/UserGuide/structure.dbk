@@ -119,7 +119,7 @@
   </section>
   <section><title>Parameters and DCParameters</title>
     <para>
-      VibroSim provides support for internally externally specified and
+      VibroSim provides support for internally and externally specified and
       controlled parameters through an internal parameter database <code>Paramdb</code> which can supplement external parameters known as <code>DCParam</code>s.
       These two types of parameters can be used identically within VibroSim; the only difference is in how they are initialized. Local <code>Paramdb</code>
       entries are instantiated from <code>AddParamToParamdb()</code> whereas
@@ -131,7 +131,7 @@
       For the most part, numeric <code>Paramdb</code> entries and <code>DCParam</code>s
       are transformed into COMSOL parameters (in COMSOL's 'Definitions' node)
       via the <code>ObtainDCParameter()</code> call. Note that changing the
-      local <code>Paramdb</code> or remote <code>DCParam</code> a
+      local <code>Paramdb</code> or remote <code>DCParam</code>
       after the <code>ObtainDCParameter()</code> call will not affect
       the COMSOL parameter. 
     </para>
