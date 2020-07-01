@@ -9,6 +9,6 @@
   -->
   <xi:include href="process.dbk"/>
   <xi:include href="structure.dbk"/>
+  <xi:include href="dc_params.dbk"/>
   <xi:include href="reference.dbk"/>
-  
 </book>
