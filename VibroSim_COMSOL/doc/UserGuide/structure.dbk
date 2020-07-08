@@ -96,7 +96,9 @@
     </section>
   </section>
   <section><title>Phases of model construction</title>
-    <para>(These phases correspond to the execution of <code>BuildVibroModelNoInit()</code>)</para>
+    <para>
+    (These phases correspond to the execution of <code>BuildVibroModelNoInit()</code>)
+    </para>
     <segmentedlist>
       <?dbfo   list-presentation="table"?>
       <?dbhtml   list-presentation="table"?>

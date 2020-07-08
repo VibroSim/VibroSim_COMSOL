@@ -247,6 +247,46 @@
       </para>
     </section>
     <section><title>Creating isolators and couplant</title>
+    <para>
+      Couplant is the layer of protective material between your
+      excitation transducer and your specimen. Isolators are similar
+      layers of material between your specimen and its mount.
+      Couplant and isolators form the boundary of the vibrational
+      simulation: The details of your excitation transducer and
+      mounting apparatus are beyond the couplant and isolators and
+      are <emphasis>not</emphasis> explicitly modeled.
+    </para>
+    <para>
+      Proper use of couplant and isolators is necessary to make
+      vibrothermographic testing repeatable. Otherwise the unpredictability of
+      the contact nonlinearity and the complexity of the
+      dynamic response of the mounts and transducer combine to add
+      a huge amount process variability to the physical system.
+      With such inconsistent experimental behavior, modeling is
+      not meaningful.
+    </para>
+    <para>
+      Couplant, modeled as a viscoelastic layer between your specimen
+      and your transducer, acts as a spring that serves to isolate the
+      dynamic behavior of the transducer from the dynamic behavior of
+      your specimen. It inhibits the formation of complicated and
+      unpredictable system resonances between the transducer and
+      specimen (in the condition that the couplant mechanical mobility
+      is much larger than the transducer mechanical mobility), and
+      allows the transducer to be dynamically modeled as a
+      displacement boundary condition on the opposite side of the
+      couplant from the specimen.
+    </para>
+    <para>
+      Isolators, likewise modeled as viscoelastic layers between your
+      specimen and mounts, act as springs that isolate the dynamic
+      behavor of the mounts from the dynamic behavior of your
+      specimen.  They inhibit the formation of unpredictable system
+      resonances between mounts and specimen (in the condition that
+      couplant mechanical mobility is much larger than mount
+      mechanical mobility), and allow the mounts to be dynamically
+      modeled as zero displacement boundary conditions.
+    </para>
       <para>
 	To create isolators and couplant, 
 	you can either create them explicitly in your 
@@ -304,16 +344,16 @@
     A text file is passed where heating data on the crack can be stored.
     Finally a cracktype is provided that can be either <code>penny</code> or <code>through</code>.
 	<programlisting>
-        bldcrack = @(M,geom,specimen) CreateCrack(M,geom,'crack',specimen, ...
-        					  { 0.2, 0.4, 0.0 }, ...
-        					  0.003, ...
-        					  0.002, ...
-        					  [0,1,0], ...
-        					  [0,0,-1], ...
-        					  [ .001, .002, .003 ], ...
-                                                  {'solidmech_harmonicsweep','solidmech_harmonicburst'}, ...
-        					  dc_dummy_heatingdata_href{1},... % Text file to hold crack heating energies. 
-                              cracktype); 
+bldcrack = @(M,geom,specimen) CreateCrack(M,geom,'crack',specimen, ...
+            { 0.2, 0.4, 0.0 }, ...
+            0.003, ...
+            0.002, ...
+            [0,1,0], ...
+            [0,0,-1], ...
+            [ .001, .002, .003 ], ...
+            {'solidmech_harmonicsweep','solidmech_harmonicburst'}, ...
+            dc_dummy_heatingdata_href{1},... % Text file to hold crack heating energies. 
+            cracktype); 
     </programlisting>
 Please note that since CreateCrack() adds additional geometric
 objects to the specimen and forms a union between these additional
@@ -342,9 +382,17 @@ of the crack object.
 	constraints as additional boundary conditions.
       </para>
       <para>
-	Boundary conditions are specified by physics class -- which represents
-	which classes of physics models will get the boundary condition (each physics model has a physics class specified on creation) -- and by boundary condition class. Boundary condition classes are selected for activation when the physics is used in a study step. For a boundary condition to be active on a physics model in a study step, the physics model must be of one of the physics classes specified for that boundary condition, <emphasis>and</emphasis> at least one of the boundary
-	condition classes specified for the boundary condition must be specified for the study step.
+        Boundary conditions are specified by physics class -- which represents
+        which classes of physics models will get the boundary condition (each
+        physics model has a physics class specified on creation) -- and by
+        boundary condition class. Boundary condition classes are selected for
+        activation when the physics is used in a study step. For a boundary
+        condition to be active on a physics model in a study step, the physics
+        model must be of one of the physics classes specified for that boundary
+        condition, <emphasis> and </emphasis> at least one of the boundary
+        condition classes specified for the boundary condition must be specified
+        for the study step.
+      </para>
 	<segmentedlist>
 	  <title>Physics classes</title>
 	  <?dbfo   list-presentation="table"?>
@@ -367,7 +415,6 @@ of the crack object.
 	  <seglistitem><seg><code>fixedisolators</code></seg><seg>Dynamic fixed constraint boundary condition on isolators</seg></seglistitem>
 	  <seglistitem><seg><code>crackheating</code></seg><seg>Heat flow on to crack faces</seg></seglistitem>
 	</segmentedlist>
-      </para>
       <para>
 	The following example illustrates a static boundary condition
 	on an isolator with <code>ModelWrapper</code> <code>specimen.blisolator</code>. The new boundary condition gets tag <code>&lt;specimen.blisolator tag name&gt;_blfixed</code> for physics <code>solidmech_static</code> and boundary condition class <code>staticloading</code>. An anonymous function that wraps <code>BuildFaceFixedBC()</code> will be stored in a BuildLater object that will be
