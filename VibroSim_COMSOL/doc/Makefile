@@ -12,17 +12,17 @@ commit: clean
 	hg commit
 
 # Rules for user guide generation:
-VibroSim.pdf:
-	dblatex --output=VibroSim.pdf ./UserGuide/VibroSim.dbk
+VibroSim_COMSOL.pdf:
+	dblatex --output=VibroSim_COMSOL.pdf ./UserGuide/VibroSim.dbk
 
 # Rules for developer reference generation:
-Reference.pdf:
+VibroSim_COMSOL_Reference.pdf:
 	doxygen ./ProgramRef/ReferenceGenerationPDFDoxfile
 	$(MAKE) -C ./ProgramRef/latexout/
-	mv ./ProgramRef/latexout/refman.pdf ./Reference.pdf
+	mv ./ProgramRef/latexout/refman.pdf ./VibroSim_COMSOL_Reference.pdf
 	rm -rf ./ProgramRef/latexout
 
 ReferenceHTML:
 	doxygen ./ProgramRef/ReferenceGenerationHTMLDoxfile
-	mv ./ProgramRef/htmlout ./ReferenceHTML
+	mv ./ProgramRef/htmlout ./VibroSim_COMSOL_ReferenceHTML
 	rm -rf ./ProgramRef/htmlout

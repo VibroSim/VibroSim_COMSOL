@@ -97,13 +97,13 @@
   </section>
   <section><title>Phases of model construction</title>
     <para>
-    (These phases correspond to the execution of <code>BuildVibroModelNoInit()</code>)
+    (These phases correspond to the execution of <code>BuildVibroModel()</code>)
     </para>
     <segmentedlist>
       <?dbfo   list-presentation="table"?>
       <?dbhtml   list-presentation="table"?>
       <segtitle>Phase</segtitle><segtitle>Purpose</segtitle>
-      <seglistitem><seg>Between execution of InitializeVibroSimScript() and BuildVibroModelNoInit()</seg><seg>Custom initialization and parameter setting</seg></seglistitem>
+      <seglistitem><seg>Between execution of InitializeVibroSimScript() and BuildVibroModel()</seg><seg>Custom initialization and parameter setting</seg></seglistitem>
       <seglistitem><seg>Parameter setting via <code>paramfunc()</code></seg><seg>Set parameters of the simulation</seg></seglistitem>
       <seglistitem><seg>Geometry construction</seg><seg>Build specimen, define isolators, contactors, materials, boundary conditions, etc. via <code>geometryfunc()</code></seg></seglistitem>
       <seglistitem><seg>Flaw construction</seg><seg>Instantiate flaw via <code>flawfunc()</code></seg></seglistitem>

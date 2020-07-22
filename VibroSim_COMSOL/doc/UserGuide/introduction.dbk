@@ -3,9 +3,10 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Introduction</title>
   <para>
-    VibroSim COMSOL is a toolkit for modeling vibrothermographic NDE.
+    VibroSim_COMSOL is a toolkit for generating the vibrational and 
+heat flow models of the VibroSim vibrothermographic NDE model.
     It is implemented as a set of MATLAB scripts which configure COMSOL
-    to run the vibrothermographic simulation.
+    to run the vibration and heatflow  simulations.
   </para>
   <para>
     PLEASE NOTE THAT VIBROSIM HAS NOT BEEN ADEQUATELY VALIDATED,
@@ -22,36 +23,66 @@
     on the relative motion of the two crack faces. 
   </para>
   <para>
-    VibroSim COMSOL separates out your geometric and material model of your
+    VibroSim_COMSOL separates out your geometric and material model of your
     specimen from VibroSim COMSOL's physics models of the vibrothermography
-    process. The normal use of VibroSim COMSOL is to predict vibrothermographic
-    response by following a test process parallel to that which
+    process. The normal use of VibroSim_COMSOL is to predict vibrational 
+    response to a pulse, tone burst, or frequency sweep and to predict 
+    temperatures in response to particular levels of heat energy 
+    deposition along the crack faces. It is part of the VibroSim
+    model, which simulates vibrothermographic
+    response following a test process parallel to that which
     would be used in physical experiments.
   </para>
   <para>
-    Specifically, the test process involves five steps:
+    There are two different test processes: One used with linear 
+    excitation and the other used with ultrasonic welder excitation. 
+  </para>
+  <para>
+    Specifically, the linear excitation test process generally involves five steps:
     <orderedlist>
       <listitem>
-	A modal vibration analysis to identify resonances.
+	A modal vibration analysis to identify resonances (VibroSim_COMSOL).
       </listitem>
       <listitem>
 	Frequency sweeps to analyze candidate vibrational resonances more
-	precisely.
+	precisely. (VibroSim_COMSOL)
       </listitem>
       <listitem>
-      Modeling of the vibrothermography excitation
+	A tone burst analysis to predict vibrational stresses on the crack (VibroSim_COMSOL)
+      </listitem>
+      <listitem>
+	Calculation of crack heating (VibroSim_Simulator)
       </listitem>
       <listitem>
 	Heatflow simulations predicting the resulting heat flow
-	from each tone burst excitation
+	from each tone burst excitation (VibroSim_COMSOL)
       </listitem>
     </orderedlist>
-    In addition, prior to simulation you will need to create a
+    The ultrasonic welder test process involves slightly different steps:
+    <orderedlist>
+      <listitem>
+	A modal vibration analysis to identify resonances (VibroSim_COMSOL).
+      </listitem>
+      <listitem>
+        Construction of a synthetic spectrum to verify correct damping behavior
+      </listitem>
+      <listitem>
+	Evaluation of the impulse response of the specimen to a welder impact (VibroSim_COMSOL)
+      </listitem>
+      <listitem>
+	Evaluation of crack motion (VibroSim_WelderModel)
+      </listitem>
+      <listitem>
+	Calculation of crack heating (VibroSim_Simulator)
+      </listitem>
+      <listitem>
+	Heatflow simulations predicting the resulting heat flow
+	from crack heating (VibroSim_COMSOL)
+      </listitem>
+    </orderedlist>
+    Most of the steps substantially involve VibroSim_COMSOL. 
+    In general a VibroSim simulation requires an application-specific
+    model construction script (the _comsol.m file). This needs to create a
     solid model within COMSOL, a suitable mesh, and attach
-    "couplant" and "isolators". There are also physics modules
-    to support static deformation analysis (including
-    geometric nonlinearity) as well as analysis of harmonic
-    perturbation of a staticly loaded system (these additional physics
-    modules will not normally be needed).
-  </para>
+    "couplant" and "isolators" as appropriate.   </para>
 </chapter>

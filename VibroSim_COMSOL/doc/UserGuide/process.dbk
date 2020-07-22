@@ -19,9 +19,8 @@
       and transducer.
     </para>
     <para>
-      In general, you pass a function as the <code>geometryfunc</code>
-      parameter to <code>BuildVibroModel()</code>
-      or <code>BuildVibroModelNoInit()</code>.  This function is 
+      In general, you pass a function or function pipeline as the <code>geometryfunc</code>
+      parameter to <code>BuildVibroModel()</code>.  This function is 
       responsible for instantiating the geometry for the specimen, 
       creating a <code>ModelWrapper</code>, applying a material, 
       creating couplant and isolators, meshing, and applying 
@@ -72,11 +71,9 @@
 	<programlisting>
 	  InitializeVibroSimScript('mph_file_name.mph');
 	</programlisting>
-	and then you <emphasis>must</emphasis> use
-	<code>BuildVibroModelNoInit()</code> for model creation, whereas otherwise
-	you either pass no parameter to <code>InitializeVibroSimScript()</code> or
-	not call <code>InitializeVibroSimScript()</code> at all and instead use
-	<code>BuildVibroModel()</code> for model creation. 
+	Otherwise you you pass no parameter to <code>InitializeVibroSimScript()</code>. 
+	Either way model construction, boundary identification, etc. can be performed
+	by the function parameters to <code>BuildVibroModel()</code>
       </para>
       <para>
     VibroSim is designed to make it much easier to swap out geometry
@@ -336,8 +333,7 @@
         <section><title>Creating the crack or flaw</title>
       <para>
 	The function to create a simulated crack should be passed
-	to <code>BuildVibroModel</code>
-	or <code>BuildVibroModelNoInit</code> as
+	to <code>BuildVibroModel</code> as
 	the <code>flawfunc</code> parameter. It is called with three
 	parameters: The top
 	level <code>ModelWrapper</code> <code>M</code>, the top level
@@ -359,13 +355,13 @@
     Finally a cracktype is provided that can be either <code>penny</code> or <code>through</code>.
 	<programlisting>
 bldcrack = @(M,geom,specimen) CreateCrack(M,geom,'crack',specimen, ...
-            { 0.2, 0.4, 0.0 }, ...
-            0.003, ...
-            0.002, ...
-            [0,1,0], ...
-            [0,0,-1], ...
-            [ .001, .002, .003 ], ...
-            {'solidmech_harmonicsweep','solidmech_harmonicburst'}, ...
+            { 0.2, 0.4, 0.0 }, ... % crackx, cracky, crackz
+            0.003, ...  % semi major axis length
+            0.002, ...  % semi minor axis length
+            [0,1,0], ...  % axis major direction (growth along surface)
+            [0,0,-1], ... % axis minor direction (growth into depth)
+            [ .001, .002, .003 ], ... % subradii for different COMSOL boundaries
+            {'solidmech_harmonicsweep','solidmech_harmonicburst'}, ... % vibration physics models where the crack should be present
             dc_dummy_heatingdata_href{1},... % Text file to hold crack heating energies. 
             cracktype); 
     </programlisting>
@@ -416,6 +412,7 @@ of the crack object.
 	  <seglistitem><seg><code>solidmech_static</code></seg><seg>Static deformation analysis</seg></seglistitem>
 	  <seglistitem><seg><code>solidmech_harmonicper</code></seg><seg>Dynamic harmonic perturbation of static deformation</seg></seglistitem>
 	  <seglistitem><seg><code>solidmech_harmonic</code></seg><seg>Dynamic harmonic analysis -- instantiated as both <code>solidmech_harmonicsweep</code> and <code>solidmech_harmonicburst</code></seg></seglistitem>
+	  <seglistitem><seg><code>solidmech_multisweep</code></seg><seg>Multi-sweep analysis -- used to generate ultrasonic welder impulse response</seg></seglistitem>
 	  <seglistitem><seg><code>heatflow</code></seg><seg>Conduction heat transfer</seg></seglistitem>
 	</segmentedlist>
 	<segmentedlist>
@@ -616,16 +613,21 @@ AddBoundaryCondition(M,geom,specimen.blisolator,[specimen.blisolator.tag '_blfix
 
     </para>
   </section>
+  <section><title>Multisweep analysis</title>
+    <para>
+      Multisweep analysis is used for ultrasonic welder excitation modeling to obtain a minimally sampled frequency domain representation 
+of the specimen response to an impact (impulse) at the welder contact location. By using different frequency domain spacings over different frequency
+ranges, the number of samples required to get an impulse response can be drastically reduced compared to a direct time-domain calculation. 
+The multisweep analysis is split into four segments (seg1, seg2, seg3, seg4) that can be computed in series or (potentially) parallel. The 
+process_multisweep step of VibroSim_Simulator then converts the results from the four frequency domain segments into a time-domain impulse response.
+    </para>
+  </section>
   <section><title>Heat Flow Analysis</title>
     <para>
       Heat flow analysis is used to simulate the flow of heat from the
       partial annuli that make up the crack faces. The amount of heat
-      flow can be specified as the final argument
-      <code>QbExpressions</code> to CreateCrack(), or, if not
-      provided, will be calculated from the crack heating model based
-      on the last harmonic burst vibration physics referenced in the
-      <code>vibration_physicstags</code> parameter to
-      <code>CreateCrack()</code>.
+      flow can be specified as coming from the file given as the second to last argument
+      <code>heatingfile</code> to CreateCrack().
     </para>
     <para>
       When viewing the results of the heat flow analysis it is common
