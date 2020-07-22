@@ -36,12 +36,12 @@ Installation
 1. Install MATLAB
 2. Install COMSOL with MATLAB LiveLink, being sure to correctly
    identify your MATLAB installation
-3. Within MATLAB go to File...Open and browse to VibroSim_COMSOL.mtlbx 
+3. Within MATLAB go to File...Open and browse to VibroSim_COMSOL.mltbx 
    and open it. Select 'Install'. You can manage it with MATLAB's 
    add-on manager. By default it will be placed under your 
    Documents/MATLAB folder. 
 4. Alternate install: 
-    * Unzip the .mtlbx file (it is actually a ZIP archive) 
+    * Unzip the .mltbx file (it is actually a ZIP archive) 
     * Add the VibroSim_COMSOL folder and the VibroSim_COMSOL/m_files
       folders WITHIN the unzipped toolbox to your MATLAB path. 
 
@@ -65,9 +65,19 @@ should do the trick.
 Rebuilding .mltbx file from source
 ----------------------------------
 1. Make sure all changes have been committed to git
-2. Run git status --ignored to check for ignored files. Make sure
+    * Including an update to the new version number in VibroSim_COMSOL.prj
+2. Tag the version with the new version number (e.g. v0.3.2)
+3. Run git status --ignored to check for ignored files. Make sure
    all ignored files are either deleted or added to the repository
-   as appropriate. (VibroSim_COMSOL.mtlbx should be deleted)
-3. Open VibroSim_COMSOL.prj in Matlab and press Package...Package.
-4. Make sure VibroSim_COMSOL.prj has not been changed, or if it has
-   that absolute paths have not been added back in.
+   as appropriate. (VibroSim_COMSOL.mltbx should be deleted)
+4. From the base directory of this package, run: 
+      matlab VibroSim_COMSOL.prj
+5. Explicitly add the m_files subfolder to MATLAB's path
+      path('VibroSim_COMSOL/m_files',path);
+6. Double click on VibroSim_COMSOL.prj on the left (file list)
+7. Make sure under "Install Actions" the m_files subfolder is
+   explicitly included in the MATLAB Path
+8. Press Package...Package.
+9. Check changes to VibroSim_COMSOL.prj to make sure they are not substantive
+   probably want to 'git checkout VibroSim_COMSOL.prj' to revert them because
+   MATLAB likes to add in absolute paths
