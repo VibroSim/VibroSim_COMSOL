@@ -48,7 +48,8 @@ function  obj = CreateProbe(M, tag, physicstag, coordx,coordy,coordz,directionx,
   % When a DomainPoint is created it automatically creates a 
   % Displacement Probe that we really don't want (not compatible with
   % our naming scheme)
-  autoprobetagname=cell(obj.node.feature.tags){1};
+  tags_cell = cell(obj.node.feature.tags);
+  autoprobetagname=tags_cell{1};
   obj.node.feature.remove(autoprobetagname);
 
   CreateWrappedProperty(M,obj,'displ',[ tag '_displ' ],obj.node.feature,'PointExpr');

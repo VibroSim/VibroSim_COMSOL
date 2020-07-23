@@ -27,7 +27,8 @@ function obj=CreateLaser(M,tag,physicstag,laserx,lasery,laserz,laserdx,laserdy,l
   % When a DomainPoint is created it automatically creates a 
   % Displacement Probe that we really don't want (not compatible with
   % our naming scheme)
-  autoprobetagname=cell(obj.node.feature.tags){1};
+  tags_cell = cell(obj.node.feature.tags);
+  autoprobetagname=tags_cell{1};
   obj.node.feature.remove(autoprobetagname);
 
   % Create displacement probe from preexisting feature (note tagname will not match!)
