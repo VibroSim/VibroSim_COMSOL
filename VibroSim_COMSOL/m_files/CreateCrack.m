@@ -347,7 +347,7 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   addprop(crack,'position_along_surface'); 
   crack.position_along_surface = CreateVariable(M,[tag '_position_along_surface'],position_along_surface); 
 
-  if exist('heatingfile','var')
+  if exist('heatingfile','var') and heatingfile ~= []
     % Create an interpolation function representing crack heating --
     %  data to be loaded from an external file based on external (non-COMSOL) calculations
     addprop(crack,'heatingfunction');
@@ -445,7 +445,7 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   %end
   
 
-  if exist('heatingfile','var')
+  if exist('heatingfile','var') and heatingfile != []
     AddBoundaryCondition(M,geom,crack, sprintf('%s_heatsrc',crack.tag), ...
   			 { 'heatflow' }, ... % physicses
 			 { 'crackheating' }, ...  % BC classes

@@ -57,8 +57,22 @@ function calc_straincoefficient(basename, id)
     
     %                 x          y         z      angle
     couplant_coord={ xduceroffsetx,   mountoffsety,     bottomoffsetz,      'NaN'   };
-
     
+    
+    crackshape = ObtainDCParameter(M,'simulationcrackshape');
+    crackshape_penny = strfind(crackshape,'penny') != [];
+    crackshape_through = strfind(crackshape,'through') != [];
+    
+    if crackshape_penny
+        createcrack_type = 'penny';
+    elseif crackshape_through
+        createcrack_type = 'through';
+    else
+        fprintf(2,'VibroSim_COMSOL calc_straincoefficient.m: WARNING: DC Parameter simulationcrackshape did not include either ''penny'' or ''through'' substrings\n'); 
+        createcrack_type = 'unknown';
+    end
+	  
+
     bldgeom = @(M,geom) CreateRectangularBarSpecimen(M,geom,'specimen',ObtainDCParameter(M,'spclength','m'),ObtainDCParameter(M,'spcwidth','m'),ObtainDCParameter(M,'spcthickness','m'),ObtainDCParameter(M,'spcmaterial')) | ...
 	      @(specimen) AttachThinCouplantIsolators(M,geom,specimen, ...
 						      couplant_coord, ...
@@ -126,7 +140,9 @@ function calc_straincoefficient(basename, id)
 					    [0,1,0], ...
 					    [0,0,-1], ...
 					    [ .001, .002, .003 ], ...
-					    'solidmech_modal');
+					    'solidmech_modal',
+					    [],  % heatingfile
+					    createcrack_type);
   
   % Define a procedure for creating the various physics definitions. Steps can be 
   % sequenced by using the pipe (vertical bar | ) character.
