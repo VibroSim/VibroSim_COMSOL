@@ -347,29 +347,30 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   addprop(crack,'position_along_surface'); 
   crack.position_along_surface = CreateVariable(M,[tag '_position_along_surface'],position_along_surface); 
 
-  if exist('heatingfile','var') and heatingfile ~= []
-    % Create an interpolation function representing crack heating --
-    %  data to be loaded from an external file based on external (non-COMSOL) calculations
-    addprop(crack,'heatingfunction');
-    crack.heatingfunction = CreateFunction(M,[ tag '_heatingfunction' ], 'Interpolation');
-    crack.heatingfunction.node.label([ tag '_heatingfunction' ]);
-    crack.heatingfunction.node.set('sourcetype','user');
-    crack.heatingfunction.node.set('source','file');
-    crack.heatingfunction.node.set('struct','spreadsheet');
-    crack.heatingfunction.node.set('filename',buildabspath(heatingfile)); % must use absolute path here because COMSOL current directory is the mli (LiveLink) directory
-    crack.heatingfunction.node.set('interp','linear');
-    crack.heatingfunction.node.set('argunit','s,m');  
-    crack.heatingfunction.node.set('fununit','W/m^2');  
-    crack.heatingfunction.node.set('nargs',2); % function of two parameters (first column time, second column radius)
-    % side 1 is first column after parameter columns
-    crack.heatingfunction.node.setIndex('funcs', [ tag '_heatingfunction_side1' ], 0,0);
-    crack.heatingfunction.node.setIndex('funcs', '1' , 0,1);
-    
-    % side 2 is second column after parameter columns
-    crack.heatingfunction.node.setIndex('funcs', [ tag '_heatingfunction_side2' ], 1,0);
-    crack.heatingfunction.node.setIndex('funcs', '2' , 1,1);
+  if exist('heatingfile','var') 
+    if ~isempty(heatingfile)
+      % Create an interpolation function representing crack heating --
+      %  data to be loaded from an external file based on external (non-COMSOL) calculations
+      addprop(crack,'heatingfunction');
+      crack.heatingfunction = CreateFunction(M,[ tag '_heatingfunction' ], 'Interpolation');
+      crack.heatingfunction.node.label([ tag '_heatingfunction' ]);
+      crack.heatingfunction.node.set('sourcetype','user');
+      crack.heatingfunction.node.set('source','file');
+      crack.heatingfunction.node.set('struct','spreadsheet');
+      crack.heatingfunction.node.set('filename',buildabspath(heatingfile)); % must use absolute path here because COMSOL current directory is the mli (LiveLink) directory
+      crack.heatingfunction.node.set('interp','linear');
+      crack.heatingfunction.node.set('argunit','s,m');  
+      crack.heatingfunction.node.set('fununit','W/m^2');  
+      crack.heatingfunction.node.set('nargs',2); % function of two parameters (first column time, second column radius)
+      % side 1 is first column after parameter columns
+      crack.heatingfunction.node.setIndex('funcs', [ tag '_heatingfunction_side1' ], 0,0);
+      crack.heatingfunction.node.setIndex('funcs', '1' , 0,1);
+      
+      % side 2 is second column after parameter columns
+      crack.heatingfunction.node.setIndex('funcs', [ tag '_heatingfunction_side2' ], 1,0);
+      crack.heatingfunction.node.setIndex('funcs', '2' , 1,1);
+    end
   end
-  
   % Add thin elastic layers for each half-annulus
 
   % geom.node.run;  % build geometry
@@ -445,15 +446,17 @@ function [crack] = CreateCrack(M,geom, tag, specimen, centerpoint, semimajoraxis
   %end
   
 
-  if exist('heatingfile','var') and heatingfile != []
-    AddBoundaryCondition(M,geom,crack, sprintf('%s_heatsrc',crack.tag), ...
-  			 { 'heatflow' }, ... % physicses
-			 { 'crackheating' }, ...  % BC classes
-			 @(M,physics,bcobj) ...
-			  BuildBoundaryHeatSourceBCs(M,geom,physics,crack,bcobj, ...
-						     @(M,geom,crack) ...
-						      GetCrackBoundaries(M,geom,crack), ...
-						     ['if((' crack.position_along_surface ') < 0[m],' tag '_heatingfunction_side1(t,' crack.r_equiv_surface '),' tag '_heatingfunction_side2(t,' crack.r_equiv_surface '))' ]));
-    
+  if exist('heatingfile','var') 
+    if ~isempty(heatingfile)
+      AddBoundaryCondition(M,geom,crack, sprintf('%s_heatsrc',crack.tag), ...
+  			   { 'heatflow' }, ... % physicses
+			   { 'crackheating' }, ...  % BC classes
+			   @(M,physics,bcobj) ...
+			    BuildBoundaryHeatSourceBCs(M,geom,physics,crack,bcobj, ...
+						       @(M,geom,crack) ...
+							GetCrackBoundaries(M,geom,crack), ...
+						       ['if((' crack.position_along_surface ') < 0[m],' tag '_heatingfunction_side1(t,' crack.r_equiv_surface '),' tag '_heatingfunction_side2(t,' crack.r_equiv_surface '))' ]));
+      
+    end
   end
 end

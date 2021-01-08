@@ -2,6 +2,9 @@ if "vibrotherm_simulation_specimen_dcc" not in globals():
     vibrotherm_simulation_specimen_dcc=True
     
     # Damping coefficients
+    paramdb.addparam("spcmaterialdampingtype",stringv)
+    paramdb["spcmaterialdampingtype"].requestvalstr_sync("ViscousDamping")
+
     paramdb.addparam("spcviscousdamping",numericunitsv,defunits="N*s")
     paramdb["spcviscousdamping"].requestvalstr_sync("0.0 N*s")
 

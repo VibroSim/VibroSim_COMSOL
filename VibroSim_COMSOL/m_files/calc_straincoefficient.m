@@ -31,6 +31,8 @@ function calc_straincoefficient(basename, id)
   % Extract parameters that will be needed below
 
 
+
+  spcmaterial_struct = GetDCParamStringValue(M,'spcmaterial');
   
   
   % Define a procedure for building the geometry. Steps can be sequenced by using
@@ -58,22 +60,8 @@ function calc_straincoefficient(basename, id)
     %                 x          y         z      angle
     couplant_coord={ xduceroffsetx,   mountoffsety,     bottomoffsetz,      'NaN'   };
     
-    
-    crackshape = ObtainDCParameter(M,'simulationcrackshape');
-    crackshape_penny = strfind(crackshape,'penny') != [];
-    crackshape_through = strfind(crackshape,'through') != [];
-    
-    if crackshape_penny
-        createcrack_type = 'penny';
-    elseif crackshape_through
-        createcrack_type = 'through';
-    else
-        fprintf(2,'VibroSim_COMSOL calc_straincoefficient.m: WARNING: DC Parameter simulationcrackshape did not include either ''penny'' or ''through'' substrings\n'); 
-        createcrack_type = 'unknown';
-    end
 	  
-
-    bldgeom = @(M,geom) CreateRectangularBarSpecimen(M,geom,'specimen',ObtainDCParameter(M,'spclength','m'),ObtainDCParameter(M,'spcwidth','m'),ObtainDCParameter(M,'spcthickness','m'),ObtainDCParameter(M,'spcmaterial')) | ...
+    bldgeom = @(M,geom) CreateRectangularBarSpecimen(M,geom,'specimen',ObtainDCParameter(M,'spclength','m'),ObtainDCParameter(M,'spcwidth','m'),ObtainDCParameter(M,'spcthickness','m'),spcmaterial_struct.value) | ...
 	      @(specimen) AttachThinCouplantIsolators(M,geom,specimen, ...
 						      couplant_coord, ...
 						      isolators_coords) | ...
@@ -124,11 +112,20 @@ function calc_straincoefficient(basename, id)
     
     
   else 
-    bldgeom = @(M,geom) CreateRectangularBarSpecimen(M,geom,'specimen',ObtainDCParameter(M,'spclength','m'),ObtainDCParameter(M,'spcwidth','m'),ObtainDCParameter(M,'spcthickness','m'),ObtainDCParameter(M,'spcmaterial'));
+    bldgeom = @(M,geom) CreateRectangularBarSpecimen(M,geom,'specimen',ObtainDCParameter(M,'spclength','m'),ObtainDCParameter(M,'spcwidth','m'),ObtainDCParameter(M,'spcthickness','m'),spcmaterial_struct.value);
   end
 
-  
-  
+
+  crackshape_struct = GetDCParamStringValue(M,'simulationcrackshape');
+  if ~isempty(strfind(crackshape_struct.value,'penny'))
+      createcrack_type = 'penny';
+  elseif ~isempty(strfind(crackshape_struct.value,'through'))
+      createcrack_type = 'through';
+  else
+      fprintf(2,'VibroSim_COMSOL calc_straincoefficient.m: WARNING: DC Parameter simulationcrackshape (%s) did not include either ''penny'' or ''through'' substrings\n',crackshape_struct.value); 
+      createcrack_type = 'unknown';
+  end
+
   % Define a procedure for building the crack. Steps can be sequenced by using
   % the pipe (vertical bar | ) character. 
   bldcrack = @(M,geom,specimen) CreateCrack(M,geom,'crack',specimen, ...
@@ -140,8 +137,8 @@ function calc_straincoefficient(basename, id)
 					    [0,1,0], ...
 					    [0,0,-1], ...
 					    [ .001, .002, .003 ], ...
-					    'solidmech_modal',
-					    [],  % heatingfile
+					    'solidmech_modal',...
+					    [],...  % heatingfile
 					    createcrack_type);
   
   % Define a procedure for creating the various physics definitions. Steps can be 
